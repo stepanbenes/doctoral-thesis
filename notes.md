@@ -1,3 +1,5 @@
+# Thesis title: Multimesh Methods for Data Visualization and Finite Element Analysis
+
 # Title for paper: Design of Data Formats for Finite Element Computation / Design of cloud-based infrastructure (service) for finite element computation
 
 * Zkusit se inspirovat strukturou dokumentu zde: https://blogs.msdn.microsoft.com/dotnet/2017/02/03/games-item-system-part-1-challenge-explained/}
