@@ -1,6 +1,6 @@
-% Chapter 1
+% TODO: remove this Appendix
 
-\chapter{Chapter Title Here} % Main chapter title
+\chapter{How to write thesis in TeX} % Main chapter title
 
 \label{Chapter1} % For referencing the chapter elsewhere, use \ref{Chapter1} 
 
@@ -249,7 +249,7 @@ There will hopefully be many figures in your thesis (that should be placed in th
 \begin{verbatim}
 \begin{figure}
 \centering
-\includegraphics{Figures/Electron}
+\includegraphics{figures/Electron}
 \decoRule
 \caption[An Electron]{An electron (artist's impression).}
 \label{fig:Electron}
@@ -300,6 +300,26 @@ All equations you write (which are not in the middle of paragraph text) are auto
 \begin{verbatim}
 \[ a^{2}=4 \]
 \end{verbatim}
+
+\section{How do I change the colors of links?}
+
+The color of links can be changed to your liking using:
+
+{\small\verb!\hypersetup{urlcolor=red}!}, or
+
+{\small\verb!\hypersetup{citecolor=green}!}, or
+
+{\small\verb!\hypersetup{allcolor=blue}!}.
+
+\noindent If you want to completely hide the links, you can use:
+
+{\small\verb!\hypersetup{allcolors=.}!}, or even better: 
+
+{\small\verb!\hypersetup{hidelinks}!}.
+
+\noindent If you want to have obvious links in the PDF but not the printed text, use:
+
+{\small\verb!\hypersetup{colorlinks=false}!}.
 
 %----------------------------------------------------------------------------------------
 

@@ -6,7 +6,7 @@
 
 # Content of paper
 
-## Introduction: State of the art in FEM file formats, current state of existing FEM computation solutions; State of the art in FEM file formats and existing FEM computation solutions
+## Introduction: State of the art in FEM file formats, current state of existing FEM computation solutions
 
 ## Architecture: Description of cloud-based FEM solution architecture
 
