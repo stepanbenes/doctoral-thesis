@@ -54,6 +54,12 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{fancyvrb} % keep tabs in verbatim sections, see: https://tex.stackexchange.com/questions/231083/how-to-stop-verbatim-from-converting-tabs-to-spaces
 
 %----------------------------------------------------------------------------------------
+%	COMMAND DEFINITIONS
+%----------------------------------------------------------------------------------------
+
+\newcommand{\tabhead}[1]{\textbf{#1}}
+
+%----------------------------------------------------------------------------------------
 %	MARGIN SETTINGS
 %----------------------------------------------------------------------------------------
 
@@ -78,7 +84,7 @@ headsepline, % Uncomment to get a line under the header
 \author{John \textsc{Smith}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
 \addresses{} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
 
-\subject{Biological Sciences} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
+\subject{Engineering software} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
 \keywords{} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
 \university{\href{http://www.university.com}{University Name}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
 \department{\href{http://department.university.com}{Department or School Name}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
@@ -278,7 +284,7 @@ $\omega$ & angular frequency & \si{\radian} \\
 \include{appendices/2-approximation}
 \include{appendices/3-SVD}
 \include{appendices/4-data-format-examples}
-\include{appendices/5-TeX}
+%\include{appendices/5-TeX}
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY

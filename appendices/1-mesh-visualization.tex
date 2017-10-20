@@ -108,7 +108,7 @@ Memory requirements of each entity object are summarized in Figure \ref{fig:surf
 \centering
 \includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure5}
 \decoRule
-\caption[Memory consumption of surface representation]{Memory consumption of surface entity objects.}
+\caption{Memory consumption of the surface representation.}
 \label{fig:surface-rep-memory}
 \end{figure}
 
@@ -117,3 +117,202 @@ Memory requirements of each entity object are summarized in Figure \ref{fig:surf
 %----------------------------------------------------------------------------------------
 
 \subsection{Surface representation construction}
+
+The process of creating the mesh surface representation is the key feature. It was designed as a one-pass algorithm which finds surface entities and creates the winged edge data structure on the fly during loading an input file. It should be noted that the input file does not contain any relationships between the mesh entities besides the coordinates of each node and a simple list of elements with links to relevant nodes.
+
+The main problem is to find those faces of 3D elements that belong to the mesh surface. To resolve this issue we started with the consideration that each internal face has its twin in the adjacent element. While loading each element from the file, all its faces are generated. Then, the faces are included to a global hash table \cite{XXX-7}. The key to this table is a special object consisting of the face node IDs. If the face under same key already exists, it means that the face is an internal face that we do not consider. Hence, the face is thrown away and the twin face is removed from the hash table. The procedure is repeated until all faces of all elements are processed. At the end (for conformal meshes) it is guaranteed that all remaining faces in the table are on the mesh boundary. For non-conformal meshes the algorithm can produce also some internal faces. Additional check for these situations is possible but it would break the simplicity and performance of the algorithm. Figure \ref{fig:mesh-construction} shows a diagram with the progress of loading an input file and constructing the mesh internal representation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure6}
+\decoRule
+\caption[Activity diagram of mesh construction]{Activity diagram of loading and construction mesh surface representation.}
+\label{fig:mesh-construction}
+\end{figure}
+
+In order to complete the surface representation, the edges must be generated from their faces. The analogous procedure that works with the hash table of edges is used here. Each edge has its twin in the adjacent face on the surface. But only one representative is needed. If a new edge is included into the table and under the same key the object is already contained, the new edge is thrown away. But compared to the previous case the edge in the table is not removed. The byproduct of this algorithm is finding the edges on the surface boundary. These edges have no twins as they have only one neighboring face. This however applies only to two-dimensional meshes, since the 3D meshes have a closed boundary.
+
+Finally, when all surface entities are found, the Vertex Buffer Object (VBO) is created. It is an OpenGL feature that provides methods for uploading vertex data to the video device for rendering. VBO offers substantial performance gains over the immediate mode rendering because the data resides in the video device memory rather than the system memory and so it can be rendered directly by the video device. However, the buffer of rendered data must be updated each time the surface geometry changes. All up-to-date video cards support the VBO feature. If the card still does not support this feature, the application is smart enough to use the immediate-mode for rendering.
+
+%----------------------------------------------------------------------------------------
+%	SUB-SECTION Looking inside the mesh
+%----------------------------------------------------------------------------------------
+
+\subsection{Looking inside the mesh}
+
+The editor allows to hide (or delete) some group of elements to enable the user to look inside the mesh. This makes sense especially for the 3D models when the user wants to see and manipulate the internal entities. Let us suppose that the set of elements to be hidden is known. Firstly, the program disposes of the current mesh surface representation and after that it basically creates the entire surface again with the use of the above mentioned effective surface representation construction algorithm. However, in this case the algorithm does not take all the elements from the input file as an input parameter, it take only those that are \textbf{not} contained in the list of elements to be removed. This solution offers the possibility to reuse the existing code that is already optimized and universally applicable to all types of meshes.
+
+Moreover, this approach simplifies the implementation of other useful features summarized in the following list (all the features use the same surface construction algorithm).
+
+\begin{itemize}
+	\item \textbf{Hide selected elements} -- remove a set of arbitrary elements selected by the mouse pointer.
+	\item \textbf{Show or hide elements with specific property} -- e.g. turn on or off layers containing elements with the same material id.
+	\item \textbf{Cut through the mesh defined by plane} -- hide all the elements that are located behind the plane specified with three points lying in the plane or by a point on the plane and a normal vector. In this case only the elements that fall entirely behind the cut plane are displayed. Then the view is not perfect, but this approach is needed in our editor, where we have to assign properties to individual entities such as nodes and faces of elements. If the cut portion of the elements intersecting the cut plane would be displayed, editing of entities on the cut will not be possible. Also the implementation would be more complicated and our winged-edge data structure could not be used.
+	\item \textbf{Cut through the mesh defined by general algebraic equation} -- previous operation (cut defined by plane) uses internal testing function that takes the point coordinates as an input parameter and returns a boolean value saying whether the point lies inside the area to be removed or not. The testing function is called for all currently visible elements. The testing function is in this case generalized to test the point against the algebraic equation specified by the user.
+\end{itemize}
+
+Each time the cut is performed the surface representation of the mesh is regenerated. Therefore turning on the cuts has no effect on the speed of manipulating views. All calculations are performed only during applying the cut through the mesh.
+
+%----------------------------------------------------------------------------------------
+%	SUB-SECTION Finding visible nodes
+%----------------------------------------------------------------------------------------
+
+\subsection{Finding visible nodes}
+
+For various operations with a mesh, it is useful to have some method that finds the set of nodes that are visible from the current view-point, i.e. nodes that are not hidden behind a part of the mesh. Apart from the rendering of nodes and labels on the mesh surface, information about visible nodes can be used for implementation of the method for selection of entities on the surface using the mouse pointer.
+
+The principle of the method is simple. Firstly, the method performs the perspective projection of all nodes to the screen and their actual depth is determined. Then the whole model is rendered into depth-buffer to produce a depth-map of the mesh. After that, the value in the depth-buffer corresponding to each node is compared to the Z-component of the screen coordinates of this node. If the value in the depth-buffer is greater than the projected distance of the node, the node is hidden behind some face. Otherwise, the node is added to the visible nodes set. The best precision in the depth-buffer is for the vertices that are in a small distance from the front clipping plane of the viewing frustum. The first step of the algorithm is therefore to move the near clipping plane from the observer to the mesh surface as close as possible. The pseudo-code of the described algorithm follows.
+
+{\small
+\begin{Verbatim}[obeytabs,tabsize=4]
+Set<Node> FindVisibleNodes(Rectangle area)
+{
+	GL.MatrixMode(MatrixMode.Projection);
+	GL.LoadIdentity();
+	// move the Near plane closer to model for better precision
+	double newZ_NEAR_PARAM = ComputeMeshMinVisibleDistance();
+	// set perspective projection with updated parameters
+	Glu.Perspective(FOVY_PARAM, aspect_ratio, newZ_NEAR_PARAM, Z_FAR_PARAM);
+	// ---------------------------------------------------------------------
+	// compute projections of all nodes to screen coordinates
+	Dictionary<Node, Vector3> projections = new Dictionary<Node, Vector3>();
+	Vector3 winPos;
+	foreach (Node node in allSurfaceNodes)
+	{
+		Glu.Project(node.Position, modelview, projection, viewport, out winPos);
+		if (area.Contains(winPos.X, winPos.Y)) // if the point is inside area,
+			projections[node] = winPos;  // save projection to dictionary
+	}
+	// ---------------------------------------------------------------------
+	// draw faces to depth buffer
+	GL.Clear(ClearBufferMask.DepthBufferBit);
+	GL.PolygonOffset(1f, 1f); // move little bit to enable testing
+	GL.Enable(EnableCap.PolygonOffsetFill);
+	DrawFaces();
+	GL.Disable(EnableCap.PolygonOffsetFill);
+	// ---------------------------------------------------------------------
+	Set<Node> result = new Set<Node>();
+	foreach (KeyValuePair<Node, Vector3> pair in projections)
+	{
+		Node node = pair.Key; winPos = pair.Value; float pixelDepth;
+		GL.ReadPixels(winPos.X, winPos.Y, 1, 1, Format.Depth, Type.Float, out pixelDepth);
+		// !! key depth test; if passes, node is visible
+		if (winPos.Z <= pixelDepth)
+			result.Add(node);
+	}
+	return result; // return list of visible nodes
+}
+\end{Verbatim}
+}
+
+%----------------------------------------------------------------------------------------
+%	SUB-SECTION Selection of entities
+%----------------------------------------------------------------------------------------
+
+\subsection{Selection of entities}
+
+The mesh editor implements a tool for selection of entities in the mesh. The tool has two modes. The first mode allows user to select entities contained in the rectangular area specified by dragging the mouse pointer. Implementation of this tool uses the above mentioned method \texttt{FindVisibleNodes()}. The set of nodes returned by the method is then transformed to the set of entities that the user wants to select by looking to the winged edge data structure that takes advantage of its rich interconnections. For example, if the user wants to select all the edges in the rectangular area, the algorithm finds all edges that have one of theirs node in the set of nodes returned by the method \texttt{FindVisibleNodes()} that takes the selection rectangle as a parameter.
+
+The second mode of the tool is selection of some geometrically related entities, e.g. all nodes on the top of the mesh. The input file that is used does not contain any information about neither the model from which the mesh was generated nor the curves and planes that form the surface of the model. However, the user usually requests to be able to select such groups of entities.
+
+The core of the implementation of this functionality is the method \texttt{SelectSurface()}. The method returns the set of element faces on the mesh surface that have pre-specified maximum angle between them. The angle (passed as a function parameter) defines the degree of smoothness of the resulting surface.
+
+The limit angle is determined by the count of the mouse button clicks on some face. The target face is also passed as an input parameter of the function. The limit angle increases with a growing number of clicks. The program operates with four levels of tolerance in the surface selection. The default values of the limit angles for each level are carefully chosen to suit the largest number of the mesh. For atypical-formed meshes, the user can change these default parameters.
+
+The following pseudo-code shows the implementation of the \texttt{SelectSurface()} method. Figure \ref{fig:element-face-selection} illustrates the result of the double- and triple-click on the mesh surface. Double-click selects all faces in the area that is delimited by the first limit angle. Default value of this parameter is one degree. Therefore double-click selects the elements or faces of elements which have a face on the same flat surface as the mouse cursor, whereas the triple-click selects the elements or faces on the smooth (possibly curved) surface as the mouse cursor. This surface is delimited by edges whose adjacent faces include angle lower than or equal to the second limit angle. Fourth click selects all the remaining neighboring elements or faces.
+
+{\small
+\begin{Verbatim}[obeytabs,tabsize=4]
+Set<Element2D> SelectSurface(Element2D startFace, float borderAngleLimit)
+{
+	Set<Element2D> selectionSet = new Set<Element2D>(); // faces to select
+	Stack<Element2D> faces = new Stack<Element2D>(); // visited faces
+	faces.Push(startFace); // push starting face
+	selectionSet.Add(startFace);
+	while (faces.Count > 0) // while the stack is not empty
+	{
+		Element2D face = faces.Pop();
+		// add to the stack all neighboring faces
+		// that form with the face an angle of value at most borderAngleLimit
+		foreach (Element2D neighbor in face.GetNeighbors(borderAngleLimit))
+		{
+			if (!selectionSet.Contains(neighbor))
+			{
+				faces.Push(neighbor);
+				selectionSet.Add(neighbor);
+			}
+		}
+	}
+	return selectionSet;
+}
+\end{Verbatim}
+}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure7}
+\decoRule
+\caption[Selection of element faces]{Selection of element faces on the mesh surface. (a) Result after mouse double-click. (b) Result after mouse triple-click.}
+\label{fig:element-face-selection}
+\end{figure}
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION Results
+%----------------------------------------------------------------------------------------
+
+\section{Results}
+
+The program was benchmarked against other commonly used editors that have similar capabilities. We chose the \textbf{GiD} \cite{XXX-8} postprocessor, \textbf{ParaView} \cite{XXX-9} and \textbf{VisIt} \cite{XXX-10}. The initial loading time (see Table \ref{tab:loading-time}) and memory consumption were measured (see Table \ref{tab:memory-consumption}). The memory requirements of our mesh editor grows slightly faster than requirements of other tools for meshes with high number of finite elements. It is caused by auxiliary data structures assembled for future fast manipulation with meshes. The mesh Beam with $651.873$ elements represents a limit task which can be solvable on a single processor computer. For smaller problems, memory requirements of our editor are comparable or even smaller in comparison with GiD, ParaView and VisIt. Figure \ref{fig:benchmark-meshes} contains visualizations of the meshes that were used in the benchmark.
+
+\begin{table}
+\caption[Initial loading time comparison]{Measured results: Initial loading time in seconds (CPU time).}
+\label{tab:loading-time}
+\centering
+\begin{tabular}{l r r r r}
+\toprule
+\tabhead{mesh (size)} & \tabhead{MeshEditor} & \tabhead{GiD} & \tabhead{ParaView} & \tabhead{VisIt} \\
+\midrule
+Beam (651873 elements) & 36 & 28 & 16 & 24\\
+Beam (47680 elements) & 4 & 5 & 3 & 2\\
+Beam (3222 elements) & 1 & 4 & 2 & 1\\
+Sphere (348014 elements) & 4 & 3 & 7 & 2\\
+Robo (244188 elements) & 7 & 7 & 7 & 7\\
+\bottomrule\\
+\end{tabular}
+\end{table}
+
+\begin{table}
+\caption[Memory consumption comparison]{Measured results: Memory consumption in megabytes (Private working set) [MB]}
+\label{tab:memory-consumption}
+\centering
+\begin{tabular}{l r r r r}
+\toprule
+\tabhead{mesh (size)} & \tabhead{MeshEditor} & \tabhead{GiD} & \tabhead{ParaView} & \tabhead{VisIt} \\
+\midrule
+Beam (651873 elements) & 824.616 & 620.956 & 339.436 & 526.144\\
+Beam (47680 elements) & 104.124 & 92.772 & 128.888 & 123.244\\
+Beam (3222 elements) & 42.800 & 52.480 & 114.380 & 89.116\\
+Sphere (348014 elements) & 108.324 & 106.428 & 133.652 & 128.808\\
+Robo (244188 elements) & 291.836 & 200.484 & 543.316 & 355.268\\
+\bottomrule\\
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure8}
+\decoRule
+\caption[Meshes for benchmarks]{Visualizations of meshes used in benchmark. Three different densities of the Beam mesh were used to demonstrate the effects of mesh size. Meshes Sphere and Robo show effect of surface area/volume ratio. a) Beam. b) Sphere. c) Robo.}
+\label{fig:benchmark-meshes}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure9}
+\decoRule
+\caption[Visualization of significant edges]{Finding and visualization of significant edges. a) GiD postprocessor. b) The Mesh Editor.}
+\label{fig:significant-edges}
+\end{figure}
+
+For benchmarking we used PC with Intel Core i7-2600 processor, 16 GB memory and NVidia GeForce GT 545 graphics card. The results support the fact, that more complex data structure is constructed to represent the mesh in our editor. The manipulation with the model is comfortable even for a very large data input. The program takes benefit of creating the sophisticated internal data structure that, on the contrary, causes longer initial loading time. However, the presented smart internal model representation allows selection of logically related groups of entities on the mesh surface without knowing the geometrical and topological connections from the modeller. The program is able to find automatically the significant edges where the geometry changes (shown in Figure \ref{fig:significant-edges}) and therefore simplify the process of selecting the entities. Moreover, individual elements can be easily removed so it is allowed to dig into the mesh and view the internal elements. The other editors, which were tested against the proposed editor, do not support those features. Besides that, the capability of unlimited view-point movement allows to fly through holes in the mesh and investigate the mesh from the inside.
