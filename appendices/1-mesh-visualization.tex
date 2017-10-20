@@ -61,12 +61,12 @@ The abstract base class Element2D is common for both the two-dimensional element
 
 The 3D element face classes differ only by implementation of the interface \texttt{IFaceOfElement3D}.
 
-\begin{Verbatim}[obeytabs,tabsize=4]
+\begin{lstlisting}
 interface IFaceOfElement3D
 {
 	Element3D ParentElement { get; }
 }
-\end{Verbatim}
+\end{lstlisting}
 
 The interface helps to include reference to the parent 3D element at each face. This link is important for selection of elements on the mesh surface, because surface is composed, among other things, of external faces of those 3D elements that lie on the domain boundary. The adapted winged edge pattern is applied for the surface representation. All classes participating in this data structure are summarized in the class diagram in Figure \ref{fig:class-diagram-surface}.
 
@@ -163,8 +163,7 @@ For various operations with a mesh, it is useful to have some method that finds 
 
 The principle of the method is simple. Firstly, the method performs the perspective projection of all nodes to the screen and their actual depth is determined. Then the whole model is rendered into depth-buffer to produce a depth-map of the mesh. After that, the value in the depth-buffer corresponding to each node is compared to the Z-component of the screen coordinates of this node. If the value in the depth-buffer is greater than the projected distance of the node, the node is hidden behind some face. Otherwise, the node is added to the visible nodes set. The best precision in the depth-buffer is for the vertices that are in a small distance from the front clipping plane of the viewing frustum. The first step of the algorithm is therefore to move the near clipping plane from the observer to the mesh surface as close as possible. The pseudo-code of the described algorithm follows.
 
-{\small
-\begin{Verbatim}[obeytabs,tabsize=4]
+\begin{lstlisting}
 Set<Node> FindVisibleNodes(Rectangle area)
 {
 	GL.MatrixMode(MatrixMode.Projection);
@@ -202,8 +201,7 @@ Set<Node> FindVisibleNodes(Rectangle area)
 	}
 	return result; // return list of visible nodes
 }
-\end{Verbatim}
-}
+\end{lstlisting}
 
 %----------------------------------------------------------------------------------------
 %	SUB-SECTION Selection of entities
@@ -221,8 +219,7 @@ The limit angle is determined by the count of the mouse button clicks on some fa
 
 The following pseudo-code shows the implementation of the \texttt{SelectSurface()} method. Figure \ref{fig:element-face-selection} illustrates the result of the double- and triple-click on the mesh surface. Double-click selects all faces in the area that is delimited by the first limit angle. Default value of this parameter is one degree. Therefore double-click selects the elements or faces of elements which have a face on the same flat surface as the mouse cursor, whereas the triple-click selects the elements or faces on the smooth (possibly curved) surface as the mouse cursor. This surface is delimited by edges whose adjacent faces include angle lower than or equal to the second limit angle. Fourth click selects all the remaining neighboring elements or faces.
 
-{\small
-\begin{Verbatim}[obeytabs,tabsize=4]
+\begin{lstlisting}
 Set<Element2D> SelectSurface(Element2D startFace, float borderAngleLimit)
 {
 	Set<Element2D> selectionSet = new Set<Element2D>(); // faces to select
@@ -245,8 +242,7 @@ Set<Element2D> SelectSurface(Element2D startFace, float borderAngleLimit)
 	}
 	return selectionSet;
 }
-\end{Verbatim}
-}
+\end{lstlisting}
 
 \begin{figure}[H]
 \centering
