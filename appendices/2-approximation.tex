@@ -186,5 +186,81 @@ Also note that passing residuals of approximation instead of original data betwe
 %	SUB-SUB-SECTION Approximation functions
 %----------------------------------------------------------------------------------------
 
-%\subsubsection{Approximation functions}
+\subsubsection{Approximation functions}
 
+Various approximation functions were investigated and tested. Besides polynomial functions also Discrete cosine transform \cite{XXX-13} and Wavelet transform \cite{XXX-14} were considered. Since the data compression algorithm has to be very fast, simple polynomial approximation functions were preferred. They are summarized below:
+
+\begin{itemize}
+  \item \textbf{Mean value} -- A single value (average value) replaces the set of discrete values. Arithmetic mean was used during testing because it is fast to compute unlike the median. Also, it takes into account whole spectrum of values in contrast of the mode value that is the value that occurs most often in the collection. It is suitable in statistics where the measurement errors have to be excluded. However, in the case of the results from the FEM the user wants to see extremes in data and these outlying results should be rather highlighted instead of truncated. That is the reason why is neither the arithmetic mean nor other statistically estimated mean value suitable for this purpose. Mean value approximation diagram is depicted in Figure \ref{fig:mean-value-approx}.
+
+  \begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/appendix-approximation/figure4}
+  \decoRule
+  \caption[Mean value approximation diagram]{Mean value approximation diagram. Dashed lines denote octree division process. Shorter the line the deeper subdivision represents. Mean value is not suitable because of high errors and discontinuities between approximation cells. $v$ stands for function value and $x$ for spatial dimension.}
+  \label{fig:mean-value-approx}
+  \end{figure}
+
+  \item \textbf{Regression} -- Finds a polynomial that models relationship between a scalar dependent variable and one or more explanatory (independent) variables. In three-dimensional problem there are three independent variables. Polynomial regression models are often fitted using the least squares method. The implementation used in this work is based on solving linear system of equations using LU decomposition. Key thing is that the size of the system does not depend on the number of data values, but on the number of approximation function parameters. Therefore, the algorithm has linear computational complexity and scales well. Several polynomials were tested. In the functions below $x$, $y$, $z$ are spatial coordinates, $c_i$ are parameters which determine the shape of the polynomial and $v$ is the function value.
+
+  \begin{itemize}
+    \item \textbf{Linear} -- Hyperplane, only four parameters per octree cell. Value $v$ in the point with coordinates $x$, $y$, $z$ is computed using linear interpolation function in the form
+    
+    \begin{equation}
+    v=c_{1}x + c_{2}y + c_{3}z + c_{4}.
+    \end{equation}
+    
+    Figure \ref{fig:octree-creation} contains example of creation of octree node hierarchy driven by this function.
+    
+    \item \textbf{Quadratic} -- Parametric shape models known as Hyperquadrics. They have too many parameters per cell (10) and are not suitable to capture continuity between octree cells. Value v in the point with coordinates $x$, $y$, $z$ is computed using quadratic interpolation function in the form
+
+    \begin{equation}
+      v=c_{1}x^2 + c_{2}y^2 + c_{3}z^2 + c_{4}xy + c_{5}xz + c_{6}yz + c_{7}x + c_{8}y + c_{9}z + c_{10}.
+    \end{equation}
+
+    \item \textbf{Trilinear} -- 8 parameters, the best compromise, consistent with neighboring octree cells, almost “seamless” transitions between octree cells. Also used in the FEM. Value $v$ in the point with coordinate $x$, $y$, $z$ is computed using trilinear interpolation function in the form
+    
+    \begin{equation}
+      v=c_{1}xyz + c_{2}xy + c_{3}xz + c_{4}yz + c_{5}x + c_{6}y + c_{7}z + c_{8}.
+    \end{equation}
+
+    The least squares method is applied to find parameters $c_{1},...,c_{8}$. The problem is solved by minimizing the sum of squared residuals $G$ of the linear regression model
+
+    \begin{equation}
+      G = \sum_{i=1}^{N}(v_i - (c_{1}x_{i}y_{i}z_{i} + c_{2}x_{i}y_{i} + c_{3}x_{i}z_{i} + c_{4}y_{i}z_{i} + c_{5}x_{i} + c_{6}y_{i} + c_{7}z_{i} + c_{8}))^2,
+    \end{equation}
+    
+    where $N$ is number of values which are interpolated. When the parameters of interpolation are known, value in any point of the approximated volume can be found simply by providing $x$, $y$, and $z$ coordinates of the point in the equation.
+    
+    \item \textbf{Tri-quadratic} -- Too many describing parameters with no significant benefit over trilinear form.
+    
+    \item \textbf{Quadrilinear form} -- Generalized trilinear form, extended by temporal dimension, only theoretical option, not implemented.
+    
+
+  \end{itemize}
+
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/appendix-approximation/figure5}
+\decoRule
+\caption[Octree creation]{Octree creation example based on linear approximation error.}
+\label{fig:octree-creation}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/appendix-approximation/figure6}
+\decoRule
+\caption[Nodal value computation]{Nodal value computation diagram.}
+\label{fig:nodal-value-computation}
+\end{figure}
+
+Figure \ref{fig:nodal-value-computation} depicts computation of nodal value via traversing octree from the root to the leaves and simultaneously summing up approximation errors. Root node of the octree contains all data components in all time steps where data value of an arbitrary element node can be computed. If an approximation is not sufficiently accurate in current octree node, correction can be made with the help of data stored in lower levels of the octree and summing up corrections together with initial value to compute final value for the node.
+
+%----------------------------------------------------------------------------------------
+%	SUB-SUB-SECTION Results
+%----------------------------------------------------------------------------------------
+
+\subsubsection{Results}
