@@ -113,11 +113,11 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{inconsolata}
 
-\definecolor{bluekeywords}{rgb}{0,0,1}
-\definecolor{greencomments}{rgb}{0,0.5,0}
-\definecolor{redstrings}{rgb}{0.64,0.08,0.08}
-\definecolor{xmlcomments}{rgb}{0.5,0.5,0.5}
-\definecolor{types}{rgb}{0.17,0.57,0.68}
+\definecolor{keywordsColor}{rgb}{0,0,1}
+\definecolor{commentsColor}{rgb}{0,0.5,0}
+\definecolor{stringsColor}{rgb}{0.64,0.08,0.08}
+\definecolor{xmlcommentsColor}{rgb}{0.5,0.5,0.5}
+\definecolor{typesColor}{rgb}{0.17,0.57,0.68}
 
 \usepackage{listings}
 \lstset{language=[Sharp]C,
@@ -131,13 +131,16 @@ breaklines=true,
 showstringspaces=false,
 breakatwhitespace=true,
 escapeinside={(*@}{@*)},
-commentstyle=\color{greencomments},
+commentstyle=\color{commentsColor},
 morekeywords={partial, var, value, get, set},
-keywordstyle=\color{bluekeywords},
-stringstyle=\color{redstrings},
+keywordstyle=\color{keywordsColor},
+stringstyle=\color{stringsColor},
 basicstyle=\ttfamily\small,
 }
 
+\definecolor{positiveColor}{rgb}{0,1,0}
+\definecolor{negativeColor}{rgb}{1,0,0}
+\definecolor{neutralColor}{rgb}{0.6,0.6,0.6}
 
 \begin{document}
 

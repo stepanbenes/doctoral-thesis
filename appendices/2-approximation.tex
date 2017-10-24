@@ -73,6 +73,7 @@ Similar procedure -- passing residuals between mesh levels -- is applied in the 
 %----------------------------------------------------------------------------------------
 
 \subsection{Approximation in space}
+\label{sec:approximation-in-space}
 
 Discrete values within an octree cell are replaced by a continuous function which is as simple as possible and can be represented in memory by a few parameters. It is therefore necessary to find suitable type of function and in the case of polynomial functions also the order of the function. Compression algorithm has to be very fast. Compromise between low error and memory consumption must be found. For the sake of simplicity at the beginning of the work the relations between neighboring octree nodes were neglected. Nodal values in each octree cell are approximated separately.
 
@@ -265,18 +266,18 @@ Figure \ref{fig:nodal-value-computation} depicts computation of nodal value via 
 
 \subsubsection{Results}
 
-The benchmark is designed to compare maximal relative approximation error, average error and compression ratio when using different approximation methods. Two test data sets were chosen (Figure \ref{fig:reactor-vessel-displacements} and Figure \ref{fig:reactor-containment-displacements}), both contain displacement vector values with three components ($u$, $v$ and $w$) and about 30 time steps. Maximal relative approximation error is the highest relative error of an approximation method in single element node across all data components and time steps. Average error is a weighted sum of approximation errors in all nodes and data components divided by the number of these approximations. Compression ratio is memory consumption of the proposed data representation divided by memory consumption of original post-processor that does not use any data approximation techniques. Results are summarized in Table \ref{tab:reactor-vessel-results} and Table \ref{XXX2}. The mesh topology and result data sets that were used in this benchmark can be found at \cite{XXX-15}.  These files can be opened for reference in program GiD.
+The benchmark is designed to compare maximal relative approximation error, average error and compression ratio when using different approximation methods. Two test data sets were chosen (Figure \ref{fig:reactor-vessel-displacements} and Figure \ref{fig:reactor-containment-displacements}), both contain displacement vector values with three components ($u$, $v$ and $w$) and about 30 time steps. Maximal relative approximation error is the highest relative error of an approximation method in single element node across all data components and time steps. Average error is a weighted sum of approximation errors in all nodes and data components divided by the number of these approximations. Compression ratio is memory consumption of the proposed data representation divided by memory consumption of original post-processor that does not use any data approximation techniques. Results are summarized in Table \ref{tab:reactor-vessel-results} and Table \ref{tab:reactor-containment-results}. The mesh topology and result data sets that were used in this benchmark can be found at \cite{XXX-15}.  These files can be opened for reference in program GiD.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/appendix-approximation/figure7}
 \decoRule
-\caption[Reactor vessel 2D slice]{Reactor vessel 2D slice. Displacements visualization.}
+\caption[Reactor vessel 2D]{Reactor vessel 2D. Displacements visualization.}
 \label{fig:reactor-vessel-displacements}
 \end{figure}
 
 \begin{table}[H]
-\caption[Approximated results of reactor vessel 2D slice simulation]{Reactor vessel 2D slice. Spatial octree approximation results.}
+\caption[Approximated results of reactor vessel 2D simulation]{Reactor vessel 2D. Spatial octree approximation results.}
 \label{tab:reactor-vessel-results}
 \centering
 \begin{tabular}{l r r r}
@@ -485,3 +486,28 @@ Relative error $\tilde{d}$ is then
 \end{equation}
 
 The value of $\tilde{d}$ is then compared to $\epsilon$ value. The value $\epsilon=0.001$ came from the experiments as the best-fitting value. If condition $\tilde{d} \leq \epsilon$ holds, functions $u$ and $v$ are considered equal in terms of approximation in time. The value $\epsilon$ matches \code{MAX\_RELATIVE\_ERROR} parameter in Listing \ref{alg:approximation-in-time}.
+
+%----------------------------------------------------------------------------------------
+%	SUB-SUB-SECTION Results
+%----------------------------------------------------------------------------------------
+
+\subsubsection{Results}
+
+Results of the approximation in time are summarized in Table \ref{tab:reactor-vessel-spacetime}. For spatial approximation the trilinear regression was chosen as the method with the best results in the previous benchmark. The reactor vessel simulation results were used in the test (see Figure \ref{fig:reactor-vessel-displacements}).
+
+\begin{table}[H]
+\caption[Approximated results of reactor vessel 2D simulation (space and time)]{Reactor vessel 2D. Spatial and temporal octree approximation results.}
+\label{tab:reactor-vessel-spacetime}
+\centering
+\begin{tabular}{l r r r}
+\toprule
+\tabhead{ } & \tabhead{Max error [\%]} & \tabhead{Average error [\%]} & \tabhead{Compression ratio [\%]} \\
+\midrule
+Mean value & 100.7 \textcolor{negativeColor}{(+25.42)} & 0.7835 \textcolor{negativeColor}{(+0.16)} & 7.53 \textcolor{positiveColor}{(-47.77)}\\
+Linear regression & 44.23 \textcolor{neutralColor}{(+0.0)} & 0.2262 \textcolor{negativeColor}{(+0.042)} & 2.57 \textcolor{positiveColor}{(-15.13)}\\
+Trilinear regression & 81.41 \textcolor{negativeColor}{(+0.14)} & 0.2158 \textcolor{negativeColor}{(+0.041)} & 2.54 \textcolor{positiveColor}{(-14.34)}\\
+\bottomrule\\
+\end{tabular}
+\end{table}
+
+Files with mesh topology and FEM results that were used in this benchmark can be found at \cite{XXX-15}. Time compression procedure presented in Listing \ref{alg:approximation-in-time} was applied to already created octree-based structure containing approximations of original data values. Generation of this octree is described in section \ref{sec:approximation-in-space}.
