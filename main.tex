@@ -45,7 +45,7 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
-\addbibresource{example.bib} % The filename of the bibliography
+\addbibresource{references.bib} % The filename of the bibliography
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 
@@ -54,6 +54,21 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{fancyvrb} % keep tabs in verbatim sections, see: https://tex.stackexchange.com/questions/231083/how-to-stop-verbatim-from-converting-tabs-to-spaces
 
 \usepackage{listings} % enable to reference source code, see: https://tex.stackexchange.com/questions/74155/how-to-treat-verbatim-as-a-block-that-can-be-referenced-just-like-a-figure
+
+\usepackage{amssymb} % The amssymb package provides various useful mathematical symbols
+
+\usepackage{mathtools} % math tools (ceiling signs, see: http://tex.stackexchange.com/questions/42271/floor-and-ceiling-functions)
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% following packages allows to write algorithms as pseudocode
+\usepackage{amsmath}
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\algnewcommand\algorithmicinput{\textbf{INPUT:}}
+\algnewcommand\INPUT{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{OUTPUT:}}
+\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
 
 %----------------------------------------------------------------------------------------
 %	COMMAND DEFINITIONS
@@ -68,6 +83,7 @@ headsepline, % Uncomment to get a line under the header
 \newcommand{\tabhead}[1]{\textbf{#1}}
 \newcommand*\diff{\mathop{}\!\mathrm{d}} % dx
 \newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}} % d^2x
+\newcommand{\mtrx}[1]{\mathbf{#1}}
 
 %----------------------------------------------------------------------------------------
 %	MARGIN SETTINGS
