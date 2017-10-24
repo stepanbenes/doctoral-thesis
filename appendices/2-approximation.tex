@@ -280,14 +280,14 @@ The benchmark is designed to compare maximal relative approximation error, avera
 \caption[Approximated results of reactor vessel 2D simulation]{Reactor vessel 2D. Spatial octree approximation results.}
 \label{tab:reactor-vessel-results}
 \centering
-\begin{tabular}{l r r r}
-\toprule
+\begin{tabular}{| l | r | r | r |}
+\hline
 \tabhead{ } & \tabhead{Max error [\%]} & \tabhead{Average error [\%]} & \tabhead{Compression ratio [\%]} \\
-\midrule
+\hline
 Mean value & 75.28 & 0.6268 & 55.3\\
 Linear regression & 44.23 & 0.1842 & 17.7\\
 Trilinear regression & 81.27 & 0.1751 & 16.9\\
-\bottomrule\\
+\hline
 \end{tabular}
 \end{table}
 
@@ -303,14 +303,14 @@ Trilinear regression & 81.27 & 0.1751 & 16.9\\
 \caption[Approximated results of reactor containment simulation]{Segment of reactor containment. Spatial octree approximation results.}
 \label{tab:reactor-containment-results}
 \centering
-\begin{tabular}{l r r r}
-\toprule
+\begin{tabular}{| l | r | r | r |}
+\hline
 \tabhead{ } & \tabhead{Max error [\%]} & \tabhead{Average error [\%]} & \tabhead{Compression ratio [\%]} \\
-\midrule
+\hline
 Mean value & 38.62 & 1.667 & 63.1\\
 Linear regression & 32.9 & 0.305 & 59.4\\
 Trilinear regression & 89.46 & 0.2237 & 56\\
-\bottomrule\\
+\hline
 \end{tabular}
 \end{table}
 
@@ -499,14 +499,14 @@ Results of the approximation in time are summarized in Table \ref{tab:reactor-ve
 \caption[Approximated results of reactor vessel 2D simulation (space and time)]{Reactor vessel 2D. Spatial and temporal octree approximation results.}
 \label{tab:reactor-vessel-spacetime}
 \centering
-\begin{tabular}{l r r r}
-\toprule
+\begin{tabular}{| l | r | r | r |}
+\hline
 \tabhead{ } & \tabhead{Max error [\%]} & \tabhead{Average error [\%]} & \tabhead{Compression ratio [\%]} \\
-\midrule
+\hline
 Mean value & 100.7 \textcolor{negativeColor}{(+25.42)} & 0.7835 \textcolor{negativeColor}{(+0.16)} & 7.53 \textcolor{positiveColor}{(-47.77)}\\
 Linear regression & 44.23 \textcolor{neutralColor}{(+0.0)} & 0.2262 \textcolor{negativeColor}{(+0.042)} & 2.57 \textcolor{positiveColor}{(-15.13)}\\
 Trilinear regression & 81.41 \textcolor{negativeColor}{(+0.14)} & 0.2158 \textcolor{negativeColor}{(+0.041)} & 2.54 \textcolor{positiveColor}{(-14.34)}\\
-\bottomrule\\
+\hline
 \end{tabular}
 \end{table}
 
