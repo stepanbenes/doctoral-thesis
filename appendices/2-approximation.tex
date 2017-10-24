@@ -154,7 +154,7 @@ function ComputeApproximation(dataValues, dataComponentId, approximationMethod)
 }    
 \end{lstlisting}
 
-After loading a data block, compression is started. Listing \ref{alg:approximation} contains pseudo-code of recursive procedure that is the core of the compression algorithm. Figure \ref{fig:octree-generation} contains overview of this algorithm in form of UML Activity diagram. The input is an array of nodal values in one component of one field defined on the mesh in single time step. In case of data stored in gauss-points the values has to be at first extrapolated to nodes using natural coordinates supplied in the data file. Nodal data are then passed as an input parameter \texttt{dataValues} to the function \texttt{InsertDataValues} that is called upon the octree root node which represents one big cube that surrounds the whole mesh. Each \texttt{dataValue} object is a structure consisting of floating-point number Value and integer \texttt{NodeId} that represents a key to the table of nodes in global mesh object. \texttt{InsertDataValues} is pure virtual function declared in abstract base class \texttt{OctreeNode} and its implementation differs in derived classes. Its implementation in \texttt{OctreeLeafNode} is straightforward and so follows description of its implementation in class \texttt{OctreeInternalNode}. Simplified class diagram of the key types involved in Listing \ref{alg:approximation} is shown in Figure \ref{fig:octree-class-diagram}.
+After loading a data block, compression is started. Listing \ref{alg:approximation} contains pseudo-code of recursive procedure that is the core of the compression algorithm. Figure \ref{fig:octree-generation} contains overview of this algorithm in form of UML Activity diagram. The input is an array of nodal values in one component of one field defined on the mesh in single time step. In case of data stored in gauss-points the values has to be at first extrapolated to nodes using natural coordinates supplied in the data file. Nodal data are then passed as an input parameter \code{dataValues} to the function \code{InsertDataValues} that is called upon the octree root node which represents one big cube that surrounds the whole mesh. Each \code{dataValue} object is a structure consisting of floating-point number Value and integer \code{NodeId} that represents a key to the table of nodes in global mesh object. \code{InsertDataValues} is pure virtual function declared in abstract base class \code{OctreeNode} and its implementation differs in derived classes. Its implementation in \code{OctreeLeafNode} is straightforward and so follows description of its implementation in class \code{OctreeInternalNode}. Simplified class diagram of the key types involved in Listing \ref{alg:approximation} is shown in Figure \ref{fig:octree-class-diagram}.
 
 \begin{figure}[H]
 \centering
@@ -172,13 +172,13 @@ After loading a data block, compression is started. Listing \ref{alg:approximati
 \label{fig:octree-class-diagram}
 \end{figure}
 
-At first the algorithm computes parameters of continuous approximation function of discrete data values provided (variable \texttt{approximation}). In case of trilinear interpolation it uses least square method to calculate 8 parameters of a polynomial regression model and stores them in \texttt{DataCatalog} table which is a property of each octree node. Then the maximal relative approximation error is computed.
+At first the algorithm computes parameters of continuous approximation function of discrete data values provided (variable \code{approximation}). In case of trilinear interpolation it uses least square method to calculate 8 parameters of a polynomial regression model and stores them in \code{DataCatalog} table which is a property of each octree node. Then the maximal relative approximation error is computed.
 
 Approximation function for data values in the octree cell is assessed with the help of several metrics. First, absolute approximation error, which is the difference between the original nodal value and the value of approximation function, is evaluated in all nodes. Then, relative approximation error is obtained by dividing the absolute approximation error by global range of values (difference between global maximum and global minimum of original nodal values). The maximum relative approximation error in an octree cell is one of three parameters (see condition 2 above) that are used by the algorithm to decide whether to proceed with further subdivision of the octree cell. These three parameters control the overall quality of approximation, memory consumption and performance and need to be fine-tuned during testing on real-world data.
 
-If the maximal approximation error is too high, the algorithm continues, calculates approximation error in each node and stores it in table residuals in relevant octant according to its position in current octree cell. \texttt{residuals} is a table of data value arrays and it is a local variable that will be disposed after each call to function \texttt{InsertDataValues} finishes. Algorithm then iterates over all child octants and checks for number of residuals assigned to them. If condition 1 stated above holds, algorithm is recursively called upon each child octree cell. If the octree cell is a leaf node, recursion is stopped and algorithm determines whether it should split current leaf octree cell into 8 sub-segments by checking conditions 2 and 3. In other words, if the current octree branch is not deep enough and maximal residual belonging to current child octree cell is higher than designated epsilon value, then this leaf cell is replaced with internal cell and function \texttt{InsertDataValues} is called upon this new \texttt{OctreeInternalNode} object. Residuals located in current octant are passed as an input to this function.
+If the maximal approximation error is too high, the algorithm continues, calculates approximation error in each node and stores it in table residuals in relevant octant according to its position in current octree cell. \code{residuals} is a table of data value arrays and it is a local variable that will be disposed after each call to function \code{InsertDataValues} finishes. Algorithm then iterates over all child octants and checks for number of residuals assigned to them. If condition 1 stated above holds, algorithm is recursively called upon each child octree cell. If the octree cell is a leaf node, recursion is stopped and algorithm determines whether it should split current leaf octree cell into 8 sub-segments by checking conditions 2 and 3. In other words, if the current octree branch is not deep enough and maximal residual belonging to current child octree cell is higher than designated epsilon value, then this leaf cell is replaced with internal cell and function \code{InsertDataValues} is called upon this new \code{OctreeInternalNode} object. Residuals located in current octant are passed as an input to this function.
 
-This continues until approximation of current data component is good enough in all octree cells.  When the algorithm finishes, original discrete data can be deleted, because the created octree structure with approximation functions in its nodes is all that is needed to reconstruct the original data. Then the algorithm can proceed with reading and processing next data set. Note that these operations are to a considerable extent independent and processing of data sets can be parallelized. However, if the same octree data structure is reused for multiple data sets, then the access to \texttt{DataCatalog} and octree node expansion has to be synchronized using standard locking mechanisms.
+This continues until approximation of current data component is good enough in all octree cells.  When the algorithm finishes, original discrete data can be deleted, because the created octree structure with approximation functions in its nodes is all that is needed to reconstruct the original data. Then the algorithm can proceed with reading and processing next data set. Note that these operations are to a considerable extent independent and processing of data sets can be parallelized. However, if the same octree data structure is reused for multiple data sets, then the access to \code{DataCatalog} and octree node expansion has to be synchronized using standard locking mechanisms.
 
 Also note that passing residuals of approximation instead of original data between octree levels is important, because it allows to describe the main character of function (lower frequencies) on top levels and details (high-frequency changes) on bottom levels of the octree. This design is inspired by the Multigrid method basic principles.
 
@@ -264,3 +264,224 @@ Figure \ref{fig:nodal-value-computation} depicts computation of nodal value via 
 %----------------------------------------------------------------------------------------
 
 \subsubsection{Results}
+
+The benchmark is designed to compare maximal relative approximation error, average error and compression ratio when using different approximation methods. Two test data sets were chosen (Figure \ref{fig:reactor-vessel-displacements} and Figure \ref{fig:reactor-containment-displacements}), both contain displacement vector values with three components ($u$, $v$ and $w$) and about 30 time steps. Maximal relative approximation error is the highest relative error of an approximation method in single element node across all data components and time steps. Average error is a weighted sum of approximation errors in all nodes and data components divided by the number of these approximations. Compression ratio is memory consumption of the proposed data representation divided by memory consumption of original post-processor that does not use any data approximation techniques. Results are summarized in Table \ref{tab:reactor-vessel-results} and Table \ref{XXX2}. The mesh topology and result data sets that were used in this benchmark can be found at \cite{XXX-15}.  These files can be opened for reference in program GiD.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/appendix-approximation/figure7}
+\decoRule
+\caption[Reactor vessel 2D slice]{Reactor vessel 2D slice. Displacements visualization.}
+\label{fig:reactor-vessel-displacements}
+\end{figure}
+
+\begin{table}[H]
+\caption[Approximated results of reactor vessel 2D slice simulation]{Reactor vessel 2D slice. Spatial octree approximation results.}
+\label{tab:reactor-vessel-results}
+\centering
+\begin{tabular}{l r r r}
+\toprule
+\tabhead{ } & \tabhead{Max error [\%]} & \tabhead{Average error [\%]} & \tabhead{Compression ratio [\%]} \\
+\midrule
+Mean value & 75.28 & 0.6268 & 55.3\\
+Linear regression & 44.23 & 0.1842 & 17.7\\
+Trilinear regression & 81.27 & 0.1751 & 16.9\\
+\bottomrule\\
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/appendix-approximation/figure8}
+\decoRule
+\caption[Segment of reactor containment]{Segment of reactor containment. Displacements visualization.}
+\label{fig:reactor-containment-displacements}
+\end{figure}
+
+\begin{table}[H]
+\caption[Approximated results of reactor containment simulation]{Segment of reactor containment. Spatial octree approximation results.}
+\label{tab:reactor-containment-results}
+\centering
+\begin{tabular}{l r r r}
+\toprule
+\tabhead{ } & \tabhead{Max error [\%]} & \tabhead{Average error [\%]} & \tabhead{Compression ratio [\%]} \\
+\midrule
+Mean value & 38.62 & 1.667 & 63.1\\
+Linear regression & 32.9 & 0.305 & 59.4\\
+Trilinear regression & 89.46 & 0.2237 & 56\\
+\bottomrule\\
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/appendix-approximation/figure9}
+\decoRule
+\caption[Geological layers simulation results]{Geological layers simulation results. Exact data values, no approximation applied.}
+\label{fig:geological-layers-exact}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/appendix-approximation/figure10}
+\decoRule
+\caption[Mean value approximation of geological layers simulation results]{Geological layers simulation results. Mean value approximation of data values. Nodes in each cell have constant approximated value. High average error of an approximation. High memory consumption due to high average depth of the octree. Non-smooth transition between cells.}
+\label{fig:geological-layers-mean}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/appendix-approximation/figure11}
+\decoRule
+\caption[Trilinear approximation of geological layers simulation results]{Geological layers simulation results. Trilinear approximation of data values. Seamless transition between cells. Low depth of the octree in smooth areas. Can't capture high frequent changes in data which is common disadvantage of all lossy compressions.}
+\label{fig:geological-layers-trilinear}
+\end{figure}
+
+Figure \ref{fig:geological-layers-exact} contains visualization of the exact data values whereas Figure \ref{fig:geological-layers-mean} and Figure \ref{fig:geological-layers-trilinear} contains visualization of approximation of the same data series but for different types of approximation functions to highlight the imperfections of the approximation algorithm. The red lines represent the octree cells.
+
+
+%----------------------------------------------------------------------------------------
+%	SUB-SECTION Approximation in time
+%----------------------------------------------------------------------------------------
+
+\subsection{Approximation in time}
+
+Additional data compression can be gained by focusing on temporal dimension of function values. Memory allocation can be lowered by eliminating unimportant time steps. To achieve that, it is necessary to find those time steps, in which function values are steady or are changing linearly and can be therefore interpolated from other time steps.
+
+Figure \ref{fig:interpolation-in-time} illustrates the idea of interpolation in time. Intermediate time steps can be interpolated from the key time steps if they have similar shape -- they are \textit{nearly} linear combinations of each other and therefore data in redundant time steps can be disposed. The decision whether to dispose time step or not is based on difference of two functions compared to experimentally designated threshold value. Mathematical background of this procedure is described later in this section.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/appendix-approximation/figure12}
+\decoRule
+\caption[Interpolation in time diagram]{Interpolation in time. Intermediate time steps (blue) can be interpolated from the key time steps (red) if they have similar shape.}
+\label{fig:interpolation-in-time}
+\end{figure}
+
+Several options to store temporal data were considered.
+
+\begin{itemize}
+  \item Sequence of octrees. Each one for single time step.
+  \item 4D tree. Extension of octal tree on temporal dimension. Each internal node has 16 children.
+  \item Single ordinary octree containing data approximations with time component. Extending the approximation functions by temporal dimension, e.g. quadrilinear form instead of trilinear form.
+  \item Combination of octree for spatial decomposition and binary tree for temporal dimension division.
+\end{itemize}
+
+Octree for each time frame of an animation is memory inefficient as well as 4D tree \cite{XXX-16}. 4D approximation functions have many parameters and also can’t capture intricate evolution of function in time. Therefore, different solution was suggested -- single octree representing spatial decomposition that is formed by merging sequence of octrees from all time steps. However, the sequence of octrees is just a virtual term. Algorithm 1 treats all data component from all time steps the same and when it finishes its job, only single octree is left with data approximation object for various data component and time steps stored in data catalog in each octree node independent to each other. By merging it is meant the unifying all time steps of a single data component in each octree node into single data sequence object that can be then a subject of the time compression algorithm. This process of merging virtual octrees for each time step into single ``time-tree'' is illustrated in Figure \ref{fig:unifying-time-steps}. Notice that the octree for each time step can have different structure and depth, because in each time step the original function can have different frequency spectrum for which the different sampling rate is needed.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/appendix-approximation/figure13}
+\decoRule
+\caption[Illustration of unifying time steps in octree nodes]{Illustration of unifying time steps in octree nodes. For the sake of simplicity the binary tree is shown instead of octree. T1 and T2 represent approximation functions of the same data component in different time steps. Result of the union is single octree that contains sequences of corresponding time steps in its nodes.}
+\label{fig:unifying-time-steps}
+\end{figure}
+
+However, not all approximation functions are preserved during merging. Each octree cell contains list of approximation functions only for key time steps, that are necessary to cover time development of discrete function in area represented by the octree cell. These key (or fixed) time steps are either specified by the user or identified automatically by the algorithm presented in Listing \ref{alg:approximation-in-time}.
+
+Original nodal value retrieving is the same octree traversal as was depicted in Figure \ref{fig:nodal-value-computation} except for the final phase -- calculating value from approximation function in leaf octree nodes. If desired time instant is not present, then it must be interpolated from the key time steps. To find concrete time instant in the list of approximation functions the fast binary search algorithm is used.
+
+Temporal-data-containing-octree is created by algorithm that works with already created octree having approximation functions for all time steps. At first it finds time steps that must be preserved. Those can be explicitly picked by the user or the algorithm itself determines automatically the first and the last time step as key times. Then the program traverses steps between key events of time interval. In each time step the algorithm iterates over space approximations for each loaded quantities and computes difference between each function and function created by interpolation of functions in key intervals. If this difference is lower than some preset fixed value, approximation function in current time step can be disposed because it can be created on demand in the future. Otherwise time interval is divided in current step and algorithm is recursively called on each of both intervals. It is therefore similar algorithm to approximation in space, but instead of octree a binary tree is used because there is only one temporal dimension instead of three spatial dimensions. Pseudo-code of approximation in time is shown in Listing \ref{alg:approximation-in-time}.
+
+\begin{lstlisting}[caption=Approximation in time procedure,label=alg:approximation-in-time]
+function compressTimeSteps(fromIndex, toIndex)
+{
+  // recursion stopping criterion
+  if (toIndex - 1 <= fromIndex)
+    return
+
+  fromApproximation = timeSteps[fromIndex].Approximation
+  toApproximation = timeSteps[toIndex].Approximation
+  
+  for (index = fromIndex + 1; index < toIndex; index++)
+  {
+    currentTime = timeSteps[index]
+    timeFactor = (currentTime - timeSteps[fromIndex]) / (timeSteps[toIndex] - timeSteps[fromIndex])
+    
+    testFunction = timeSteps.Values[index].Approximation
+    interpolatedFunction = InterpolatePolynomial(fromApproximation, toApproximation, timeFactor)
+
+    sumDiffSqr = 0.0, sumFuncSqr = 0.0
+
+    // compute difference of testFunction and interpolatedFunction
+    foreach (testPoint in domainPoints)
+    {
+      testValue = testFunction.ComputeValue(testPoint)
+      interpolatedValue = interpolatedFunction.ComputeValue(testPoint)
+      diff = testValue - interpolatedValue
+      
+      sumDiffSqr += diff * diff
+      sumFuncSqr += testValue * testValue
+    }
+
+    absoluteError = sqrt(sumDiffSqr)
+    absoluteValue = sqrt(sumFuncSqr)
+    relativeError = absoluteError / absoluteValue
+
+    // if functions are not similar
+    if (relativeError <= MAX_RELATIVE_ERROR)
+    {
+      // discard current time step
+      removeTimeStep(currentTime)
+    }
+    else
+    {
+      half = (toIndex + fromIndex) / 2
+      // recursive call on first half
+      compressTimeSteps(fromIndex, half)
+      // recursive call on second half
+      compressTimeSteps(half, toIndex)
+      return
+    }
+  }
+}
+
+// Approximation in time is called upon holes between fixed (key) time steps
+// Fixed time steps are at least first and last time step and any interleaved time step specified by user
+for (i = 1; i < fixedTimesIndexes.Count; i++)
+{
+  compressTimeSteps(fixedTimesIndexes[i - 1], fixedTimesIndexes[i])
+}
+\end{lstlisting}
+
+In the case of approximation in time, we have two continuous functions that we want to compare to each other. First function is approximation function for the time step that can be potentially removed. This function is already created by spatial approximation algorithm described above. Second function is computed ad-hoc from key time steps to test if it can potentially replace the first function later. If the test succeeds (functions are similar enough) the first function can be removed entirely from octree data structure, because it can be computed from the functions in neighboring time steps.
+
+The process of computing intermediate function from the key time steps is quite straightforward. With regard to the fact that all approximation functions have to be of the same polynomial type, each parameter of the interpolated function can be then computed as interpolation of the related parameters in two boundary functions in key time steps.
+
+Approximation in time is made for each spatial octree node separately instead of globally for the whole mesh, because the quantity can change in time only in some parts of the mesh and in others can be constant.
+
+%----------------------------------------------------------------------------------------
+%	SUB-SUB-SECTION Difference between two functions
+%----------------------------------------------------------------------------------------
+
+\subsubsection{Difference between two functions}
+
+The algorithm for approximation in time has to compare two continuous approximation functions to determine their similarity.
+
+The difference $d$ of two continuous square-integrable functions $u$ and $v$ is considered as scalar value computed as
+
+\begin{equation}
+  d = \sqrt{\int_{\Omega}(u-v)^2 \diff\Omega}.
+\end{equation}
+
+If $u \neq 0$ relative difference $\hat{d}$ is then
+
+\begin{equation}
+  \hat{d} = \frac{\sqrt{\int_{\Omega}(u-v)^2\diff\Omega}}{\sqrt{\int_{\Omega}u^2\diff\Omega}}.
+\end{equation}
+
+To move from continuous to discrete world the integrals can be replaced by sums
+
+\begin{equation}
+  \int_{\Omega}f(x)\diff x = \sum_{i=1}^{m}f(x_i) w_i,
+\end{equation}
+
+where $w_i$ is the weight of the $i$-th test point with the meaning of volume surrounding the point, $x_i$ is the location of the test point and $m$ is the number of integration points. The test points in the formula are the data points situated in the area represented by approximation function $f$ in the presented algorithm.
+
+Relative error $\tilde{d}$ is then
+
+\begin{equation}
+  \tilde{d} = \sqrt{\frac{\sum_{i=1}^{m}(u(x_i)-v(x_i))^2 w_i}{\sum_{i=1}^{m}u(x_i)^2 w_i}}.
+\end{equation}
+
+The value of $\tilde{d}$ is then compared to $\epsilon$ value. The value $\epsilon=0.001$ came from the experiments as the best-fitting value. If condition $\tilde{d} \leq \epsilon$ holds, functions $u$ and $v$ are considered equal in terms of approximation in time. The value $\epsilon$ matches \code{MAX\_RELATIVE\_ERROR} parameter in Listing \ref{alg:approximation-in-time}.
