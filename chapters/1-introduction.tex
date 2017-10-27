@@ -1,9 +1,9 @@
 \chapter{Introduction}
 \label{chapter-introduction}
 
-% Finite element analysis general description; Motivation example (including image);
+The research work presented in this thesis has set ambitious goal to redesign the whole well established process of data management in Finite element analysis software. It also proposes efficient methods to visualize finite element meshes and the results from the complex finite element analyses.
 
-Finite Element Analysis (FEA) is the term describing the entire process of modeling the physical system. FEA consists of model generation, meshing, attribute assignment, solution, and post-processing. With the ongoing desire to solve more complex systems with better and better precision, an analysis has to process enormous amount of data in each of its phases. Traditional unstructured file-based representation of the mesh, input parameters, and the results from the solution is the bottleneck of the entire process. It lacks the scalability and complicates the development of the tools for engineers that are either preparing the input to the FEM, or interpreting the output from the FEM.
+Finite Element Analysis (FEA) is the term describing the entire process of modeling the physical system using the Finite Element Method (FEM). FEA consists of model generation, meshing, attribute assignment, solution, and post-processing. With the ongoing desire to solve more complex systems with better and better precision, an analysis has to process enormous amount of data in each of its phases. Traditional unstructured file-based representation of the mesh, input parameters, and the results from the solution is the bottleneck of the entire process. It lacks the scalability and complicates the development of the tools for engineers that are either preparing the input to the FEM, or interpreting the output from the FEM.
 
 The solution of large-scale Finite element analysis itself can be parallelized and calculated in reasonable time on high-performance computing clusters. Nevertheless, in the end the results are transfered over network and post-processed on an ordinary personal computer. Another concern is the colaboration and sharing of the model and the results between engineers and researchers. All these limitation of the standard file-based approach lead to re-think the entire process of data management in FEA. The focus of the thesis is mainly on the post-processing of the results, and the way the results are stored, transfered, and visualized. However, the storage format for the results was designed with the whole picture in mind and there is proposed database-centric environment for complete FEA data management.
 
@@ -17,32 +17,36 @@ As an motivation example can serve analysis of reactor vessels in nuclear power 
 \label{fig:motivation-example}
 \end{figure}
 
+This thesis is structured in the following manner. Chapter \ref{chapter-related-work} gives a brief revision of related work performed in FEA data management, file formats, data compression, and post-processing of the results. Chapter \ref{chapter-design} deals with the alternative to file-based data management. Section \ref{sec:system-architecture} contains proposal of relational database model that connects all parts of Finite element analysis including geometry, model attributes, and simulation results, providing query interface and remote access over the Internet. Section \ref{sec:storage-format} describes details of new data format. Section \ref{sec:efficient-postprocessing} presents design of the postprocessor that is built on top of the data management system. Chapter \ref{chapter-implementation} summarizes interesting technical details and challenges that arose during implementation of the management system and post-processor. Chapter \ref{chapter-results} evaluates the implementation of the tools that are based on the new storage format and contains comparison to the traditional data formats. Chapter \ref{chapter-conclusion} concludes the thesis with final remarks, benefits and weaknesses of the chosen solution, and possible future work.
+
 %----------------------------------------------------------------------------------------
 %	SECTION Concepts
 %----------------------------------------------------------------------------------------
 
 \section{Concepts}
 
+% vysvetlit, co bude v teto kapitole
 % popsat zakladni pojmy se kteryma pracuju, uvod do problemu, ktery se snazim obsahnout; format slovniku - heslo: popis
 
 % vysvetlit, proc pouzivam pojem Multi-mesh (Multigrid byla inspirace)
 
-%----------------------------------------------------------------------------------------
-%	SUB-SECTION Finite element analysis
-%----------------------------------------------------------------------------------------
+\paragraph{Finite Element Method (FEM)} A numerical method for solving problems of engineering and physics. Typical areas include structural analysis, heat transfer, fluid flow, and electromagnetics. The analytical solution of these problems generally require the solution to boundary value problems for partial differential equations. The finite element method formulation of the problem results in a system of algebraic equations. The method yields approximate values of the unknowns at discrete number of points over the domain \cite{XXX}. To solve the problem, it subdivides a large problem domain into smaller, simpler parts that are called finite elements. This process is called the mesh generation \cite{XXX}. The simple equations that model these finite elements are then assembled into a larger system of equations that models the entire problem. FEM then uses variational methods from the calculus of variations to approximate a solution by minimizing an associated error function \cite{XXX}.
 
-\subsection{Finite element analysis}
+\paragraph{Finite element analysis} consists of...
 
 % nejprve vysvetlit FEM - jak se lisi od FEA
 
 % popsat podrobneji jednotlive faze
 
-\begin{itemize}
+\begin{enumerate}
     \item Preprocessing / modeller
     \item FEM calculation
     % Finite Element Method (FEM) is .... PD eq, structural analysis, heat transfer, fluid flow, mass transport, and electromagnetic potential. (Wikipedia)
     \item Post-processing of results
-\end{itemize}
+    % pridat dalsi z clanku
+\end{enumerate}
+
+% popsat jak v soucasnosti funguje data management
 
 %----------------------------------------------------------------------------------------
 %	SUB-SECTION Storage format
@@ -50,7 +54,8 @@ As an motivation example can serve analysis of reactor vessels in nuclear power 
 
 \subsection{Storage format} % or Data representation or Data management
 
-% file-based vs. db-based, advantages/disadvantages
+% popsat soucasny file-based format, advantages/disadvantages
+% popsat jak funguje zpracovani tohoto formatu, jak funguje post-processing
 
 % FEA is not an isolated example of this size effect, forcing us to re-think the way we handle application data
 
@@ -60,6 +65,8 @@ As an motivation example can serve analysis of reactor vessels in nuclear power 
 %----------------------------------------------------------------------------------------
 
 \section{Challenges}
+
+% vysvetlit, co bude v teto kapitole
 
 % jak reprezentovat takto velke mnozstvi dat
 % jak tyto vsechny faze propojit do jednoho systemu
