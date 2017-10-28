@@ -17,7 +17,7 @@ As an motivation example can serve analysis of reactor vessels in nuclear power 
 \label{fig:motivation-example}
 \end{figure}
 
-This thesis is structured in the following manner. Chapter \ref{chapter-related-work} gives a brief revision of related work performed in FEA data management, file formats, data compression, and post-processing of the results. Chapter \ref{chapter-design} deals with the alternative to file-based data management. Section \ref{sec:system-architecture} contains proposal of relational database model that connects all parts of Finite element analysis including geometry, model attributes, and simulation results, providing query interface and remote access over the Internet. Section \ref{sec:storage-format} describes details of new data format. Section \ref{sec:efficient-postprocessing} presents design of the postprocessor that is built on top of the data management system. Chapter \ref{chapter-implementation} summarizes interesting technical details and challenges that arose during implementation of the management system and post-processor. Chapter \ref{chapter-results} evaluates the implementation of the tools that are based on the new storage format and contains comparison to the traditional data formats. Chapter \ref{chapter-conclusion} concludes the thesis with final remarks, benefits and weaknesses of the chosen solution, and possible future work.
+The thesis is structured in the following manner. Chapter \ref{chapter-related-work} gives a brief revision of related work performed in FEA data management, file formats, data compression, and post-processing of the results. Chapter \ref{chapter-design} deals with the alternative to file-based data management. Section \ref{sec:system-architecture} contains proposal of relational database model that connects all parts of Finite element analysis including geometry, model attributes, and simulation results, providing query interface and remote access over the Internet. Section \ref{sec:storage-format} describes details of new data format. Section \ref{sec:efficient-postprocessing} presents design of the postprocessor that is built on top of the data management system. Chapter \ref{chapter-implementation} summarizes interesting technical details and challenges that arose during implementation of the management system and post-processor. Chapter \ref{chapter-results} evaluates the implementation of the tools that are based on the new storage format and contains comparison to the traditional data formats. Chapter \ref{chapter-conclusion} concludes the thesis with final remarks, benefits and weaknesses of the chosen solution, and possible future work.
 
 %----------------------------------------------------------------------------------------
 %	SECTION Concepts
@@ -25,40 +25,47 @@ This thesis is structured in the following manner. Chapter \ref{chapter-related-
 
 \section{Concepts}
 
-% vysvetlit, co bude v teto kapitole
+% TODO: vysvetlit, co bude v teto kapitole. A single sentence introducing the section.
+
 % popsat zakladni pojmy se kteryma pracuju, uvod do problemu, ktery se snazim obsahnout; format slovniku - heslo: popis
 
-% vysvetlit, proc pouzivam pojem Multi-mesh (Multigrid byla inspirace)
 
-\paragraph{Finite Element Method (FEM)} A numerical method for solving problems of engineering and physics. Typical areas include structural analysis, heat transfer, fluid flow, and electromagnetics. The analytical solution of these problems generally require the solution to boundary value problems for partial differential equations. The finite element method formulation of the problem results in a system of algebraic equations. The method yields approximate values of the unknowns at discrete number of points over the domain \cite{XXX}. To solve the problem, it subdivides a large problem domain into smaller, simpler parts that are called finite elements. This process is called the mesh generation \cite{XXX}. The simple equations that model these finite elements are then assembled into a larger system of equations that models the entire problem. FEM then uses variational methods from the calculus of variations to approximate a solution by minimizing an associated error function \cite{XXX}.
+\textbf{Finite Element Method (FEM).} FEM is a numerical method for solving problems of engineering and physics. Typical areas include structural analysis, heat transfer, fluid flow, and electromagnetics. The analytical solution of these problems generally require the solution to boundary value problems for partial differential equations. The finite element method formulation of the problem results in a system of algebraic equations. The method yields approximate values of the unknowns at discrete number of points over the domain \cite{XXX}. To solve the problem, it subdivides a large problem domain into smaller, simpler parts that are called finite elements. This process is called the mesh generation \cite{XXX}. The simple equations that model these finite elements are then assembled into a larger system of equations that models the entire problem. FEM then uses variational methods from the calculus of variations to approximate a solution by minimizing an associated error function \cite{XXX}. The focus of this thesis is exclusively on the data management problems in the context of FEM-based simulations, not the simulations themselves.
 
-\paragraph{Finite element analysis} consists of...
+% do predchoziho odstavce vlozit vysvetleni gaussovych/integracnich bodu
 
-% nejprve vysvetlit FEM - jak se lisi od FEA
-
-% popsat podrobneji jednotlive faze
+\paragraph{Finite Element Analysis (FEA).} Various data creation and modification tasks precede and follow the actual numerical solution of the boundary value problem using FEM. This whole process is called \textbf{Finite element analysis} and consists of several distinct phases. The basic phases of a FEA depicted in Figure \ref{fig:FEA-phases} are\footnote{This is a quite simplified description of the FEA process as the results from one simulation are then sometimes used as an input for other simulations. Preliminary results of the simulation can also be post-processed continualy during the calculation phase to monitor the convergence of the iterative methods. Another case represent the iso-parametric representation of finite elements \cite{XXX} and NURBS-enhanced FEM \cite{XXX}. These new approches are somewhat bridging the mesh generation phase as the curves describing the geometry are used also as the base functions of the finite elements.}:
 
 \begin{enumerate}
-    \item Preprocessing / modeller
-    \item FEM calculation
-    % Finite Element Method (FEM) is .... PD eq, structural analysis, heat transfer, fluid flow, mass transport, and electromagnetic potential. (Wikipedia)
-    \item Post-processing of results
+    \item \textbf{Model creation} phase describes geometry of the domain, typically by defining boundaries of the domain using parametric surfaces like Bézier patches or Non-Uniform Rational Bézier-Splines (NURBS) \cite{XXX} in a CAD (Computer Aided Design) tool.
+    \item \textbf{Attribute definition and assignment} specifies properties of the model, i.e. material properties of volumes, initial and boundary conditions for the solution.
+    \item \textbf{Mesh generation} decomposes the geometry of the model into simple shapes (triangles or quadrilaterals) or voxels like tetrahedra or bricks that fill the volume. This is often only an approximation of the orignal domain, because it is not possible for these simple shapes to fill the complex domain completely without gaps.
+    \item \textbf{FEM solution} uses the equations describing the problem, model discretization, and attributes to simulate the system's behavior. Often, the process is parametric either in geometry, or in assigned attributes. Simulation then produces multiple sets of output data, each for different configuration.
+    \item \textbf{Post-processing} of results is examination of the output by engineer or scientist, who is seeking the features and trends in data using the visualization tool.
     % pridat dalsi z clanku
 \end{enumerate}
 
-% popsat jak v soucasnosti funguje data management
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/FEA-phases}
+    \decoRule
+    \caption[TODO: ]{TODO: FEA phases}
+    \label{fig:FEA-phases}
+\end{figure}
 
-%----------------------------------------------------------------------------------------
-%	SUB-SECTION Storage format
-%----------------------------------------------------------------------------------------
+Visualization tools are used to explore and analyse the data during all the phases. However, the vast majority of discussion about FEA focuses on the solution phase only. This makes sense as the solution phase consumes the largest portion of the computer time. But the solution phase itself consumes the insignificant amount of people-time. The majority of people's time is spent in pre-processing and post-processing of complex models. This fact seems to be overlooked and is one of the motivations for research work presented in this thesis.
 
-\subsection{Storage format} % or Data representation or Data management
+\paragraph{FEM results.} Results from FEM are scalar, vector, or tensor fields represented by discrete values. Some results are stored in nodes of the mesh, such as vectors of nodal displacements. Other results are stored typically in Gauss points (i.e. integration points) on finite elements. There are two similar sets of results. One is generated by a non-linear algorithms, where several incremental steps are stored and the other is generated by time integration, where results in particular time steps are stored. These results are represented as dense tabular values of basic types, usually double-precision floating-point numbers (8 bytes each). For example, a 3D material stress calculation of the domain discretized by tetrahedral elements with quadratic approximation yields 12 values for the stress and strain tensors in each Gauss points. There are 11 Gauss points in each element. If 100 time samples are taken, the size of the solution output is $100 \times 12 \times 11 \times 8 \approx 100$ kilobytes per single (!) element. The number of finite elements depends on (1) the resolution of the discretization, (2) the geometric complexity of the model, and (3) the desired accuracy of output. In practice, fine discretizations of the problem domain contain millions of elements.
 
-% popsat soucasny file-based format, advantages/disadvantages
-% popsat jak funguje zpracovani tohoto formatu, jak funguje post-processing
+\paragraph{Storage format.} Current FEA software packages store the results either sequentially in formatted \textit{ASCII or binary files} ordered by time steps, or use more sophisticated \textit{database}\footnote{The term database is used here to describe any structured storage beyond a simple file store.} systems to preserve the links between the input model and the simulation results. Either way, the size of output data is very large for non-trivial analyses, which puts pressure on storage capacity, transfer times over the network, and memory consumption of postprocessing tools. In reaction to the current state-of-the-art and due to lack of support for compression of results in existing formats, this thesis proposes a new storage format that supports compression of results, several suitable compression methods, and describes the transition to the new post-processor that can read and visualize the compressed data from the new storage format.
 
-% FEA is not an isolated example of this size effect, forcing us to re-think the way we handle application data
+\paragraph{Data compression.} A compression method can be lossy or lossless. Lossless methods reduce information by identifying and eliminating statistical redundancy in data and are therefore able to fully reconstruct original data from its compressed form. Lossy methods, on the other hand, reduce the size by removing less important information in data and are thus producing only the approximation of original data. Singular Value Decomposition (SVD) (Chapter \ref{appendix-SVD}) is the most promising method used for compression of results in this research. Other methods, that were investigated, include Wavelet transform (\ref{XXX}), and approximation of discrete values by continuous polynomial functions (Chapter \ref{appendix-approximation}).
 
+\paragraph{Approximation error.} Compression methods usually yield approximated data. In the following text, the term approximation error denotes an error resulted from compression, i.e. difference between original results of FEM analysis and their compressed form. It should not be confused with the error of the Finite Element Method itself that yields approximate solution to mathematical problems used to model physical reality. There are defined several error metrics in the text (Section \ref{sec:error-estimation}) that are used to measure the approximation error.
+
+% TODO: vysvetlit, proc pouzivam pojem Multi-mesh (Multigrid byla inspirace)
+
+% TODO: pridat dalsi pojmy/hesla, ktera potrebuji vysvetlit. Tato kapitola by mela fungovat jako slovnicek pojmu
 
 %----------------------------------------------------------------------------------------
 %	SECTION Challenges
@@ -66,7 +73,7 @@ This thesis is structured in the following manner. Chapter \ref{chapter-related-
 
 \section{Challenges}
 
-% vysvetlit, co bude v teto kapitole
+% TODO: vysvetlit, co bude v teto kapitole
 
 % jak reprezentovat takto velke mnozstvi dat
 % jak tyto vsechny faze propojit do jednoho systemu
@@ -82,7 +89,7 @@ This thesis is structured in the following manner. Chapter \ref{chapter-related-
 
 \subsection{Mesh visualization}
 
-% strucne popsat vyzvy vizualizace siti; pak se odkazat na clanek a na appendix
+% strucne popsat vyzvy vizualizace siti; jake jsou druhy site atd. pak se odkazat na clanek a na kapitolu \ref{appendix-mesh-visualization}
 
 %----------------------------------------------------------------------------------------
 %	SUB-SECTION FEM results compression
@@ -90,7 +97,7 @@ This thesis is structured in the following manner. Chapter \ref{chapter-related-
 
 \subsection{FEM results compression}
 
-% vysledku je hodne, je potreba je zmensit; pak se odkazat na 2 clanky a na appendixy
+% vysledku je hodne, je potreba je zmensit; pak se odkazat na 2 clanky a na 2 kapitoly \ref{appendix-approximation} a \ref{appendix-SVD}
 % U approximation clanku jsem se inspiroval multigridem; také zmínit inspiraci mpeg kompresí u aproximace v čase - klíčové snímky
 
 %----------------------------------------------------------------------------------------
