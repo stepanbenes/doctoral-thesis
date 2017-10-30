@@ -1,5 +1,5 @@
 \chapter{Efficient methods to visualize finite element meshes}
-\label{appendix-mesh-visualization}
+\label{chapter:mesh-visualization}
 
 Here follows the description of the methods to process and visualize large finite element meshes. The objectives for the implementation are high responsivness, comfort of use, and low memory consumption of the final mesh editor. This text with more details is also published in \cite{Benes2015}.
 
@@ -33,7 +33,7 @@ Figure \ref{fig:winged-edge} shows the adjusted data structure describing mesh s
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure1}
+\includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure1}
 \decoRule
 \caption[Winged edge data structure]{Winged edge data structure. (a) Entity dependencies. (b) Storage in lists with references.}
 \label{fig:winged-edge}
@@ -51,7 +51,7 @@ All types of elements that are handled by the program are represented by the cla
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure2}
+\includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure2}
 \decoRule
 \caption[Class diagram of element types]{Class diagram with hierarchy of all supported element types.}
 \label{fig:class-diagram-elements}
@@ -72,7 +72,7 @@ The interface helps to include reference to the parent 3D element at each face. 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure3}
+\includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure3}
 \decoRule
 \caption[Class diagram of surface representation]{Class diagram with mesh surface representation.}
 \label{fig:class-diagram-surface}
@@ -96,7 +96,7 @@ The modified winged-edge data structure was used to describe the internal surfac
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure4}
+\includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure4}
 \decoRule
 \caption[Data structure overview]{Diagram with data structure overview.}
 \label{fig:data-structure-mesh}
@@ -106,7 +106,7 @@ Memory requirements of each entity object are summarized in Figure \ref{fig:surf
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure5}
+\includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure5}
 \decoRule
 \caption{Memory consumption of the surface representation.}
 \label{fig:surface-rep-memory}
@@ -124,7 +124,7 @@ The main problem is to find those faces of 3D elements that belong to the mesh s
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure6}
+\includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure6}
 \decoRule
 \caption[Activity diagram of mesh construction]{Activity diagram of loading and construction mesh surface representation.}
 \label{fig:mesh-construction}
@@ -246,7 +246,7 @@ Set<Element2D> SelectSurface(Element2D startFace, float borderAngleLimit)
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure7}
+\includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure7}
 \decoRule
 \caption[Selection of element faces]{Selection of element faces on the mesh surface. (a) Result after mouse double-click. (b) Result after mouse triple-click.}
 \label{fig:element-face-selection}
@@ -297,7 +297,7 @@ Robo (244188 elements) & 291.836 & 200.484 & 543.316 & 355.268\\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure8}
+\includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure8}
 \decoRule
 \caption[Meshes for benchmarks]{Visualizations of meshes used in benchmark. Three different densities of the Beam mesh were used to demonstrate the effects of mesh size. Meshes Sphere and Robo show effect of surface area/volume ratio. a) Beam. b) Sphere. c) Robo.}
 \label{fig:benchmark-meshes}
@@ -305,7 +305,7 @@ Robo (244188 elements) & 291.836 & 200.484 & 543.316 & 355.268\\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-mesh-visualization/figure9}
+\includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure9}
 \decoRule
 \caption[Visualization of significant edges]{Finding and visualization of significant edges. a) GiD postprocessor. b) The Mesh Editor.}
 \label{fig:significant-edges}

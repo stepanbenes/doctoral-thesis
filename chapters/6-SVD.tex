@@ -1,5 +1,5 @@
 \chapter[SVD for compression of results]{Singular value decomposition used for compression of results from the Finite element method}
-\label{appendix-SVD}
+\label{chapter:SVD}
 
 Singular Value Decomposition (SVD) is a well known factorization method that provides rich information about matrix systems. One of its many applications is image compression where it can significantly reduce size of data representing image while preserving quality of image appearance. The compression method based on SVD that is described in this chapter is also presented in \cite{Benes2017}.
 
@@ -67,7 +67,7 @@ where $m$ and $n$ are dimensions of matrix $\mtrx{A}$. Explanation of the compre
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{figures/appendix-SVD/low_rank_decomposition_diagram}
+\includegraphics[width=0.7\textwidth]{figures/chapter-SVD/low_rank_decomposition_diagram}
 \decoRule
 \caption{Decomposition of input matrix $\mtrx{A}$ into diagonal matrix of singular values $\mtrx{S}$ and matrices of left and right singular vectors. Light color illustrates low-rank approximation.}
 \label{fig:lowrank_svd}
@@ -303,7 +303,7 @@ These results confirm that the SVD implementation has computational complexity $
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/executionTime_varyingRows}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/executionTime_varyingRows}
 \decoRule
 \caption{Dependency of SVD execution time on number of rows of an input matrix (having fixed number of columns).}
 \label{fig:ExeTime_rows}
@@ -311,7 +311,7 @@ These results confirm that the SVD implementation has computational complexity $
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/executionTime_varyingColumns}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/executionTime_varyingColumns}
 \decoRule
 \caption{Dependency of SVD execution time on number of columns of an input matrix (having fixed number of rows).}
 \label{fig:ExeTime_columns}
@@ -322,7 +322,7 @@ Behavior of the compression strategy introduced is presented on three real world
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/temelin_screenshot}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/temelin_screenshot}
 \decoRule
 \caption{Segment of containment analyzed. Results visualization (displacement field, x component).}
 \label{fig:temelin:mesh}
@@ -330,7 +330,7 @@ Behavior of the compression strategy introduced is presented on three real world
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/temelin_NRMSD}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/temelin_NRMSD}
 \decoRule
 \caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for reactor containment analysis results.}
 \label{fig:temelin:NRMSD}
@@ -341,7 +341,7 @@ Figure \ref{fig:chotkova:mesh}  shows results from an analysis of geological lay
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/chotkova_screenshot}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/chotkova_screenshot}
 \decoRule
 \caption{Analysis of geological layers. Results visualization (stress field, sigma XX component).}
 \label{fig:chotkova:mesh}
@@ -349,7 +349,7 @@ Figure \ref{fig:chotkova:mesh}  shows results from an analysis of geological lay
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/chotkova_NRMSD}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/chotkova_NRMSD}
 \decoRule
 \caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for results of geological layers project.}
 \label{fig:chotkova:NRMSD}
@@ -357,7 +357,7 @@ Figure \ref{fig:chotkova:mesh}  shows results from an analysis of geological lay
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/chotkova_MaxError}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/chotkova_MaxError}
 \decoRule
 \caption{Dependence of Normalized Maximum Error on Compression ratio for results of geological layers project.}
 \label{fig:chotkova:MaxError}
@@ -368,7 +368,7 @@ Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimens
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/mechaxisym_screenshot}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/mechaxisym_screenshot}
 \decoRule
 \caption{2D model of a reactor vessel. Results visualization (displacement field, x component).}
 \label{fig:mechaxisym:mesh}
@@ -376,7 +376,7 @@ Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimens
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/mechaxisym_NRMSD}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/mechaxisym_NRMSD}
 \decoRule
 \caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for reactor vessel analysis results.}
 \label{fig:mechaxisym:NRMSD}
@@ -387,7 +387,7 @@ Figure \ref{fig:PSNR} summarizes the compression error for all three benchmarks 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/PSNR}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/PSNR}
 \decoRule
 \caption{Comparison of Peek signal to noise ratio value calculated for different decompositions.}
 \label{fig:PSNR}
@@ -395,7 +395,7 @@ Figure \ref{fig:PSNR} summarizes the compression error for all three benchmarks 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/PSNR_rand}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/PSNR_rand}
 \decoRule
 \caption{Comparison of Peek signal to noise ratio value for different randomized decompositions.}
 \label{fig:PSNR_rand}
@@ -406,7 +406,7 @@ Besides the error also the execution speed of compression algorithm was measured
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/appendix-SVD/temelin_ExecutionTime}
+\includegraphics[width=\textwidth]{figures/chapter-SVD/temelin_ExecutionTime}
 \decoRule
 \caption{Variation of execution time of standard and randomized decompositions calculated for reactor containment analysis results.}
 \label{fig:temelin:ExeTime}

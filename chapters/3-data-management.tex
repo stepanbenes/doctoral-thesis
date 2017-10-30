@@ -1,7 +1,5 @@
-\chapter{Design}
-\label{chapter-design}
-
-% Prejmenovat tuto kapitolu na FEA data management
+\chapter{FEA data management}
+\label{chapter:data-management}
 
 % project-management, storage-format, modeller (OOFEM-link, script-based engine), post-processors, layer format, filters
 % Compression methods: SVD, Wavelet, polynomial functions, ... Kazdou rozepsat, u Wavelet zminit Hilbert curve?
@@ -35,3 +33,13 @@
 \label{sec:efficient-postprocessing}
 
 % layers, filters, vytvoreni Surface vrstvy pro webovy postprocessor, barevna skala, Remote/Local solutions - neni rozdil, postprocessor je tenky klient, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou. Dekomprese: prenasobeni matic - staci jeden radek. ...
+
+\section{Implementation details}
+\label{sec:implementation-details}
+% implementation details; cloud-infrastructure, Azure functions, web frontend, backend providing project info, blob-storage with layer format; command-based console management; reference to appendix with storage format examples
+% SVD compression using redsvd; How is realized postprocessing of compressed data
+% Encoding: converting to text representation, base64, NaN values, ... UTF8
+
+% Webový browser, WebGL, textové pole se zadáváním příkazů, veškeré zpracování příkazů na serveru, na klient se budou posílat jen grafické buffery
+
+% Přidat podkapitolku o implementaci barevné škály (diskrétní, spojitá, isoareas shader)
