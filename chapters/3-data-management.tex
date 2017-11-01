@@ -1,9 +1,12 @@
 \chapter{FEA data management}
 \label{chapter:data-management}
 
+% Psat uz rovnou o mem reseni. Zadne okecavani.
+% Napsat, ze hodlam vyuzit model Software-as-a-service, popis dat bud do footnote, nebo do kapitoly Concepts.
+% Pridat diagram prezentujici cely system - vsechny jeho komponenty (Webapi, Solver, Modeller? - misto toho model importer, Web-based postprocessor, Desktop-based postprocessor, Project Database, Result database)
+
 % project-management, storage-format, modeller (OOFEM-link, script-based engine), post-processors, layer format, filters
 
-% Software-as-a-service
 
 \section{System architecture}
 \label{sec:system-architecture}
@@ -13,7 +16,7 @@
 % solution.json
 % model attributes: viz clanek FEA with Relational DB, section FEA Data and Dataflow
 
-Figure \ref{fig:FEA-db-schema}, Figure \ref{fig:FEA-db-schema-results}, Figure \ref{fig:results-class-diagram}
+Figure \ref{fig:FEA-db-schema}, Figure \ref{fig:FEA-db-schema-results}.
 
 \begin{figure}[H]
     \centering
@@ -31,22 +34,15 @@ Figure \ref{fig:FEA-db-schema}, Figure \ref{fig:FEA-db-schema-results}, Figure \
     \label{fig:FEA-db-schema-results}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{figures/layer-class-diagram}
-    \decoRule
-    \caption{Class diagram of results representation}
-    \label{fig:results-class-diagram}
-\end{figure}
-
 \section{Storage format}
 \label{sec:storage-format}
 
 % hodne se inspirovat oznacenymi vetami v clanku FEA-with-relational-DB
 
-% samotny seznam souboru, ktere pouzivam. 
+% samotny seznam souboru, ktere pouzivam. Nerikat tomu soubory, ale dokumenty? objekty?
 % summary.json, mesh.json, attribute.json, and result.json - odkaz do Appendixu na example
 % NoSQL DB
+% U kazdeho souboru
 
 % konverze z tradicnich souboru do noveho formatu (do budoucna integrovat do solveru); data location Points/Cells/CellPoints, GP extrapolation
 
@@ -71,3 +67,13 @@ Figure \ref{fig:FEA-db-schema}, Figure \ref{fig:FEA-db-schema-results}, Figure \
 % Webový browser, WebGL, textové pole se zadáváním příkazů, veškeré zpracování příkazů na serveru, na klient se budou posílat jen grafické buffery
 
 % Přidat podkapitolku o implementaci barevné škály (diskrétní, spojitá, isoareas shader)
+
+Figure \ref{fig:results-class-diagram}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/results-class-diagram}
+    \decoRule
+    \caption{Class diagram of results representation}
+    \label{fig:results-class-diagram}
+\end{figure}
