@@ -1,11 +1,28 @@
 \chapter{FEA data management}
 \label{chapter:data-management}
 
-% Psat uz rovnou o mem reseni. Zadne okecavani.
-% Napsat, ze hodlam vyuzit model Software-as-a-service, popis dat bud do footnote, nebo do kapitoly Concepts.
+% TODO: pridat obecny uvod (zadne okecavani, primo k veci, ale jen k tem zakladnim principum)
+% Zopakovat, ze pred popisem samotneho formatu pro reprezentaci vysledku z MKP, je treba popsat architekturu celeho FEA systemu, ktery tyto data produkuje a se kterou to musi byt kompatibilni
+% Architektura je prototyp, na kterem se ma predvest system pro reprezentaci vysledku z FEM. Abych to zasadil do kontextu, popisu nejprve tuto architekturu.
 
 \section{System architecture}
 \label{sec:system-architecture}
+
+The prototype implementation of the FEA data management system is designed as a collaborative framework that can be accessed by users from different client devices. Figure \ref{fig:FEA-architecture} depicts the schema of the system architecture. System consists of several independent modules. The FEM calculation itself runs on a remote server as one of micro-services\footnote{TODO: micro-services} along with mesh generation service, results processing service, etc. These services are controlled by the application service that provides interface to the client applications in form of REST-ful web API\footnote{TODO: REST; REST-ful service; REST web API.}.
+
+% TODO: Client applications: either desktop (feature-rich) or web application(simple, basic control over calculation, presentation of resultsů; cross-platform, everywhere without installation)
+% TODO: Two databases. Relational-database to store project-related data and user data. Blob storage to save file-based data (input to mesh generator or FEM solver, output files). Vstup do FEMu (geometricky model v teto architekture muze byt reprezentovan bud vstupnim souborem vygenerovanym v CADu nebo muze byt ulozen)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/FEA-architecture}
+    \decoRule
+    \caption{FEA system architecture.}
+    \label{fig:FEA-architecture}
+\end{figure}
+
+The architecture relies on an abstraction provided by Platform-as-a-Service\footnote{PaaS. TODO: These services can be carried in a public cloud or on-premises. ...} computing model. No service component is tied directly to a specific machine. Hardware resources are allocated when they are needed by a service infrastructure controller. This makes the scaling and deployment of components easier and allows to focus on the problem domain instead of solving server configuration and networking issues.
+
 
 % project management, SQL relational database
 % zminit modeller a OOFEM-link, ukazka db modelu
@@ -16,15 +33,7 @@
 
 % project-management, storage-format, modeller (OOFEM-link, script-based engine), post-processors, layer format, filters
 
-Figure \ref{fig:FEA-architecture}, Figure \ref{fig:FEA-workflow}, Figure \ref{fig:FEA-db-schema}, Figure \ref{fig:FEA-db-schema-results}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{figures/FEA-architecture}
-    \decoRule
-    \caption{FEA system architecture.}
-    \label{fig:FEA-architecture}
-\end{figure}
+Figure \ref{fig:FEA-workflow}
 
 \begin{figure}[H]
     \centering
@@ -33,6 +42,16 @@ Figure \ref{fig:FEA-architecture}, Figure \ref{fig:FEA-workflow}, Figure \ref{fi
     \caption{FEA system workflow.}
     \label{fig:FEA-workflow}
 \end{figure}
+
+\section{Project-based data representation}
+
+% Centrem vseho je projekt, projekt ma uzivatele vlastnika a muze mit nekolik dalsich lidi, kteri maji pristup k projektu (ruzna prava, pro cteni ci pro zapis...)
+% V ramci jednoho projektu muze byt spusteno vice simulaci, kazda simulace muze mit jiny vstup - at uz geometricky model, atributy, ci jine parametry analyzy. Geometricky model a parametry mohou byt reprezentovany v relacni databazi jak je naznaceno na obrazku \ref{fig:FEA-db-schema}.
+% Tento model se da prirozene rozsirit o dalsi entity reprezentujici vysledky simulace, viz Figure Figure \ref{fig:FEA-db-schema-results}. Vysledek simulace reprezentuje entita Solution, ktera obsahuje odkaz na vystupni soubory z FEM solveru. Dale je zde entita Layer reprezentujici transformovane vysledky ze solveru do podoby vhodne pro postprocessing. (Vice v nasledujici kapitole.)
+
+Figure \ref{fig:FEA-db-schema}, Figure \ref{fig:FEA-db-schema-results}
+
+% TODO: add User entity to schema?
 
 \begin{figure}[H]
     \centering
@@ -50,10 +69,29 @@ Figure \ref{fig:FEA-architecture}, Figure \ref{fig:FEA-workflow}, Figure \ref{fi
     \label{fig:FEA-db-schema-results}
 \end{figure}
 
+% model and mesh in persistent storage
+
+
 \section{Storage format for results}
 \label{sec:storage-format}
 
+% Result converter component ma za ukol transformovat vysledky z FEM solveru do mojeho formatu (predpokladam pouziti solver komponenty, ktera ma vlastni proprietarni format, protoze se snazim navrhnout system nezavisly na jednotlivych komponentach)
+
+% Centrem vseho je solution. To muze byt reprezentovano entitou v DB. Pripadne solution.json souborem v pripadne vysledku ulozenych a postprocessovanych lokalne. Hlavni koncept pri postprocessingu ke vrstva - layer - reprezentuje sit konecnych prvku a korespondujici vysledky at uz v uzlech ci v prvcich. Tyto data mohou byt zkompresovana. Vysvetlit, proc mam vic vrstev. Proc nestaci jedna.
+% TODO: pridat obrazek stromu vrstev.
+
+Figure \ref{fig:layers-tree}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/layers-tree-diagram}
+    \decoRule
+    \caption{Diagram of layers tree.}
+    \label{fig:layers-tree}
+\end{figure}
+
 % hodne se inspirovat oznacenymi vetami v clanku FEA-with-relational-DB
+
 
 % samotny seznam souboru, ktere pouzivam. Nerikat tomu soubory, ale dokumenty? objekty?
 % summary.json, mesh.json, attribute.json, and result.json - odkaz do Appendixu na example
@@ -62,6 +100,8 @@ Figure \ref{fig:FEA-architecture}, Figure \ref{fig:FEA-workflow}, Figure \ref{fi
 
 % konverze z tradicnich souboru do noveho formatu (do budoucna integrovat do solveru); data location Points/Cells/CellPoints, GP extrapolation
 
+% sit je krome vstupu dulezita i u vystupu. je nutne zachovat 1:1 mapovani vysledku na sit
+
 \subsection {Encoding}
 % base64, JSON, XML, ...
 
@@ -69,8 +109,8 @@ Figure \ref{fig:FEA-architecture}, Figure \ref{fig:FEA-workflow}, Figure \ref{fi
 % Compression methods: SVD, Wavelet, polynomial functions, ... Kazdou rozepsat, u Wavelet zminit Hilbert curve?
 % main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet, mohu pouzit vzorkovani...
 
-\section{Efficient postprocessing}
-\label{sec:efficient-postprocessing}
+\section{Postprocessing}
+\label{sec:postprocessing}
 
 % layers, filters, vytvoreni Surface vrstvy pro webovy postprocessor, barevna skala, Remote/Local solutions - neni rozdil, postprocessor je tenky klient, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou. Dekomprese: prenasobeni matic - staci jeden radek. ...
 
