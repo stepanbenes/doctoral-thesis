@@ -1,17 +1,12 @@
 \chapter{FEA data management}
 \label{chapter:data-management}
 
-% TODO: pridat obecny uvod (zadne okecavani, primo k veci, ale jen k tem zakladnim principum)
-% Zopakovat, ze pred popisem samotneho formatu pro reprezentaci vysledku z MKP, je treba popsat architekturu celeho FEA systemu, ktery tyto data produkuje a se kterou to musi byt kompatibilni
-% Architektura je prototyp, na kterem se ma predvest system pro reprezentaci vysledku z FEM. Abych to zasadil do kontextu, popisu nejprve tuto architekturu.
+Together with growing complexity of finite element calculations, the importance of management of data produced by the calculations is increasingly emphasized in both industrial and research communities. As information is shared between multiple users, moved from one computer to another, and further transformed to enable different views over the data to enable inpterpretation of the information. Definition of persistent and standard representation of the data is therefore required as well as the corresponding data access system architecture that allows to query the data.
 
 \section{System architecture}
 \label{sec:system-architecture}
 
 The prototype implementation of the FEA data management system is designed as a collaborative framework that can be accessed by users from different client devices. Figure \ref{fig:FEA-architecture} depicts the schema of the system architecture. System consists of several independent modules. The FEM calculation itself runs on a remote server as one of micro-services\footnote{TODO: micro-services} along with mesh generation service, results processing service, etc. These services are controlled by the application service that provides interface to the client applications in form of REST-ful web API\footnote{TODO: REST; REST-ful service; REST web API.}.
-
-% TODO: Client applications: either desktop (feature-rich) or web application(simple, basic control over calculation, presentation of resultsů; cross-platform, everywhere without installation)
-% TODO: Two databases. Relational-database to store project-related data and user data. Blob storage to save file-based data (input to mesh generator or FEM solver, output files). Vstup do FEMu (geometricky model v teto architekture muze byt reprezentovan bud vstupnim souborem vygenerovanym v CADu nebo muze byt ulozen)
 
 \begin{figure}[H]
     \centering
@@ -22,6 +17,20 @@ The prototype implementation of the FEA data management system is designed as a 
 \end{figure}
 
 The architecture relies on an abstraction provided by Platform-as-a-Service\footnote{PaaS. TODO: These services can be carried in a public cloud or on-premises. ...} computing model. No service component is tied directly to a specific machine. Hardware resources are allocated when they are needed by a service infrastructure controller. This makes the scaling and deployment of components easier and allows to focus on the problem domain instead of solving server configuration and networking issues.
+
+To test the prototype implementation of the data management system two client applications are created. The first is the feature-rich desktop post-processor with the support for Microsoft Windows and Linux operating systems. The second is the simple web application that provides basic control over an analysis and basic post-processing capabilities. Its purpose is mainly to demonstrate the benefits of proposed format for results when post-processing complex FEA. Its web-based implementation allows for truly cross-platform experience without the need for installation and allows to access the analysis data even from low-end mobile devices.
+
+The system contains two types of data storage. The relational-database type of storage is intended to store project-related data, user data, and their relationships. 
+
+% toto uloziste rovnez umoznuje reprezentovat vstupni model do analyzy - geometrii a atributy
+
+% meziuloziste urcene pro docasne ulozeni vstupnich a vystupnich souboru z jednotlivych komponent - hlavne mesh generatoru a FEM solveru, protoze cely data management je navrzen nezavisle na pouzitem solveru a generatoru a komponenty, ktere pouzivame v soucasnisti jsou orientovane na vstup a vystup pomoci souboru. V budoucnu predpokladame postupny prechod na prime ukladani vysledku do noveho strukturovaneho formatu a cteni vstupu primo z databaze, kde je ulozeny model - tim odpadne tento mezikrok.
+
+The second type of storage is a blob storage that is used to store file-based data, e.g. input file to FEM solver or output files with results.
+
+% TODO: Two databases. Relational-database to store project-related data and user data. Blob storage to save file-based data (input to mesh generator or FEM solver, output files). Vstup do FEMu (geometricky model v teto architekture muze byt reprezentovan bud vstupnim souborem vygenerovanym v CADu nebo muze byt ulozen)
+% In addition to that the desktop postprocessor ma moznost ukladat si data lokalne
+
 
 
 % project management, SQL relational database
@@ -116,7 +125,7 @@ Figure \ref{fig:layers-tree}
 
 \section{Implementation details}
 \label{sec:implementation-details}
-% implementation details; cloud-infrastructure, Azure functions, web frontend, backend providing project info, blob-storage with layer format; command-based console management; reference to appendix with storage format examples
+% implementation details; cloud-infrastructure, Azure functions, web frontend, backend providing project info, blob-storage with layer format; command-based console management - popsat prikazy; reference to appendix with storage format examples
 % SVD compression using redsvd; How is realized postprocessing of compressed data
 % Encoding: converting to text representation, base64, NaN values, ... UTF8
 
