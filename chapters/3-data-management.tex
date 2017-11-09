@@ -20,18 +20,7 @@ The architecture relies on an abstraction provided by Platform-as-a-Service\foot
 
 To test the prototype implementation of the data management system two client applications are created. The first is the feature-rich desktop post-processor with the support for Microsoft Windows and Linux operating systems. The second is the simple web application that provides basic control over an analysis and basic post-processing capabilities. Its purpose is mainly to demonstrate the benefits of proposed format for results when post-processing complex FEA. Its web-based implementation allows for truly cross-platform experience without the need for installation and allows to access the analysis data even from low-end mobile devices.
 
-The system contains two types of data storage. The relational-database type of storage is intended to store project-related data, user data, and their relationships. 
-
-% toto uloziste rovnez umoznuje reprezentovat vstupni model do analyzy - geometrii a atributy
-
-% meziuloziste urcene pro docasne ulozeni vstupnich a vystupnich souboru z jednotlivych komponent - hlavne mesh generatoru a FEM solveru, protoze cely data management je navrzen nezavisle na pouzitem solveru a generatoru a komponenty, ktere pouzivame v soucasnisti jsou orientovane na vstup a vystup pomoci souboru. V budoucnu predpokladame postupny prechod na prime ukladani vysledku do noveho strukturovaneho formatu a cteni vstupu primo z databaze, kde je ulozeny model - tim odpadne tento mezikrok.
-
-The second type of storage is a blob storage that is used to store file-based data, e.g. input file to FEM solver or output files with results.
-
-% TODO: Two databases. Relational-database to store project-related data and user data. Blob storage to save file-based data (input to mesh generator or FEM solver, output files). Vstup do FEMu (geometricky model v teto architekture muze byt reprezentovan bud vstupnim souborem vygenerovanym v CADu nebo muze byt ulozen)
-% In addition to that the desktop postprocessor ma moznost ukladat si data lokalne
-
-
+The system contains two types of data storage. The relational-database type of storage is intended to store project-related data, user data, and their relationships. The input to the FEA -- geometrical model, attribute assignments, and analysis parameters -- can be stored in relational-database as shown in Figure \ref{fig:FEA-db-schema}. Nevertheless, storing this complex type of information in SQL database is questionable. Its pros and cons are discussed in Section \ref{sec:project-data}. The second type of storage is a blob storage used to hold temporary files serving as the input or the output to particular components, especially the mesh generator and the FEM solver. The system is designed to be independent of the solver and mesh generator components, therefore this intermediate step of converting the input to proprietary file format that the components understand is necessary. In the future, it is possible to expect a gradual transition from the file-based approach to the direct connection to the database and query the input model directly. Also, the output of the calculation could be saved directly in the proposed format to represent the results in post-process-ready form.
 
 % project management, SQL relational database
 % zminit modeller a OOFEM-link, ukazka db modelu
@@ -53,10 +42,15 @@ Figure \ref{fig:FEA-workflow}
 \end{figure}
 
 \section{Project-based data representation}
+\label{sec:project-data}
 
 % Centrem vseho je projekt, projekt ma uzivatele vlastnika a muze mit nekolik dalsich lidi, kteri maji pristup k projektu (ruzna prava, pro cteni ci pro zapis...)
 % V ramci jednoho projektu muze byt spusteno vice simulaci, kazda simulace muze mit jiny vstup - at uz geometricky model, atributy, ci jine parametry analyzy. Geometricky model a parametry mohou byt reprezentovany v relacni databazi jak je naznaceno na obrazku \ref{fig:FEA-db-schema}.
 % Tento model se da prirozene rozsirit o dalsi entity reprezentujici vysledky simulace, viz Figure Figure \ref{fig:FEA-db-schema-results}. Vysledek simulace reprezentuje entita Solution, ktera obsahuje odkaz na vystupni soubory z FEM solveru. Dale je zde entita Layer reprezentujici transformovane vysledky ze solveru do podoby vhodne pro postprocessing. (Vice v nasledujici kapitole.)
+% Vstup do FEMu (geometricky model v teto architekture muze byt reprezentovan bud vstupnim souborem vygenerovanym v CADu nebo muze byt ulozen)
+% In addition to that the desktop postprocessor ma moznost ukladat si data lokalne
+
+% zminit, ze ukladat model v relacni databazi asi neni idealni, ma to sve nevyhody, ale pro ty projektova data to je fajn. Kam ukladat model? Taky do No-SQL databaze? Diskutovat vyhody a nevyhody
 
 Figure \ref{fig:FEA-db-schema}, Figure \ref{fig:FEA-db-schema-results}
 
@@ -118,7 +112,7 @@ Figure \ref{fig:layers-tree}
 % Compression methods: SVD, Wavelet, polynomial functions, ... Kazdou rozepsat, u Wavelet zminit Hilbert curve?
 % main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet, mohu pouzit vzorkovani...
 
-\section{Postprocessing}
+\section{Post-processing}
 \label{sec:postprocessing}
 
 % layers, filters, vytvoreni Surface vrstvy pro webovy postprocessor, barevna skala, Remote/Local solutions - neni rozdil, postprocessor je tenky klient, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou. Dekomprese: prenasobeni matic - staci jeden radek. ...
