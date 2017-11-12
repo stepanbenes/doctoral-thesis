@@ -18,12 +18,16 @@ The prototype implementation of the FEA data management system is designed as a 
 
 The architecture relies on an abstraction provided by Platform-as-a-Service\footnote{PaaS. TODO: These services can be carried in a public cloud or on-premises. ...} computing model. No service component is tied directly to a specific machine. Hardware resources are allocated when they are needed by a service infrastructure controller. This makes the scaling and deployment of components easier and allows to focus on the problem domain instead of solving server configuration and networking issues.
 
-To test the prototype implementation of the data management system two client applications are created. The first is the feature-rich desktop post-processor with the support for Microsoft Windows and Linux operating systems. The second is the simple web application that provides basic control over an analysis and basic post-processing capabilities. Its purpose is mainly to demonstrate the benefits of proposed format for results when post-processing complex FEA. Its web-based implementation allows for truly cross-platform experience without the need for installation and allows to access the analysis data even from low-end mobile devices.
+% TODO: upravit tento odstavec. Pridat priklad project-related dat
+The system contains two types of data storage. The relational-database type of storage is intended to store basic project-related data, user data, and their relationships. The input to the FEA -- geometrical model, attribute assignments, and analysis parameters -- can be also stored in relational-database. % as shown in Figure \ref{fig:FEA-db-schema}. Nevertheless, storing this complex type of information in SQL database is questionable.
+% TODO: SQL databaze asi neni idealni, ma to sve vyhody i nevyhody. Zminit vyhody i nevyhody. Jake jsou alternativy? No-SQL databaze?
 
-The system contains two types of data storage. The relational-database type of storage is intended to store project-related data, user data, and their relationships. The input to the FEA -- geometrical model, attribute assignments, and analysis parameters -- can be stored in relational-database as shown in Figure \ref{fig:FEA-db-schema}. Nevertheless, storing this complex type of information in SQL database is questionable. Its pros and cons are discussed in Section \ref{sec:project-data}. The second type of storage is a blob storage used to hold temporary files serving as the input or the output to particular components, especially the mesh generator and the FEM solver. The system is designed to be independent of the solver and mesh generator components, therefore this intermediate step of converting the input to proprietary file format that the components understand is necessary. In the future, it is possible to expect a gradual transition from the file-based approach to the direct connection to the database and query the input model directly. Also, the output of the calculation could be saved directly in the proposed format to represent the results in post-process-ready form.
+The second type of storage is a blob storage used to hold temporary files serving as the input or the output to particular components, especially the mesh generator and the FEM solver. The system is designed to be independent of the solver and mesh generator components, therefore this intermediate step of converting the input to proprietary file format that the components understand is necessary. In the future, it is possible to expect a gradual transition from the file-based approach to the direct connection to the database and query the input model directly. Also, the output of the calculation could be saved directly in the proposed format to represent the results in post-process-ready form.
 
-% Data flow diagram...
-Figure \ref{fig:FEA-workflow}
+Workflow diagram in Figure \ref{fig:FEA-workflow} helps to visualize the sequence of FEA steps and the transfer of data between the service components. The vertical bars denote computational intensive tasks performed by the service components. The client side in the diagram represents the presentation layer of the FEA system that the user directly interacts with (also called front end).
+% TODO: vast majority of people time in pre and post...
+% TODO: Web API je hlavni kontroler - prideluje praci komponentam, slouzi jako rozhrani pro databaze atd.
+% Separation of concerns - design principle for separating system into distinct sections, such that each section addresses a separate concern.
 
 \begin{figure}[H]
     \centering
@@ -33,16 +37,20 @@ Figure \ref{fig:FEA-workflow}
     \label{fig:FEA-workflow}
 \end{figure}
 
+% popsat prototyp, ktery vytvarim ja - vyjmenovat z toho casti, ktere jsou funkcni, co jsem implementoval a co ne - modeller jsem nedelal, solver jsem pouzil existujici, focus je hlavne na konverzi vysledku a na post-processingu
+To test the prototype implementation of the data management system two client applications are created. The first is the feature-rich desktop post-processor with the support for Microsoft Windows and Linux operating systems. The second is the simple web application that provides basic control over an analysis and basic post-processing capabilities. Its purpose is mainly to demonstrate the benefits of proposed format for results when post-processing complex FEA. Its web-based implementation allows for truly cross-platform experience without the need for installation and allows to access the analysis data even from low-end mobile devices.
+
+% TODO: prejmenovat tuto kapitolu? Neni to jen o Project-based datech. Mluvi se zde i o vstupnim modelu a o reprezentaci vysledku - vrstvy
 \section{Project-based data representation}
 \label{sec:project-data}
 
 % Centrem vseho je projekt, projekt ma uzivatele vlastnika a muze mit nekolik dalsich lidi, kteri maji pristup k projektu (ruzna prava, pro cteni ci pro zapis...)
-% V ramci jednoho projektu muze byt spusteno vice simulaci, kazda simulace muze mit jiny vstup - at uz geometricky model, atributy, ci jine parametry analyzy. Geometricky model a parametry mohou byt reprezentovany v relacni databazi jak je naznaceno na obrazku \ref{fig:FEA-db-schema}.
+% V ramci jednoho projektu muze byt spusteno vice simulaci, kazda simulace muze mit jiny vstup - at uz geometricky model, atributy, ci jine parametry analyzy. Geometricky model a parametry mohou byt reprezentovany v relacni databazi jak je naznaceno na obrazku \ref{fig:FEA-db-schema}. ER-diagram
 % Tento model se da prirozene rozsirit o dalsi entity reprezentujici vysledky simulace, viz Figure Figure \ref{fig:FEA-db-schema-results}. Vysledek simulace reprezentuje entita Solution, ktera obsahuje odkaz na vystupni soubory z FEM solveru. Dale je zde entita Layer reprezentujici transformovane vysledky ze solveru do podoby vhodne pro postprocessing. (Vice v nasledujici kapitole.)
-% Vstup do FEMu (geometricky model v teto architekture muze byt reprezentovan bud vstupnim souborem vygenerovanym v CADu nebo muze byt ulozen)
+% Vstup do FEMu (geometricky model v teto architekture muze byt reprezentovan bud vstupnim souborem vygenerovanym v CADu nebo muze byt ulozen v db)
 % In addition to that the desktop postprocessor ma moznost ukladat si data lokalne
 
-% zminit, ze ukladat model v relacni databazi asi neni idealni, ma to sve nevyhody, ale pro ty projektova data to je fajn. Kam ukladat model? Taky do No-SQL databaze? Diskutovat vyhody a nevyhody
+% zminit, ze diagram FEA-db-schema je konceptualni model, ktery muze byt a nemusi namapovan na relacni databazi.
 
 % zminit modeller a OOFEM-link, ukazka db modelu
 % solution.json
