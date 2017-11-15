@@ -22,7 +22,7 @@ The system contains two types of data storage. The relational-database type of s
 
 The second type of storage is a blob storage used to hold temporary files serving as the input or the output to particular components, especially the mesh generator and the FEM solver. The system is designed to be independent of the solver and mesh generator components, therefore this intermediate step of converting the input to proprietary file format that the components understand is necessary. In the future, it is possible to expect a gradual transition from the file-based approach to the direct connection to the database and query the input model directly. Also, the output of the calculation could be saved directly in the proposed format to represent the results in post-process-ready form.
 
-Workflow diagram in Figure \ref{fig:FEA-workflow} helps to visualize the sequence of FEA steps and the transfer of data between the service components. It also reveals the basic design principle behind the microservice architecture -- Separation of concerns\footnote{Separation of concerns -- design principle for separating system into distinct sections, such that each section addresses a separate concern.}. The vertical bars denote computational intensive tasks performed by the service components. The client side in the diagram represents the presentation layer of the FEA system that the user directly interacts with. In the presentation layer, also called front end, there is spent the vast majority of time by users doing pre- and post-processing of data (which is not depicted in the diagram). The Web API service, also called as back end, is the key component that assigns work to other components, serves as an controller for a running analysis and mainly as an interface between data stored in databases and the client applications.
+Workflow diagram in Figure \ref{fig:FEA-workflow} helps to visualize the sequence of FEA steps and the transfer of data between the service components. It also reveals the basic design principle behind the microservice architecture -- Separation of concerns\footnote{Separation of concerns -- design principle for separating system into distinct sections, such that each section addresses a separate concern.}. The vertical bars denote computational intensive tasks performed by the service components. The client side in the diagram represents the presentation layer of the FEA system that the user directly interacts with. In the presentation layer, also called \textit{frontend}, there is spent the vast majority of time by users doing pre- and post-processing of data (which is not depicted in the diagram). The Web API service, also called as \textit{backend}, is the key component that assigns work to other components, serves as an controller for a running analysis and mainly as an interface between the data stored in databases and the client applications.
 
 \begin{figure}[H]
     \centering
@@ -32,29 +32,14 @@ Workflow diagram in Figure \ref{fig:FEA-workflow} helps to visualize the sequenc
     \label{fig:FEA-workflow}
 \end{figure}
 
-% popsat prototyp, ktery vytvarim ja - vyjmenovat z toho casti, ktere jsou funkcni, co jsem implementoval a co ne - modeller jsem nedelal, solver jsem pouzil existujici, focus je hlavne na konverzi vysledku a na post-processingu. V dalsi casti se bude hovorit jen o techto dvou postprocessorech, o konvertor
+The prototype implementation of the data management system follows the schema and the workflow depicted in Figures \ref{fig:FEA-architecture} and \ref{fig:FEA-workflow}. The difference is that the pre-processing phase is currently excluded. The focus of the work presented in this thesis is primarily on the post-processing features and the representation of results. Therefore, the results from the existing FEM solver are uploaded into the system and the system converts them to the internal representation suitable for post-processing. To test the prototype implementation of the data management system, two client applications are created. The first is the feature-rich desktop post-processor with the support for Microsoft Windows and Linux operating systems. The second is the simple web application that provides basic control over an analysis and basic post-processing capabilities. Its purpose is mainly to demonstrate the benefits of proposed format for storage of results when post-processing complex FEA. Its web-based implementation allows for truly cross-platform experience without the need for installation and it allows to access the analysis data even from low-end mobile devices.
 
-The prototype implementation of the data management system follows the schema and the workflow depicted in Figures \ref{fig:FEA-architecture} and \ref{fig:FEA-workflow}. The difference is that the preprocessing phase is currentlty excluded. The focus of the work presented in this thesis is primarily on the postprocessing features and the representation of results. Therefore, the results from the existing FEM solver are uploaded into the system and the system converts them to the internal representation suitable for post-processing. To test the prototype implementation of the data management system two client applications are created. The first is the feature-rich desktop post-processor with the support for Microsoft Windows and Linux operating systems. The second is the simple web application that provides basic control over an analysis and basic post-processing capabilities. Its purpose is mainly to demonstrate the benefits of proposed format for storage of results when post-processing complex FEA. Its web-based implementation allows for truly cross-platform experience without the need for installation and it allows to access the analysis data even from low-end mobile devices.
-
-% TODO: Project-based data representation - prejmenovat tuto kapitolu? Neni to jen o Project-based datech. Mluvi se zde i o vstupnim modelu a o reprezentaci vysledku - vrstvy
-\section{Project database schema}
+\section{Project-based data representation} % TODO: prejmenovat tuto kapitolu? Project database schema? Neni to jen o Project-based datech. Mluvi se zde i o vstupnim modelu a o reprezentaci vysledku - vrstvy
 \label{sec:project-db-schema}
 
-% Centrem vseho je projekt, projekt ma uzivatele vlastnika a muze mit nekolik dalsich lidi, kteri maji pristup k projektu (ruzna prava, pro cteni ci pro zapis...)
-% V ramci jednoho projektu muze byt spusteno vice simulaci, kazda simulace muze mit jiny vstup - at uz geometricky model, atributy, ci jine parametry analyzy. Geometricky model a parametry mohou byt reprezentovany v relacni databazi jak je naznaceno na obrazku \ref{fig:FEA-db-schema}. ER-diagram
-% Tento model se da prirozene rozsirit o dalsi entity reprezentujici vysledky simulace, viz Figure Figure \ref{fig:FEA-db-schema-results}. Vysledek simulace reprezentuje entita Solution, ktera obsahuje odkaz na vystupni soubory z FEM solveru. Dale je zde entita Layer reprezentujici transformovane vysledky ze solveru do podoby vhodne pro postprocessing. (Vice v nasledujici kapitole.)
-% Vstup do FEMu (geometricky model v teto architekture muze byt reprezentovan bud vstupnim souborem vygenerovanym v CADu nebo muze byt ulozen v db)
-% In addition to that the desktop postprocessor ma moznost ukladat si data lokalne
+% Since potentially many users can access the core server to perform structural analysis and to query the analysis results, a project management scheme is needed. The basic premise is that most researchers and engineers typically work independently, while sharing information necessary for collaboration. More importantly, they wish to retain control over the information they make accessible to other members [34]. In the prototype online data access system, a mechanism to perform version control and access control in order to cope with project evolution is implemented. The overall database schema is depicted in Fig. 6. The schema includes a user table and a project table.
 
-% zminit, ze diagram FEA-db-schema je konceptualni model, ktery muze byt a nemusi namapovan na relacni databazi.
-
-% zminit modeller a OOFEM-link, ukazka db modelu
-% solution.json
-% model attributes: viz clanek FEA with Relational DB, section FEA Data and Dataflow
-
-Figure \ref{fig:FEA-db-schema}, Figure \ref{fig:FEA-db-schema-results}
-
-% TODO: add User entity to schema?
+Most researchers and engineers typically work independently using their own workstations, while sharing the hardware infrastructure for intensive FEM calculations. The output from the complex analyses are also shared as it would be costly and ineffective if each collaborator had performed her/his own calculations. Since potentially many users can access the server to oversee the analysis and to query the analysis results, a project management scheme is needed. The overall database schema is depicted in Figure \ref{fig:FEA-db-schema}. It is an entity-relationship diagram representing conceptual model that can be mapped on the SQL database model.
 
 \begin{figure}[H]
     \centering
@@ -64,11 +49,27 @@ Figure \ref{fig:FEA-db-schema}, Figure \ref{fig:FEA-db-schema-results}
     \label{fig:FEA-db-schema}
 \end{figure}
 
+The Project entity holds the basic information about the analysis, such as its name, the owner, and the list of other users that have access permissions. The Project has relations to the list of simulations. The Simulation entity encapsulates the information ...
+
+% Centrem vseho je entita projekt, projekt ma uzivatele vlastnika a muze mit nekolik dalsich lidi, kteri maji pristup k projektu (ruzna prava, pro cteni ci pro zapis...)
+% V ramci jednoho projektu muze byt spusteno vice simulaci, kazda simulace muze mit jiny vstup - at uz geometricky model, atributy, ci jine parametry analyzy. Geometricky model a parametry mohou byt reprezentovany v relacni databazi jak je naznaceno na obrazku \ref{fig:FEA-db-schema}. ER-diagram
+% Tento model se da prirozene rozsirit o dalsi entity reprezentujici vysledky simulace, viz Figure Figure \ref{fig:FEA-db-schema-results}. Vysledek simulace reprezentuje entita Solution, ktera obsahuje odkaz na vystupni soubory z FEM solveru. Dale je zde entita Layer reprezentujici transformovane vysledky ze solveru do podoby vhodne pro postprocessing. (Vice v nasledujici kapitole.)
+% Vstup do FEMu (geometricky model v teto architekture muze byt reprezentovan bud vstupnim souborem vygenerovanym v CADu nebo muze byt ulozen v db)
+% In addition to that the desktop postprocessor ma moznost ukladat si data lokalne
+
+% zminit modeller a OOFEM-link, ukazka db modelu
+% solution.json
+% model attributes: viz clanek FEA with Relational DB, section FEA Data and Dataflow
+
+Figure \ref{fig:FEA-db-schema-results}
+
+% TODO: add User entity to schema?
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/FEA-database-schema-with-results}
+    \includegraphics[width=0.6\textwidth]{figures/FEA-database-schema-only-results}
     \decoRule
-    \caption{Database schema for FEA with representation of results.}
+    \caption{Database schema for FEA with results representation only (without input model).}
     \label{fig:FEA-db-schema-results}
 \end{figure}
 
