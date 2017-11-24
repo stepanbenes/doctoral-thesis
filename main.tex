@@ -134,10 +134,11 @@ headsepline, % Uncomment to get a line under the header
 \definecolor{stringsColor}{rgb}{0.64,0.08,0.08}
 \definecolor{xmlcommentsColor}{rgb}{0.5,0.5,0.5}
 \definecolor{typesColor}{rgb}{0.17,0.57,0.68}
+\definecolor{numbersColor}{rgb}{0.25,0.6,0.83}
 
 \usepackage{listings}
 \lstset{language=[Sharp]C,
-captionpos=b,
+%captionpos=b,
 %numbers=left, %Nummerierung
 %numberstyle=\tiny, % kleine Zeilennummern
 frame=lines, % Oberhalb und unterhalb des Listings ist eine Linie
@@ -151,8 +152,53 @@ commentstyle=\color{commentsColor},
 morekeywords={partial, var, value, get, set},
 keywordstyle=\color{keywordsColor},
 stringstyle=\color{stringsColor},
-basicstyle=\ttfamily\small,
+basicstyle=\ttfamily\tiny,
 }
+
+\newcommand\JSONnumbervaluestyle{\color{numbersColor}}
+\newcommand\JSONstringvaluestyle{\color{stringsColor}}
+
+% switch used as state variable
+\newif\ifcolonfoundonthisline
+
+\makeatletter
+
+\lstdefinestyle{json}
+{
+  showstringspaces    = false,
+  keywords            = {false,true},
+  alsoletter          = 0123456789.,
+  morestring          = [s]{"}{"},
+  stringstyle         = \ifcolonfoundonthisline\JSONstringvaluestyle\fi,
+  MoreSelectCharTable =%
+    \lst@DefSaveDef{`:}\colon@json{\processColon@json},
+  basicstyle          = \ttfamily\tiny,
+  keywordstyle        = \ttfamily\bfseries,
+}
+
+% flip the switch if a colon is found in Pmode
+\newcommand\processColon@json{%
+  \colon@json%
+  \ifnum\lst@mode=\lst@Pmode%
+    \global\colonfoundonthislinetrue%
+  \fi
+}
+
+\lst@AddToHook{Output}{%
+  \ifcolonfoundonthisline%
+    \ifnum\lst@mode=\lst@Pmode%
+      \def\lst@thestyle{\JSONnumbervaluestyle}%
+    \fi
+  \fi
+  %override by keyword style if a keyword is detected!
+  \lsthk@DetectKeywords% 
+}
+
+% reset the switch at the end of line
+\lst@AddToHook{EOL}%
+  {\global\colonfoundonthislinefalse}
+
+\makeatother
 
 \definecolor{positiveColor}{rgb}{0,1,0}
 \definecolor{negativeColor}{rgb}{1,0,0}

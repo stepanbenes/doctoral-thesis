@@ -2,3 +2,197 @@
 \label{appendix:data-format}
 
 % Examples of solution.json, summary.json, mesh.json, attribute.json, and result.json files
+
+Listing \ref{lst:solution.json} ...
+
+\begin{lstlisting}[style=json,caption=Example of solution.json document,label=lst:solution.json]
+{
+    "Id": 42,
+    "ProjectName": "Shear beam 3D",
+    "Location": "https://fea-cloud-service.net/postprocess/42",
+    "Results": [
+      {
+        "MeshRecordNames": [
+          "beam.msh"
+        ],
+        "DataRecordNames": [
+          "beam.res"
+        ]
+      }
+    ],
+    "Layers": [
+      {
+        "Id": "5b585758-9f64-4790-a765-64709951931a",
+        "Name": "master",
+        "FilterType": null,
+        "Children": [
+          {
+            "Id": "09dfdc8c-a75b-48e1-b319-a9624312a5a5",
+            "Name": "deformation (scale: 0.6)",
+            "FilterType": "Deformation",
+            "Children": [
+              {
+                "Id": "ee52969e-f862-4daf-85b9-5a8224197669",
+                "Name": "slice (offset: -0.1569261)",
+                "FilterType": "Slice"
+              },
+              {
+                "Id": "a86486b1-53eb-43cc-aa22-d670bcdea163",
+                "Name": "slice (offset: -0.4757478)",
+                "FilterType": "Slice"
+              },
+              {
+                "Id": "6c6c4b8a-2280-4b4b-a51f-fcd5149f1d94",
+                "Name": "slice (offset: -0.8751443)",
+                "FilterType": "Slice"
+              }
+            ]
+          },
+          {
+            "Id": "96ca950c-0767-4439-b57a-35384ea351a7",
+            "Name": "isosurface DISPLACEMENTS/X(1) = -0.0001",
+            "FilterType": "IsoSurface"
+          },
+          {
+            "Id": "2a3c47be-2f06-48f5-adfd-30777aea092c",
+            "Name": "isosurface DISPLACEMENTS/X(1) = -0.0003",
+            "FilterType": "IsoSurface"
+          },
+          {
+            "Id": "7e5f043b-9900-427e-8d38-839ff1b8e27c",
+            "Name": "isosurface DISPLACEMENTS/X(1) = -0.0007",
+            "FilterType": "IsoSurface"
+          }
+        ]
+      }
+    ]
+}
+\end{lstlisting}
+
+Listing \ref{lst:summary.json} ...
+
+\begin{lstlisting}[style=json,caption=Example of summary.json document,label=lst:summary.json]
+{
+    "Id": "5b585758-9f64-4790-a765-64709951931a",
+    "Name": "master",
+    "ParentId": null,
+    "Filter": null,
+    "Meshes": [
+      {
+        "Index": 1,
+        "TimeSteps": [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
+        "Attributes": [
+          {
+            "Index": 1,
+            "FieldName": "ElementProperty",
+            "Location": "Cells"
+          }
+        ]
+      }
+    ],
+    "Fields": {
+      "CRACK_WIDTH": { ... } ,
+      "DISPLACEMENTS": {
+        "Components": {
+          "X(1)": {
+            "TimeSteps": {
+              "1": { "MeshIndex": 1, "DataIndex": 4 },
+              "2": { "MeshIndex": 1, "DataIndex": 4 },
+              "3": { "MeshIndex": 1, "DataIndex": 4 },
+              "4": { "MeshIndex": 1, "DataIndex": 4 },
+              "5": { "MeshIndex": 1, "DataIndex": 4 },
+              "6": { "MeshIndex": 1, "DataIndex": 4 }
+            }
+          },
+          "X(2)": {
+            "TimeSteps": {
+              "1": { "MeshIndex": 1, "DataIndex": 5 },
+              "2": { "MeshIndex": 1, "DataIndex": 5 },
+              "3": { "MeshIndex": 1, "DataIndex": 5 },
+              "4": { "MeshIndex": 1, "DataIndex": 5 },
+              "5": { "MeshIndex": 1, "DataIndex": 5 },
+              "6": { "MeshIndex": 1, "DataIndex": 5 }
+            }
+          },
+          "X(3)": {
+            "TimeSteps": {
+              "1": { "MeshIndex": 1, "DataIndex": 6 },
+              "2": { "MeshIndex": 1, "DataIndex": 6 },
+              "3": { "MeshIndex": 1, "DataIndex": 6 },
+              "4": { "MeshIndex": 1, "DataIndex": 6 },
+              "5": { "MeshIndex": 1, "DataIndex": 6 },
+              "6": { "MeshIndex": 1, "DataIndex": 6 }
+            }
+          }
+        }
+      },
+      "EXTERNAL_FORCES": { ... },
+      "STRAIN": { ... },
+      "STRESS": { ... }
+    }
+}
+\end{lstlisting}
+
+Listing \ref{lst:mesh.json} ...
+
+\begin{lstlisting}[style=json,caption=Example of mesh.json document,label=lst:mesh.json]
+{
+    "LayerId": "5b585758-9f64-4790-a765-64709951931a",
+    "Index": 1,
+    "NumberOfPoints": 434,
+    "NumberOfCells": 324,
+    "NumberOfEdges": 0,
+    "Center": [0.6375, 0.095, 0.16],
+    "Radius": 0.6719607,
+    "PointCoordinates": "//9/MwAAADIK16M+//9/MwAAADJvEoM+gDSjPQAAADIK16M+//9/M1yPwj0K16M+gDSjPQAAAD...",
+    "CellTypes": "DAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMD..."
+}
+\end{lstlisting}
+
+Listing \ref{lst:attribute.json} ...
+
+\begin{lstlisting}[style=json,caption=Example of attribute.json document,label=lst:attribute.json]
+{
+    "LayerId": "5b585758-9f64-4790-a765-64709951931a",
+    "Index": 1,
+    "MeshIndex": 1,
+    "FieldName": "ElementProperty",
+    "Location": "Cells",
+    "Compression": null,
+    "Encoding": {
+      "DataType": "Int32",
+      "OriginalLength": 324,
+      "Offset": 160,
+      "Length": 164,
+      "DefaultValue": "18"
+    },
+    "Data": "EwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAAB..."
+}
+\end{lstlisting}
+
+Listing \ref{lst:result.json} ...
+
+\begin{lstlisting}[style=json,caption=Example of result.json document,label=lst:result.json]
+{
+    "LayerId": "5b585758-9f64-4790-a765-64709951931a",
+    "Index": 4,
+    "MeshIndex": 1,
+    "FieldName": "DISPLACEMENTS",
+    "ComponentName": "X(1)",
+    "TimeSteps": [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
+    "Location": "Points",
+    "Compression": {
+      "Method": "SVD",
+      "Rows": 6,
+      "Columns": 434,
+      "Rank": 3
+    },
+    "Encoding": {
+      "DataType": "Float64",
+      "OriginalLength": 2640,
+      "Offset": 0,
+      "Length": 2640
+    },
+    "Data": "47HYqWHLML9OLoc9P8tAv5nfIqKPa1S/BoMRvASgbL+E47yyIMJ5v47IymmBdYK/ZcAwsn55IL+uuEUHN3swv1..."
+}
+\end{lstlisting}

@@ -10,7 +10,7 @@ The prototype implementation of the FEA data management system is designed as a 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/FEA-architecture}
+    \includegraphics[width=\textwidth]{figures/chapter-data-management/FEA-architecture}
     \decoRule
     \caption{FEA system architecture.}
     \label{fig:FEA-architecture}
@@ -18,7 +18,7 @@ The prototype implementation of the FEA data management system is designed as a 
 
 The architecture relies on an abstraction provided by Platform-as-a-Service\footnote{PaaS. TODO: These services can be carried in a public cloud or on-premises. ...} computing model. No service component is tied directly to a specific machine. Hardware resources are allocated when they are needed by a service infrastructure controller. This makes the scaling and deployment of components easier and allows to focus on the problem domain instead of solving server configuration and networking issues.
 
-The system contains two types of data storage. The relational-database type of storage is intended to store basic project-related data such as description of simulations, links to the simulation resources, information about the owner and other colaborating users, etc. The input to the FEA -- geometrical model, attribute assignments, and analysis parameters -- can also be stored in a relational database. Nevertheless, storing this complex type of information in the SQL database is questionable and has its drawbacks\footnote{TODO: Zminit vyhody i nevyhody. Jake jsou alternativy? No-SQL databaze?}.
+The system contains two types of data storage. The relational-database type of storage is intended to store basic project-related data such as description of simulations, links to the simulation resources, information about the owner and other colaborating users, etc. The input to the FEA -- geometrical model, attribute assignments, and analysis parameters -- can also be stored in a relational database, eventhough, storing this complex type of information in the SQL database is questionable and has its drawbacks\footnote{TODO: Zminit vyhody i nevyhody. Jake jsou alternativy? No-SQL databaze?}.
 
 The second type of storage is a blob storage used to hold temporary files serving as the input or the output to particular components, especially the mesh generator and the FEM solver. The system is designed to be independent of the solver and mesh generator components, therefore this intermediate step of converting the input to proprietary file format that the components understand is necessary. In the future, it is possible to expect a gradual transition from the file-based approach to the direct connection to the database and query the input model directly. Also, the output of the calculation could be saved directly in the proposed format to represent the results in post-process-ready form.
 
@@ -26,7 +26,7 @@ Workflow diagram in Figure \ref{fig:FEA-workflow} helps to visualize the sequenc
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/FEA-workflow}
+    \includegraphics[width=\textwidth]{figures/chapter-data-management/FEA-workflow}
     \decoRule
     \caption{FEA system workflow.}
     \label{fig:FEA-workflow}
@@ -34,32 +34,26 @@ Workflow diagram in Figure \ref{fig:FEA-workflow} helps to visualize the sequenc
 
 The prototype implementation of the data management system follows the schema and the workflow depicted in Figures \ref{fig:FEA-architecture} and \ref{fig:FEA-workflow}. The difference is that the pre-processing phase is currently excluded. The focus of the work presented in this thesis is primarily on the post-processing features and the representation of results. Therefore, the results from the existing FEM solver are uploaded into the system and the system converts them to the internal representation suitable for post-processing. To test the prototype implementation of the data management system, two client applications are created. The first is the feature-rich desktop post-processor with the support for Microsoft Windows and Linux operating systems. The second is the simple web application that provides basic control over an analysis and basic post-processing capabilities. Its purpose is mainly to demonstrate the benefits of proposed format for storage of results when post-processing complex FEA. Its web-based implementation allows for truly cross-platform experience without the need for installation and it allows to access the analysis data even from low-end mobile devices.
 
-\section{Project-based data representation} % TODO: prejmenovat tuto kapitolu? Project database schema? Neni to jen o Project-based datech. Mluvi se zde i o vstupnim modelu a o reprezentaci vysledku - vrstvy
+\section{Project-based data representation}
 \label{sec:project-db-schema}
 
 Most researchers and engineers typically work independently using their own workstations, while sharing the hardware infrastructure for intensive FEM calculations. The output from the complex analyses are also shared as it would be costly and ineffective if each collaborator had performed her/his own calculations. Since potentially many users can access the server to oversee the analysis and to query the analysis results, a project management scheme is needed. The overall database schema is depicted in Figure \ref{fig:FEA-db-schema}. It is an entity-relationship diagram representing conceptual model that can be mapped on the SQL database model.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/FEA-database-schema}
+    \includegraphics[width=0.8\textwidth]{figures/chapter-data-management/FEA-database-schema}
     \decoRule
     \caption{Database schema for FEA.}
     \label{fig:FEA-db-schema}
 \end{figure}
 
-% TODO: add User entity to schema?
-
-The Project entity holds the basic information about a set of related analyses. It has name, the owner, and the list of other users that have access permissions. The Project has also relations to the list of simulations. The Simulation entity encapsulates the information about a single finite element analysis. Each simulation can have different input -- geometrical model, attributes, and/or parameters of analysis (e.g. number of time steps). Geometrical model and its discretizations (finite element meshes) can either be stored directly in a relational database or as a custom file in a blob storage.
-
-% TODO: vice o vstupnim modelu. zminit modeller a OOFEM-link, ukazka db modelu
-% TODO: model attributes: viz clanek FEA with Relational DB, section FEA Data and Dataflow
-% model and mesh in persistent storage
+The Project entity holds the basic information about a set of related analyses. It has name, the owner, and the list of other users that have access permissions. The Project has also relations to the list of simulations. The Simulation entity encapsulates the information about a single finite element analysis. Each simulation can have different input -- geometrical model, attributes (properties of model entities, i.e., material properties of volumes, initial and boundary conditions), and/or parameters of analysis (e.g., number of time steps). Geometrical model and its discretizations (finite element meshes) can either be stored directly in a relational database or as a custom file in a blob storage.
 
 The conceptual model presented in Figure \ref{fig:FEA-db-schema} can be naturally extended to contain entities representing the results of the simulations. The project-based data model enhanced with the representation of simulation results is depicted in Figure \ref{fig:FEA-db-schema-results}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{figures/FEA-database-schema-only-results}
+    \includegraphics[width=0.6\textwidth]{figures/chapter-data-management/FEA-database-schema-only-results}
     \decoRule
     \caption{Database schema for FEA with results representation only (without the input model).}
     \label{fig:FEA-db-schema-results}
@@ -71,7 +65,7 @@ The simulation results are represented by the Solution entity, which holds a str
 \section{Storage format for results}
 \label{sec:storage-format}
 
-% Pojmout tuto kapitolu jako detailni specifikaci formatu. Inspirovat se dokumentem GiD postprocess format a take C# proposals na githubu
+% Pojmout tuto kapitolu jako detailni specifikaci formatu. Inspirovat se dokumentem GiD postprocess format (a take mozna C# proposals na githubu)
 
 % Result converter component ma za ukol transformovat vysledky z FEM solveru do mojeho formatu (predpokladam pouziti solver komponenty, ktera ma vlastni proprietarni format, protoze se snazim navrhnout system nezavisly na jednotlivych komponentach)
 
@@ -86,9 +80,9 @@ Figure \ref{fig:layers-tree}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/layers-tree-diagram}
+    \includegraphics[width=0.5\textwidth]{figures/chapter-data-management/layers-tree-diagram}
     \decoRule
-    \caption{Diagram of layers tree.}
+    \caption{Diagram of layer tree.}
     \label{fig:layers-tree}
 \end{figure}
 
@@ -115,7 +109,45 @@ Figure \ref{fig:layers-tree}
 \label{sec:postprocessing}
 
 % layers, filters, vytvoreni Surface vrstvy pro webovy postprocessor, barevna skala, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou. Dekomprese: prenasobeni matic - staci jeden radek. ...
-% ke kazdemu typu filtru pridat obrazek z postprocessoru at je to zajimavy (co ale dat do Results kapitoly?)
+
+% ke kazdemu typu filtru pridat obrazek z postprocessoru at je to zajimavy
+
+Displacement in Z axis: Figure \ref{fig:beam-master-layer} and Figure \ref{fig:beam-deformation-layer}.
+
+Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:beam-isosurface-layers}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-master-layer}
+    \decoRule
+    \caption{Example of the master layer visualization.}
+    \label{fig:beam-master-layer}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-deformation-layer}
+    \decoRule
+    \caption{Example of the deformation layer visualization.}
+    \label{fig:beam-deformation-layer}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-slice-layers}
+    \decoRule
+    \caption{Example of multiple slice layers.}
+    \label{fig:beam-slice-layers}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-isosurface-layers}
+    \decoRule
+    \caption{Example of multiple iso-surface layers.}
+    \label{fig:beam-isosurface-layers}
+\end{figure}
+
 
 \section{Implementation details}
 \label{sec:implementation-details}
@@ -127,11 +159,11 @@ Figure \ref{fig:layers-tree}
 
 % Přidat podkapitolku o implementaci barevné škály (diskrétní, spojitá, isoareas shader)
 
-Figure \ref{fig:results-class-diagram}.
+Figure \ref{fig:results-class-diagram} ...
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/results-class-diagram}
+    \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/results-class-diagram}
     \decoRule
     \caption{Class diagram of results representation}
     \label{fig:results-class-diagram}
