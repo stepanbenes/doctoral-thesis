@@ -76,7 +76,7 @@ The simulation results are represented by the Solution entity, which holds a str
 % solution.json - priklad solution.json s layers tree - melo by nahradit fig:layers-tree - ten smazat?
 % Remote/Local solutions - neni rozdil, postprocessor je tenky klient
 
-Figure \ref{fig:layers-tree}
+Figure \ref{fig:layers-tree} ...
 
 \begin{figure}[H]
     \centering
@@ -85,9 +85,6 @@ Figure \ref{fig:layers-tree}
     \caption{Diagram of layer tree.}
     \label{fig:layers-tree}
 \end{figure}
-
-% hodne se inspirovat oznacenymi vetami v clanku FEA-with-relational-DB
-
 
 % samotny seznam souboru, ktere pouzivam. Nerikat tomu soubory, ale dokumenty? objekty?
 % summary.json, mesh.json, attribute.json, and result.json - odkaz do Appendixu na example
@@ -108,6 +105,7 @@ Figure \ref{fig:layers-tree}
 \section{Post-processing}
 \label{sec:postprocessing}
 
+% V teto kapitole popsat navrh post-processoru, ktery je postaven na popsanem datovem formatu
 % layers, filters, vytvoreni Surface vrstvy pro webovy postprocessor, barevna skala, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou. Dekomprese: prenasobeni matic - staci jeden radek. ...
 
 % ke kazdemu typu filtru pridat obrazek z postprocessoru at je to zajimavy
@@ -151,6 +149,7 @@ Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:b
 
 \section{Implementation details}
 \label{sec:implementation-details}
+
 % implementation details; cloud-infrastructure, Azure functions, web frontend, backend providing project info, blob-storage with layer format; command-based console management - popsat prikazy; reference to appendix with storage format examples
 % SVD compression using redsvd; How is realized postprocessing of compressed data
 % Encoding: converting to text representation, base64, NaN values, ... UTF8
