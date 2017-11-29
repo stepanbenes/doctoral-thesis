@@ -56,8 +56,6 @@ The Project entity holds the basic information about a set of related analyses. 
 
 % Pojmout tuto kapitolu jako detailni specifikaci formatu. Inspirovat se dokumentem GiD postprocess format (a take mozna C# proposals na githubu)
 
-% TODO: move the following into the next section
-
 The conceptual model presented in Figure \ref{fig:FEA-db-schema} can be naturally extended to contain entities representing the results of the simulations. The project-based data model enhanced with the representation of simulation results is depicted in Figure \ref{fig:FEA-db-schema-results}.
 
 \begin{figure}[H]
@@ -74,29 +72,23 @@ The concept of a layer is not new. It is used in existing implementations of the
 
 In the prototype implementation of the FEA data management system, it is supposed that the FEM solver uses its own proprietary format to represent the result from the simulation. As the system is designed to be independent of individual components, the Results converter component converts the results from the FEA solver into the standardized layer-based format suitable for post-processing. The specification of the format follows.
 
-% The specification of the format follows:
+% TODO: \subsection The specification of the format?
 
-All documents that participate in the storage format are presented in JSON format. JSON is the today's standard for data transport in web technologies and also as a storage format in currently popular NoSQL\footnote{TODO: NoSQL ... Stands for Not-only SQL ...} databases. It is a consise textual format easily readable both for a human and for a computer. However, the storage format is not tightly coupled with JSON, data can be encoded in another structured format, such as XML. Also, as mentioned above in the text, there are two types of locations the data can be stored in -- \textbf{remote} and \textbf{local} (both locations are supported in the prototype implementation). In either case the key part of the format is a solution document. An example of the solution document is given in Listing \ref{lst:solution.json}. In case of the remote storage, the solution document is stored in a relational database as part of the project-based data representation shown in Figure \ref{fig:FEA-db-schema-results}, while the rest of documents are stored in a blob storage as group of JSON documents. In case of the local storage, all documents, including the solution, are stored in a folder as JSON files in local file system on a personal computer where the results are post-processed.
+All documents that participate in the storage format are presented in JSON format. JSON is the today's standard for data transport in web technologies and also as a storage format in currently popular NoSQL\footnote{TODO: NoSQL ... Stands for Not-only SQL ...} databases. It is a consise textual format easily readable both for a human and for a computer. However, the storage format is not tightly coupled with JSON, data can be encoded in another structured format, such as XML. Also, as mentioned above in the text, there are two types of locations the data can be stored in -- \textbf{remote} and \textbf{local}. Both locations are supported in the prototype implementation. In either case the key part of the format is a solution document. An example of the solution document is given in Listing \ref{lst:solution.json}. In case of the remote storage, the solution document is stored in a relational database as part of the project-based data representation shown in Figure \ref{fig:FEA-db-schema-results}, while the rest of documents are stored in a blob storage as group of JSON documents. In case of the local storage, all documents, including the solution, are stored in a folder as JSON files in local file system on a personal computer on which the results are post-processed.
 
-As can be seen in the example of the solution document in Listing \ref{lst:solution.json}, each layer is assigned a unique identifier in form of GUID\footnote{TODO: GUID...} number. 
-% Solution obsahuje vrstvy - kazda ma unikatni id, ktere zaroven koduje umisteni souboru dane vrstvy.
+As can be seen in the example of the solution document in Listing \ref{lst:solution.json}, each layer is assigned a unique identifier, specifically a GUID\footnote{TODO: GUID... Globally unique identifier, sometimes the term UUID is used ... 128bit, 4bits reserved for version ...} number. A GUID in its textual representation is also used to unambigously determine the location of the layer documents. In case of a solution stored locally, a GUID is used as a name of the folder the related layer documents are stored in. For remote solutions, a GUID is used as a part of a URL when requesting resources from a database or a blob storage.
 
 Data in each layer are stored in four types of documents.
-
 \begin{itemize}
-    \item \textbf{summary document} --- ... Listing \ref{lst:summary.json}
-    \item \textbf{mesh document} --- ... Listing \ref{lst:mesh.json}
-    \item \textbf{attribute document} --- ... Listing \ref{lst:attribute.json}
-    \item \textbf{result document} --- ... Listing \ref{lst:result.json}
+    \item \textbf{Summary document} contains all the information about the layer. ...
+    
+    An example of a summary document in JSON format is presented in Listing \ref{lst:summary.json}.
+    \item \textbf{Mesh document} --- ... An example of a mesh document in JSON format is presented in Listing \ref{lst:mesh.json}.
+    \item \textbf{Attribute document} --- ... An example of a attribute document in JSON format is presented in Listing \ref{lst:attribute.json}.
+    \item \textbf{Result document} --- ... An example of a result document in JSON format is presented in Listing \ref{lst:result.json}.
+    % result.json, attribute.json - popsat data location: Points/CellPoints/Cells (jak je to z extrapolaci z gaussovych bodu?)
+    % je nutne zachovat 1:1 mapovani vysledku na sit, kvuli efektivni implementaci postprocessoru
 \end{itemize}
-
-% samotny seznam souboru, ktere pouzivam. Nerikat tomu soubory, ale dokumenty? objekty?
-% summary.json, mesh.json, attribute.json, and result.json - odkaz do Appendixu na example
-% result.json, attribute.json - popsat data location: Points/CellPoints/Cells (jak je to z extrapolaci z gaussovych bodu?)
-
-% konverze z tradicnich souboru do noveho formatu (do budoucna integrovat do solveru); data location Points/Cells/CellPoints, GP extrapolation
-
-% sit je krome vstupu dulezita i u vystupu. je nutne zachovat 1:1 mapovani vysledku na sit
 
 % shrnout proc je to vyhodne mit to takto rozdelene do jednotlivych souboru. vypada to divoce a slozite, proc je to lepsi nez mit to v jednom souboru?
 
@@ -122,7 +114,6 @@ Typical layer tree consist of the master layer and zero or more derived layers. 
 
 % V teto kapitole popsat navrh post-processoru, ktery je postaven na popsanem datovem formatu
 % layers, filters, vytvoreni Surface vrstvy pro webovy postprocessor, barevna skala, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou. Dekomprese: prenasobeni matic - staci jeden radek. ...
-% Remote/Local solutions - neni rozdil, postprocessor je tenky klient
 
 % ke kazdemu typu filtru pridat obrazek z postprocessoru at je to zajimavy
 
@@ -167,6 +158,7 @@ Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:b
 \label{sec:implementation-details}
 
 % implementation details; cloud-infrastructure, Azure functions, web frontend, backend providing project info, blob-storage with layer format; command-based console management - popsat prikazy; reference to appendix with storage format examples
+% Jak probiha komunikace s API a dotaz na vrstvy. Jak funguje RemoteSolutionController. Remote/Local solutions - neni rozdil, postprocessor je tenky klient
 % SVD compression using redsvd; How is realized postprocessing of compressed data
 % Encoding: converting to text representation, base64, NaN values, ... UTF8
 
