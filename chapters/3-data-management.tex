@@ -90,9 +90,12 @@ Data in each layer are stored in four types of documents.
 
     \code{Fields} property contains a dictionary of result descriptors. Each field descriptor is introduced by the name of the field imported from the FEM results. Field can be composed of one or more components. Similarly, each component descriptor is identified by its name and enumerates the time steps in which the component is defined. Each time step descriptor contains the index of the corresponding result document as well as the index of the mesh document. Each result document always contains data for only one data component. However, the format allows that the data from multiple time steps can be gathered and stored in a single result document. The compression can be then applied on the range of time steps as a whole to achive better compression ratio. Therefore, to recover an arbitrary data component located either in a local or in a remote storage, the post-processor needs just a triplet of identifiers -- the layer id, the index of result document, and the time step.
 
-    \item \textbf{Mesh document} --- ... An example of a mesh document in JSON format is presented in Listing \ref{lst:mesh.json}.
+    \item \textbf{Mesh document} contains the geometric representation of a finite element mesh. An example of a mesh document in JSON format is presented in Listing \ref{lst:mesh.json}. Positions of the nodes are encoded in \code{PointCoordinates} property. Position of each node is a vector, whose components are floating-point numbers. Number of vector components is equal to the number of dimensions of the mesh. Vector components are flattened into a one dimensional array and converted to text using binary-to-text encoding (more about encoding in Section \ref{subsec:encoding}). \code{CellConnectivity} property ... \code{CellTypes} property ... \code{Center}, \code{Radius}
+
     \item \textbf{Attribute document} --- ... An example of a attribute document in JSON format is presented in Listing \ref{lst:attribute.json}.
+
     \item \textbf{Result document} --- ... An example of a result document in JSON format is presented in Listing \ref{lst:result.json}.
+
     % result.json, attribute.json - popsat data location: Points/CellPoints/Cells (jak je to z extrapolaci z gaussovych bodu?)
     % je nutne zachovat 1:1 mapovani vysledku na sit, kvuli efektivni implementaci postprocessoru
 \end{itemize}
@@ -101,14 +104,16 @@ Data in each layer are stored in four types of documents.
 
 % popsat, jak jsou soubory/bloby pojmenovane - index je soucasti souboru. Cesta k danemu souboru je tedy .../{Guid}/{index}.{file-type}.json. Nebo dat az do kapitoly Implementation details?
 
-\subsection {Encoding}
-% base64, JSON, XML, ...
-
 \subsection {Compression}
 % Compression methods: SVD, Wavelet, polynomial functions, ... Kazdou rozepsat, u Wavelet zminit Hilbert curve?
 % main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet, mohu pouzit vzorkovani...
+% format is designed to be open for other compression methods in the future...
 
 % See chapter \ref{chapter:SVD}
+
+\subsection {Encoding}
+\label{subsec:encoding}
+% base64, JSON, XML, zkracovani datovych poli u meshe a u dat. u meshe se to zkracuje jinak.
 
 \section{Post-processing}
 \label{sec:postprocessing}
@@ -173,6 +178,7 @@ Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:b
 % Jak probiha komunikace s API a dotaz na vrstvy. Jak funguje RemoteSolutionController. Remote/Local solutions - neni rozdil, postprocessor je tenky klient
 % SVD compression using redsvd; How is realized postprocessing of compressed data
 % Encoding: converting to text representation, base64, NaN values, ... UTF8
+% Calculating CellOffsets from CellConnectivity and CellTypes
 
 % Webový browser, WebGL, textové pole se zadáváním příkazů, veškeré zpracování příkazů na serveru, na klient se budou posílat jen grafické buffery
 
