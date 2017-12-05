@@ -1,7 +1,7 @@
 \chapter{FEA data management}
 \label{chapter:data-management}
 
-Together with growing complexity of finite element calculations, the importance of management of data produced by the calculations is increasingly emphasized in both industrial and research communities. As information is shared between multiple users, moved from one computer to another, and further transformed to enable different views over the data to enable inpterpretation of the information. Definition of persistent and standard representation of the data is therefore required as well as the corresponding data access system architecture that allows to query the data.
+Together with growing complexity of finite element calculations, the importance of management of data produced by the calculations is increasingly emphasized in both industrial and research communities. Information is often shared between multiple users, moved from one computer to another, and further transformed to enable different views over the data. Some definition of persistent and standard representation of the data is therefore required as well as the corresponding data access system architecture that allows to query the data.
 
 \section{System architecture}
 \label{sec:system-architecture}
@@ -113,10 +113,8 @@ Data in each layer are stored in four types of documents. All documents are iden
 
 \end{itemize}
 
-% TODO: shrnout proc je to vyhodne mit to takto rozdelene do jednotlivych souboru. vypada to divoce a slozite, nektere info je zduplikovane, proc je to lepsi nez mit to v jednom souboru? Vyssi efektivita, jednodussi implementace postprocessoru, data jsou predpripravena, rovnou se pouziji jako buffery v opengl
-% je nutne zachovat 1:1 mapovani vysledku na sit, kvuli efektivni implementaci postprocessoru
+At first glance the format seams to be overcomplicated. The data are scattered through a large number of documents. There are various types of documents with different schema, some information is duplicated, etc. However, the format is carefully designed to allow efficient and simple implementation of a post-processor while enabling the use of compression to significantly reduce the storage size of the results if needed. A post-processor should be able to easily decode the data and display it immediately, without the need for additional transformation, sorting, or caching. E.g., there is a one-to-one mapping of the data in a result document to a mesh to be able to use the decoded data array directly as an OpenGL buffer in the graphics card. Also, the data being stored in a small structured documents of a known schema enables to index the data by a database management system and then allows to create efficient queries over the data. As a side effect of the data fragmentation the resulting latency is being very low, i.e. the delay between the user request and the data being rendered on a screen is small (which allows for real-time creation of animations).
 
-% TODO: popsat, jak jsou soubory/bloby pojmenovane? - index je soucasti souboru. Cesta k danemu souboru je tedy .../{Guid}/{index}.{file-type}.json. Nebo dat az do kapitoly Implementation details?
 
 \subsection {Compression}
 \label{subsec:compression}
@@ -212,3 +210,9 @@ Figure \ref{fig:results-class-diagram} ...
     \caption{Class diagram of results representation}
     \label{fig:results-class-diagram}
 \end{figure}
+
+% TODO: popsat, jak jsou soubory/bloby pojmenovane? - index je soucasti souboru. Cesta k danemu souboru je tedy .../{Guid}/{index}.{file-type}.json. Nebo dat az do kapitoly Implementation details?
+When the documents are stored as files in a file system, the names of the files are in the following form:
+\begin{verbatim}
+    {path-to-folder}/{Layer-id-GUID}/{document-index}.{document-type}.json
+\end{verbatim}
