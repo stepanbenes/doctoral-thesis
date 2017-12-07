@@ -118,15 +118,33 @@ At first glance the format seams to be overcomplicated. The data are scattered t
 
 \subsection {Compression}
 \label{subsec:compression}
-% Compression methods: SVD, Wavelet, polynomial functions, ... Kazdou rozepsat, u Wavelet zminit Hilbert curve?
-% main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet, mohu pouzit vzorkovani...
-% format is designed to be open for other compression methods in the future...
 
-% See chapter \ref{chapter:SVD}
+The storage format supports compression of results. In order to not be dependent on a particular compression method, the format is designed to be extensible. A compression method must comply to the standard interface. The input to the compression method is required to be a matrix of numeric values. The number of rows of the matrix is equal to the number of time steps while the number of columns is equal to the number of points in which the results are stored (nodes, element nodes, or elements, depending on the location of the data). Such auxiliary matrix is assembled for each scalar field and for each component of the vector and tensor fields, and then passed to the compression method. The output from the compression method is expected to be a continuous array of numeric values that can be then encoded and stored in \code{Data} property. Dimensions of the original matrix are saved as parameters \code{Rows} and \code{Columns} in \code{Compression} property and are used by post-processor when decompressing the data.
+
+The prototype implementation contains the following types of compression methods:
+
+\begin{itemize}
+    \item \textbf{SVD} -- promising, property \code{Rank}
+    % main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet, mohu pouzit vzorkovani... % See chapter \ref{chapter:SVD}
+
+    \item \textbf{Wavelet transformation} -- experimental, Hilbert curve?
+    \item \textbf{Transparent} -- helper
+\end{itemize}
+
+% polynomial functions - jde mimo pouzity format, zminuji to zde jen pro uplnost, podrobnosti jsou v kapitole \ref{chapter:approximation}
+
 
 \subsection {Encoding}
 \label{subsec:encoding}
-% base64, JSON, XML, zkracovani datovych poli u meshe a u dat. u meshe se to zkracuje jinak.
+
+% encodinge se mysli sekvence kroku: nejprve analyza datovych poli, zda neobsahuje repetice a sla by tedy zkratit, ci nahradit jednou hodnotou, protoze datova pole absohujici napr same nuly, jsou pomerne bezna - zakoduje se pomoci defaultvalue a hodnota length muze byt nula. originallength urcuje puvodni delku pole. Take jsou bezna pole obsahujici hodne hodnot typu NaN - chybejici data v dane lokaci - to se zakoduje pomoci vlastnosti offset a length.
+% dalsim krokem je prevedeni z binarni podoby do textove - na to se pouziva base64 kodovani
+% dalsim krokem je serializace do transportniho formatu JSON (nebo napr XML) pomoci ktereho se data transportuji bud do db, nebo do vzdaleneho blob storage, nebo ulozi na lokalni disk.
+
+%Properties DataType, OriginalLength, Offset, Length, DefaultValue; DataType possible values: "Float64", "Float32", "Int32", "UInt8"
+
+% Dat sem nacrtek celeho procesu konverze do mojeho formatu? data -> komprese -> kodovani -> storage -> dekodovani -> castecna dekomprese jednoho radku; oznacit co se deje ve format converteru, a co se deje v post procesoru. Asi ne.
+
 
 \section{Post-processing}
 \label{sec:postprocessing}
@@ -143,7 +161,7 @@ Typical layer tree consist of the master layer and zero or more derived layers. 
 
 
 % V teto kapitole popsat navrh post-processoru, ktery je postaven na popsanem datovem formatu
-% layers, filters, vytvoreni Surface vrstvy pro webovy postprocessor, barevna skala, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou. Dekomprese: prenasobeni matic - staci jeden radek. ...
+% layers, filters, vytvoreni Surface vrstvy pro webovy postprocessor, barevna skala, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou (to je jedine, kdy je to potreba). Dekomprese: prenasobeni matic - staci jeden radek. ...
 
 % ke kazdemu typu filtru pridat obrazek z postprocessoru at je to zajimavy
 
@@ -212,6 +230,8 @@ Figure \ref{fig:results-class-diagram} ...
 \end{figure}
 
 % TODO: popsat, jak jsou soubory/bloby pojmenovane? - index je soucasti souboru. Cesta k danemu souboru je tedy .../{Guid}/{index}.{file-type}.json. Nebo dat az do kapitoly Implementation details?
+
+% nasledujici text dat do footnote na vhodne misto
 When the documents are stored as files in a file system, the names of the files are in the following form:
 \begin{verbatim}
     {path-to-folder}/{Layer-id-GUID}/{document-index}.{document-type}.json
