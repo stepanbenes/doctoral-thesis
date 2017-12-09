@@ -121,23 +121,25 @@ At first glance the format seams to be overcomplicated. The data are scattered t
 
 The storage format supports compression of results. In order to not be dependent on a particular compression method, the format is designed to be extensible. A compression method must comply to the standard interface. The input to the compression method is required to be a matrix of numeric values. The number of rows of the matrix is equal to the number of time steps while the number of columns is equal to the number of points in which the results are stored (nodes, element nodes, or elements, depending on the location of the data). Such auxiliary matrix is assembled for each scalar field and for each component of the vector and tensor fields, and then passed to the compression method. The output from the compression method is expected to be a continuous array of numeric values that can be then encoded and stored in \code{Data} property. Dimensions of the original matrix are saved as parameters \code{Rows} and \code{Columns} in \code{Compression} property and are used by post-processor when decompressing the data.
 
-The prototype implementation contains the following types of compression methods:
+The prototype implementation supports three compression methods. Each method is identified by a token that is assigned to \code{Method} property. A method is allowed to store additional values inside \code{Compression} property if needed.
 
 \begin{itemize}
-    \item \textbf{SVD} -- promising, property \code{Rank}
-    % main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet, mohu pouzit vzorkovani... % See chapter \ref{chapter:SVD}
+    
+    \item \textbf{SVD}. The compression method based on Singular value decomposition is the very promising method as it can be applied on an arbitrary rectangular matrix and the compression error is controllable. The result of the compression method is a low-rank approximation matrix in form of its decomposition. The decomposition is then serialized into a contiguous array in column-major order. The rank of approximation matrix is stored in \code{Rank} property. The post-processor must perform matrix multiplication to get the original results. However, in a usual case the data for one analysis step are needed at a time, i.e. multiplication of a single row is enough. The detailed description of SVD used for compression of FEM results is in Chapter \ref{chapter:SVD}.
 
-    \item \textbf{Wavelet transformation} -- experimental, Hilbert curve?
-    \item \textbf{Transparent} -- helper
+    \item \textbf{Wavelet transform}. % experimental, Hilbert curve, space-filling curve needed to order the data points to be local to each other?
+    
+    \item \textbf{Transparent}. % helper, for testing, or for grouping of timesteps into one file z nejakeho duvodu
+
 \end{itemize}
 
-% polynomial functions - jde mimo pouzity format, zminuji to zde jen pro uplnost, podrobnosti jsou v kapitole \ref{chapter:approximation}
+% polynomial functions - jde mimo pouzity format, je to alternativa k pouzitemu reseni. byla navrzena jeste pred vznikem tohoto formatu. Myslenka je provadet kompresi tak, ze nahradim diskretni data spojitymi polynomialnimi funkcemi urciteho radu, zminuji to zde jen pro uplnost, podrobnosti jsou v kapitole \ref{chapter:approximation}
 
 
 \subsection {Encoding}
 \label{subsec:encoding}
-
-% encodinge se mysli sekvence kroku: nejprve analyza datovych poli, zda neobsahuje repetice a sla by tedy zkratit, ci nahradit jednou hodnotou, protoze datova pole absohujici napr same nuly, jsou pomerne bezna - zakoduje se pomoci defaultvalue a hodnota length muze byt nula. originallength urcuje puvodni delku pole. Take jsou bezna pole obsahujici hodne hodnot typu NaN - chybejici data v dane lokaci - to se zakoduje pomoci vlastnosti offset a length.
+% Encoding is a process of transforming the data ...
+% encodingem se mysli sekvence kroku: nejprve analyza datovych poli, zda neobsahuje repetice a sla by tedy zkratit, ci nahradit jednou hodnotou, protoze datova pole absohujici napr same nuly, jsou pomerne bezna - zakoduje se pomoci defaultvalue a hodnota length muze byt nula. originallength urcuje puvodni delku pole. Take jsou bezna pole obsahujici hodne hodnot typu NaN - chybejici data v dane lokaci - to se zakoduje pomoci vlastnosti offset a length.
 % dalsim krokem je prevedeni z binarni podoby do textove - na to se pouziva base64 kodovani
 % dalsim krokem je serializace do transportniho formatu JSON (nebo napr XML) pomoci ktereho se data transportuji bud do db, nebo do vzdaleneho blob storage, nebo ulozi na lokalni disk.
 
