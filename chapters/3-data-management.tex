@@ -140,15 +140,29 @@ For the sake of completeness of this section it is necessary to mention another 
 
 \subsection {Encoding}
 \label{subsec:encoding}
-% Encoding is a process of transforming the data ...
-% encodingem se mysli sekvence kroku: nejprve analyza datovych poli, zda neobsahuje repetice a sla by tedy zkratit, ci nahradit jednou hodnotou, protoze datova pole absohujici napr same nuly, jsou pomerne bezna - zakoduje se pomoci defaultvalue a hodnota length muze byt nula. originallength urcuje puvodni delku pole. Take jsou bezna pole obsahujici hodne hodnot typu NaN - chybejici data v dane lokaci - to se zakoduje pomoci vlastnosti offset a length.
-% dalsim krokem je prevedeni z binarni podoby do textove - na to se pouziva base64 kodovani
-% dalsim krokem je serializace do transportniho formatu JSON (nebo napr XML) pomoci ktereho se data transportuji bud do db, nebo do vzdaleneho blob storage, nebo ulozi na lokalni disk.
 
-%Properties DataType, OriginalLength, Offset, Length, DefaultValue; DataType possible values: "Float64", "Float32", "Int32", "UInt8"
+The term encoding is used to denote the process of converting the data into a format required for storage, transmission, or further processing. In this context the term encoding denotes a sequence of steps that transforms the binary data produced by the compression method into the textual transport and storage format. The parameters of the encoding are stored in \code{Encoding} property of Result document.
 
-% Dat sem nacrtek celeho procesu konverze do mojeho formatu? data -> komprese -> kodovani -> storage -> dekodovani -> castecna dekomprese jednoho radku; oznacit co se deje ve format converteru, a co se deje v post procesoru. Asi ne.
+\begin{enumerate}
+    
+    \item The first step is an analysis of the data array produced by the compression method. The goal is to trim a repeating value at the beginning or at the end of the data array. It is a simple and fast method to further reduce the size if no compression method is used, or if the compression method fails to handle the degenerated cases, such as the data array full of zeroes, or the array containing the \code{NaN} values\footnote{NaN stands for Not-a-Number. It is a numeric data type value representing an undefined or unrepresentable value. It was introduced as a part of the IEEE 754 standard for floating-point arithmetics.}. \code{NaN} represents a missing value in a particular location and can be contained for instance in the results from a construction stages analysis.
 
+    The value that is trimmed out of the data array is stored in property called \code{DefaultValue}, the index of the first significant value in the original array is represented by \code{Offset} property, the length of the trimmed array is in \code{Length} property, and the length of the original array is in \code{OriginalLength} property. To reconstruct the original array the trimmed array is simply extended by the value of \code{DefaultValue} property.
+    
+    \item The next step is the serialization of the data array from its binary representation to text. For this purpose, the base64 encoding scheme is used. The general strategy is to choose 64 characters that are members of a subset common to most text encodings, and they are also printable and readable by a human. Groups of 6 bits ($2^6 = 64$ different binary values) are then converted into a sequence of characters using the encoding scheme. Considering the fact that each character is represented by 8 bits in common text encodings (ASCII, UTF-8), the ratio of output bytes to input bytes is $8:6$, i.e., there is $33\%$ overhead when using base64 encoding.
+    
+    \item The final step is to serialize a result document into JSON format. JSON was chosen over XML as it is more concise and it is often used as an transport format in HTTP protocol and related web technologies. It can also be used as an file format when storing in either local file system or in a blob storage. JSON is also a native document format in NoSQL databases. An example of a result document in JSON format is in Listing \ref{lst:result.json}.
+
+\end{enumerate}
+
+Parameter \code{DataType} of \code{Encoding} property indicates the type of data values encoded in the data array. There are four possible values of this parameter, each representing a numeric data type that is supported by the storage format:
+
+\begin{itemize}
+    \item \textbf{``Float32''} -- single-precission floating point number.
+    \item \textbf{``Float64''} -- double-precission floating point number.
+    \item \textbf{``Int32''} -- signed 32-bit integer.
+    \item \textbf{``UInt8''} -- unsigned 8-bit integer (byte).
+\end{itemize}
 
 \section{Post-processing}
 \label{sec:postprocessing}
