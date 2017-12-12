@@ -167,7 +167,9 @@ Parameter \code{DataType} of \code{Encoding} property indicates the type of data
 \section{Post-processing}
 \label{sec:postprocessing}
 
-Typical layer tree consist of the master layer and zero or more derived layers. The layer tree corresponding to the example of the solution document in Listing \ref{lst:solution.json} is also shown in Figure \ref{fig:layers-tree}. The master layer is ... Children represent the visual filters applied on the master layer
+The storage format is carefully designed with respect to the implementation of a post-processor. A post-processor ought to be as lightweight as possible, with low memory and CPU requirements and rich post-processing experience, i.e., low latency when loading the data, persistence of the visualization state between sessions, and the ability to share the state among users or devices. To allow this expirience, the storage format must support the representation of the visual filters and a post-processor itself should be decoupled from the filter generation. There must therefore exist an infrastructure that filters and serves the desired data on demand, running on a local or remote machine. As these requirements are satisfied a post-processor is just a thin client that communicates with a server and visualizes the responses.
+
+The data in the proposed storage format are structured into a form of a tree. Each node of the tree is called ``layer'' and the whole tree is called ``layer tree''. Typical layer tree consist of the master layer and zero or more derived layers. The layer tree corresponding to the example of the solution document in Listing \ref{lst:solution.json} is also depicted in Figure \ref{fig:layers-tree}. The master layer is the direct product of the conversion from the results produced by the FEM solver. Derived layers (listed in \code{Children} collection) are the products of visual filters applied on the master layer.
 
 \begin{figure}[H]
     \centering
@@ -177,15 +179,7 @@ Typical layer tree consist of the master layer and zero or more derived layers. 
     \label{fig:layers-tree}
 \end{figure}
 
-
-% V teto kapitole popsat navrh post-processoru, ktery je postaven na popsanem datovem formatu
-% layers, filters, vytvoreni Surface vrstvy pro webovy postprocessor, barevna skala, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou (to je jedine, kdy je to potreba). Dekomprese: prenasobeni matic - staci jeden radek. ...
-
-% ke kazdemu typu filtru pridat obrazek z postprocessoru at je to zajimavy
-
-Displacement in Z axis: Figure \ref{fig:beam-master-layer} and Figure \ref{fig:beam-deformation-layer}.
-
-Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:beam-isosurface-layers}.
+The visualization of the example is in Figure \ref{fig:beam-master-layer}.
 
 \begin{figure}[H]
     \centering
@@ -194,6 +188,35 @@ Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:b
     \caption{Example of the master layer visualization.}
     \label{fig:beam-master-layer}
 \end{figure}
+
+% TODO: The implemented filters are:
+% layers, filters, vyjmenovat typy filtru, vytvoreni Surface vrstvy pro webovy postprocessor
+% ke kazdemu typu filtru pridat obrazek z postprocessoru at je to zajimavy
+
+\begin{itemize}
+    % Slice // cross-section, zminit multiple parallel slices
+    \item \textbf{Slice} -- 
+    % Deformation // zminit Fallback property
+    \item \textbf{Deformation} -- 
+    % AttributeSelection // e.g. elements with specific property (material property) - TODO: pridat obrazek vybarvene site se zapnutym zobrazovanim ElementProperty
+    \item \textbf{AttributeSelection} -- 
+    % Surface, // surface of the mesh, dulezite pro webovy post-procesor
+    \item \textbf{Surface} -- 
+    % IsoSurface // surface with constant data value
+    \item \textbf{IsoSurface} -- 
+\end{itemize}
+
+
+% Ideas for another filters:
+% Clip // crop
+% StreamLines
+% ...
+
+
+Displacement in Z axis: Figure \ref{fig:beam-master-layer} and Figure \ref{fig:beam-deformation-layer}.
+
+Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:beam-isosurface-layers}.
+
 
 \begin{figure}[H]
     \centering
@@ -220,8 +243,13 @@ Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:b
 \end{figure}
 
 
+% TODO: barevna skala, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou (to je jedine, kdy je to potreba). Dekomprese: prenasobeni matic - staci jeden radek. ...
+
+
 \section{Implementation details}
 \label{sec:implementation-details}
+
+% Storage format nemuze existovat sam o sobe. Jeho soucasti je cloud-based API, ktere s nim umoznuje manipulovat, vytvaret vrstvy, odpovidat na dotazy...
 
 % implementation details; cloud-infrastructure, Azure functions, web frontend, backend providing project info, blob-storage with layer format; command-based console management - popsat prikazy; reference to appendix with storage format examples
 % Jak probiha komunikace s API a dotaz na vrstvy. Jak funguje RemoteSolutionController. Remote/Local solutions - neni rozdil, postprocessor je tenky klient
