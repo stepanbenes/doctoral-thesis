@@ -169,7 +169,7 @@ Parameter \code{DataType} of \code{Encoding} property indicates the type of data
 
 The storage format is carefully designed with respect to the implementation of a post-processor. A post-processor ought to be as lightweight as possible, with low memory and CPU requirements and rich post-processing experience, i.e., low latency when loading the data, persistence of the visualization state between sessions, and the ability to share the state among users or devices. To allow this expirience, the storage format must support the representation of the visual filters and a post-processor itself should be decoupled from the filter generation. There must therefore exist an infrastructure that filters and serves the desired data on demand, running on a local or remote machine. As these requirements are satisfied a post-processor is just a thin client that communicates with a server and visualizes the responses.
 
-The data in the proposed storage format are structured into a form of a tree. Each node of the tree is called ``layer'' and the whole tree is called ``layer tree''. Typical layer tree consist of the master layer and zero or more derived layers. The layer tree corresponding to the example of the solution document in Listing \ref{lst:solution.json} is also depicted in Figure \ref{fig:layers-tree}. The master layer is the direct product of the conversion from the results produced by the FEM solver. Derived layers (listed in \code{Children} collection) are the products of visual filters applied on the master layer.
+The data in the proposed storage format are structured into a form of a tree. Each node of the tree is called ``layer'' and the whole tree is called ``layer tree''. Typical layer tree consist of the master layer and zero or more derived layers. The layer tree corresponding to the example of the solution document in Listing \ref{lst:solution.json} is also depicted in Figure \ref{fig:layers-tree}. The master layer is the direct product of the conversion from the results produced by the FEM solver. Derived layers (listed in \code{Children} collection) are the products of visual filters applied on the master layer. Most filters deal with geometry of the parent layer. The mesh of the parent layer can be cut or deformed to a new shape, and the corresponding attributes and data fields are filtered or interpolated to match the underlying geometry.
 
 \begin{figure}[H]
     \centering
@@ -179,7 +179,7 @@ The data in the proposed storage format are structured into a form of a tree. Ea
     \label{fig:layers-tree}
 \end{figure}
 
-The visualization of the example is in Figure \ref{fig:beam-master-layer}.
+The visualization of the master layer is in Figure \ref{fig:beam-master-layer}.
 
 \begin{figure}[H]
     \centering
@@ -189,62 +189,101 @@ The visualization of the example is in Figure \ref{fig:beam-master-layer}.
     \label{fig:beam-master-layer}
 \end{figure}
 
-% TODO: The implemented filters are:
+The prototype implementation contains the following types of filters:
+
 % layers, filters, vyjmenovat typy filtru, vytvoreni Surface vrstvy pro webovy postprocessor
 % ke kazdemu typu filtru pridat obrazek z postprocessoru at je to zajimavy
 
 \begin{itemize}
-    % Slice // cross-section, zminit multiple parallel slices
-    \item \textbf{Slice} -- 
-    % Deformation // zminit Fallback property
-    \item \textbf{Deformation} -- 
-    % AttributeSelection // e.g. elements with specific property (material property) - TODO: pridat obrazek vybarvene site se zapnutym zobrazovanim ElementProperty
-    \item \textbf{AttributeSelection} -- 
-    % Surface, // surface of the mesh, dulezite pro webovy post-procesor
-    \item \textbf{Surface} -- 
-    % IsoSurface // surface with constant data value
-    \item \textbf{IsoSurface} -- 
-\end{itemize}
 
+    \item \textbf{Deformation} -- 
+    % Deformation // zminit Fallback property
+    
+    Figure \ref{fig:beam-deformation-layer}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-deformation-layer}
+        \decoRule
+        \caption{Example of the deformation layer visualization.}
+        \label{fig:beam-deformation-layer}
+    \end{figure}
+
+    \item \textbf{Slice} -- 
+    % Slice // cross-section, zminit multiple parallel slices
+    
+    Figure \ref{fig:beam-slice-layers}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-slice-layers}
+        \decoRule
+        \caption{Example of multiple slice layers.}
+        \label{fig:beam-slice-layers}
+    \end{figure}
+
+    \item \textbf{Iso-surface} -- 
+    % IsoSurface // surface with constant data value
+
+    Figure \ref{fig:beam-isosurface-layers}
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-isosurface-layers}
+        \decoRule
+        \caption{Example of multiple iso-surface layers.}
+        \label{fig:beam-isosurface-layers}
+    \end{figure}
+
+    \item \textbf{Attribute selection} -- 
+    % AttributeSelection // e.g. elements with specific property (material property) - TODO: pridat obrazek beamu s AttributeSelection filtrem, s viditelnyma 1D prvkama
+    
+    Figure \ref{fig:beam-attribute-selection-layer}
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-attribute-selection-layer}
+        \decoRule
+        \caption{Example of the attribute selection layer visualization.}
+        \label{fig:beam-attribute-selection-layer}
+    \end{figure}
+
+    \item \textbf{Surface} -- 
+    % Surface, // surface of the mesh, dulezite pro webovy post-procesorm ktery umi jen trojuhelniky kvuli jednoduchosti - TODO: pridat obrazek povrchu beamu (upozornit na trojuhelniky misto krychli)
+    % Helper filter; attribute muze obsahovat cislovani a puvodni plochy prvku pak mohou byt rekonstruovany; pripadne se daji vygenerovat quady, ale trojuhelniky jsou nejjednodussi pro implementaci jedoducheho postprocesoru
+
+    Figure \ref{fig:beam-surface-layer}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-surface-layer}
+        \decoRule
+        \caption{Example of the surface layer visualization.}
+        \label{fig:beam-surface-layer}
+    \end{figure}
+
+\end{itemize}
 
 % Ideas for another filters:
 % Clip // crop
 % StreamLines
 % ...
 
-
 Displacement in Z axis: Figure \ref{fig:beam-master-layer} and Figure \ref{fig:beam-deformation-layer}.
 
 Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:beam-isosurface-layers}.
 
+% TODO: barevna skala, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou (to je jedine, kdy je to potreba). Dekomprese: prenasobeni matic - staci jeden radek. ... Jak probiha cely proces dotazu a zobrazeni dat ve webovem postprocesoru.
+
+Figure \ref{fig:beam-vectors}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-deformation-layer}
+    \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-vectors}
     \decoRule
-    \caption{Example of the deformation layer visualization.}
-    \label{fig:beam-deformation-layer}
+    \caption{Example of the vector field visualization.}
+    \label{fig:beam-vectors}
 \end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-slice-layers}
-    \decoRule
-    \caption{Example of multiple slice layers.}
-    \label{fig:beam-slice-layers}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-isosurface-layers}
-    \decoRule
-    \caption{Example of multiple iso-surface layers.}
-    \label{fig:beam-isosurface-layers}
-\end{figure}
-
-
-% TODO: barevna skala, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou (to je jedine, kdy je to potreba). Dekomprese: prenasobeni matic - staci jeden radek. ...
-
 
 \section{Implementation details}
 \label{sec:implementation-details}
@@ -257,7 +296,7 @@ Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:b
 % Encoding: converting to text representation, base64, NaN values, ... UTF8
 % Calculating CellOffsets from CellConnectivity and CellTypes
 
-% Webový browser, WebGL, textové pole se zadáváním příkazů, veškeré zpracování příkazů na serveru, na klient se budou posílat jen grafické buffery
+% Webový browser, WebGL, THREE.js, Aurelia, Typescript, textové pole se zadáváním příkazů, veškeré zpracování příkazů na serveru, na klient se budou posílat jen grafické buffery
 
 % Přidat podkapitolku o implementaci barevné škály (diskrétní, spojitá, isoareas shader)
 
