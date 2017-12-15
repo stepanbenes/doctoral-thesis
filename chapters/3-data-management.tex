@@ -89,7 +89,7 @@ Data in each layer are stored in four types of documents. All documents are iden
     
     Each mesh has optional set of attributes. An attribute is an umbrella term for additional information assigned to mesh entities. It is usually a property of the input model that is propagated to the results as it can be interesting during post-processing. The most common attribute is the material number that is assigned to each element of the mesh.
 
-    \code{Fields} property contains a dictionary of result descriptors. Each field descriptor is introduced by the name of the field imported from the FEM results. Field can be composed of one or more components. Similarly, each component descriptor is identified by its name and enumerates the time steps in which the component is defined. Each time step descriptor contains the index of the corresponding result document as well as the index of the mesh document. Each result document always contains data for only one data component. However, the format allows that the data from multiple time steps can be gathered and stored in a single result document. The compression can be then applied on the range of time steps as a whole to achive better compression ratio. Therefore, to recover an arbitrary data component located either in a local or in a remote storage, the post-processor needs just a triplet of identifiers -- the layer id, the index of result document, and the time step.
+    \code{Fields} property contains a dictionary of result descriptors. Each field descriptor is introduced by the name of the field imported from the FEM results. Field can be composed of one or more components. Similarly, each component descriptor is identified by its name and enumerates the time steps in which the component is defined. Each time step descriptor contains the index of the corresponding result document as well as the index of the mesh document. Each result document always contains data for only one data component. However, the format allows that the data from multiple time steps can be gathered and stored in a single result document. The compression can be then applied on the range of time steps as a whole to achive better compression ratio. Therefore, to recover an arbitrary data component located either in a local or in a remote storage, the post-processor needs just a triplet of identifiers -- the layer id, the index of a result document, and the time step.
 
     \item \textbf{Mesh document} contains the geometric representation of a finite element mesh. An example of a mesh document in JSON format is presented in Listing \ref{lst:mesh.json}. Positions of the nodes are encoded in \code{PointCoordinates} property\footnote{Note that the terms \textit{node} and \textit{element} are internally referred to by more general terms \textit{point} and \textit{cell}.\label{foot:points-cells}}. Position of each node is a vector, whose components are floating-point numbers. Number of vector components is equal to the number of dimensions of the mesh. Vector components are flattened into a one dimensional array and converted to text using binary-to-text encoding (more about encoding in Section \ref{subsec:encoding}). \code{CellConnectivity} property\footnotemark[\getrefnumber{foot:points-cells}] contains encoded list of indices of element nodes that point to the coordinate array. The number of nodes per element can be retrieved by decoding \code{CellTypes} property, in which the types of all elements are stored. The supported element types along with their identifiers are depicted in Figure \ref{fig:supported-cell-types}. The identifiers are 8-bit unsigned integers (bytes) and the values match the definition of cell types in VTK file format \cite{XXX-vtk-file-format-pdf} to provide basic compatibility and to ease the conversion from the VTK format.
     
@@ -175,7 +175,7 @@ The data in the proposed storage format are structured into a form of a tree. Ea
     \centering
     \includegraphics[width=0.5\textwidth]{figures/chapter-data-management/layers-tree-diagram}
     \decoRule
-    \caption{Diagram of layer tree.}
+    \caption{Diagram of a layer tree.}
     \label{fig:layers-tree}
 \end{figure}
 
@@ -185,7 +185,7 @@ The visualization of the master layer is in Figure \ref{fig:beam-master-layer}.
     \centering
     \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-master-layer}
     \decoRule
-    \caption{Example of the master layer visualization.}
+    \caption{Visualization of a master layer.}
     \label{fig:beam-master-layer}
 \end{figure}
 
@@ -196,18 +196,19 @@ The prototype implementation contains the following types of filters:
 
 \begin{itemize}
 
-    \item \textbf{Deformation} -- 
-    % Deformation // zminit Fallback property
-    
-    Figure \ref{fig:beam-deformation-layer}
+    \item \textbf{Deformation} -- Deformation filter performs the translation of the nodes of the parent mesh by the values of a vector field, usually the displacements field. The product is a layer that contains a deformed mesh as the one shown in Figure \ref{fig:beam-deformation-layer}.
 
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-deformation-layer}
         \decoRule
-        \caption{Example of the deformation layer visualization.}
+        \caption{Visualization of a deformation layer.}
         \label{fig:beam-deformation-layer}
     \end{figure}
+    
+    As there is one-to-one mapping of the data values between the data locations in the parent mesh and the deformed mesh, there is no need for any transformation of the data or attributes. Also, to avoid the unnecessary copy of the data, the storage format supports a mechanism to share the data between a parent layer and its child layers. For this purpose, optional properties \code{DataFallbackLayerId}, \code{AttributeFallbackLayerId}, and \code{MeshFallbackLayerId} are available in Summary document. A post-processor checks the value of the fall-back properties before each request for a result, an attribute, or a mesh document to determine the layer id that should be used for the lookup.
+    
+    The geometry of a deformation layer is created once the deformation filter is applied on the parent layer. Therefore, the scale of the deformation has to be carefully selected as it cannot be modified after-the-fact during the post-processing. This is considered as a disadvantage of the chosen approach. The system helps to mitigate this problem by calculating a reasonable default value for the deformation scale (it is set to 10\%, relatively to the dimensions of the original mesh).
 
     \item \textbf{Slice} -- 
     % Slice // cross-section, zminit multiple parallel slices
@@ -218,7 +219,7 @@ The prototype implementation contains the following types of filters:
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-slice-layers}
         \decoRule
-        \caption{Example of multiple slice layers.}
+        \caption{Visualization of multiple slice layers.}
         \label{fig:beam-slice-layers}
     \end{figure}
 
@@ -231,7 +232,7 @@ The prototype implementation contains the following types of filters:
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-isosurface-layers}
         \decoRule
-        \caption{Example of multiple iso-surface layers.}
+        \caption{Visualization of multiple iso-surface layers.}
         \label{fig:beam-isosurface-layers}
     \end{figure}
 
@@ -244,7 +245,7 @@ The prototype implementation contains the following types of filters:
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-attribute-selection-layer}
         \decoRule
-        \caption{Example of the attribute selection layer visualization.}
+        \caption{Visualization of an attribute selection layer.}
         \label{fig:beam-attribute-selection-layer}
     \end{figure}
 
@@ -258,7 +259,7 @@ The prototype implementation contains the following types of filters:
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-surface-layer}
         \decoRule
-        \caption{Example of the surface layer visualization.}
+        \caption{Visualization of a surface layer.}
         \label{fig:beam-surface-layer}
     \end{figure}
 
@@ -266,14 +267,14 @@ The prototype implementation contains the following types of filters:
 
 % Ideas for another filters:
 % Clip // crop
-% StreamLines
+% Stream-lines
 % ...
 
 Displacement in Z axis: Figure \ref{fig:beam-master-layer} and Figure \ref{fig:beam-deformation-layer}.
 
 Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:beam-isosurface-layers}.
 
-% TODO: barevna skala, prepinani skalarnich velicin, vektorove veliciny - je treba nacist vice komponent najednou (to je jedine, kdy je to potreba). Dekomprese: prenasobeni matic - staci jeden radek. ... Jak probiha cely proces dotazu a zobrazeni dat ve webovem postprocesoru.
+% TODO: barevna skala, prepinani skalarnich velicin?, vektorove veliciny - je treba nacist vice komponent najednou (to je jedine, kdy je to potreba). Dekomprese: prenasobeni matic - staci jeden radek. ... Jak probiha cely proces dotazu a zobrazeni dat ve webovem postprocesoru.
 
 Figure \ref{fig:beam-vectors}
 
@@ -284,6 +285,8 @@ Figure \ref{fig:beam-vectors}
     \caption{Example of the vector field visualization.}
     \label{fig:beam-vectors}
 \end{figure}
+
+% TODO: isoareas pomoci shaderu - pridat obrazek. neni to ve storage formatu, negeneruje se pro to jina geometrie, vse je elegantne zarizeno pomoci shaderu do ktereho je zakodovana barevna skala sestavajici z kontrolnich bodu...
 
 \section{Implementation details}
 \label{sec:implementation-details}
