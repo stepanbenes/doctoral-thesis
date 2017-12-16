@@ -210,11 +210,8 @@ The prototype implementation contains the following types of filters:
     
     The geometry of a deformation layer is created once the deformation filter is applied on the parent layer. Therefore, the scale of the deformation has to be carefully selected as it cannot be modified after-the-fact during the post-processing. This is considered as a disadvantage of the chosen approach. The system helps to mitigate this problem by calculating a reasonable default value for the deformation scale (it is set to 10\%, relatively to the dimensions of the original mesh).
 
-    \item \textbf{Slice} -- 
-    % Slice // cross-section, zminit multiple parallel slices
+    \item \textbf{Slice} -- Slice filter generates a two-dimensional cross section through a three-dimensional mesh. A cross section is defined by a plane using a normal vector and an offset. Offset is a distance between the plane and the origin of the coordinate system. Example of a solution with multiple slice layers is depicted in Figure \ref{fig:beam-slice-layers}.
     
-    Figure \ref{fig:beam-slice-layers}
-
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-slice-layers}
@@ -223,10 +220,9 @@ The prototype implementation contains the following types of filters:
         \label{fig:beam-slice-layers}
     \end{figure}
 
-    \item \textbf{Iso-surface} -- 
-    % IsoSurface // surface with constant data value
-
-    Figure \ref{fig:beam-isosurface-layers}
+    Natural improvement of the slice filter could be the ability to automatically generate a sequence of parallel slices with an uniform distance between them. This will be a subject of a future work.
+    
+    \item \textbf{Iso-surface} -- Iso-surfaces are two-dimensional surfaces following a constant value of a data component. They help to visualize the gradient of a field inside the volume of a domain. Examples of three iso-surface filters are shown in Figure \ref{fig:beam-isosurface-layers}.
     
     \begin{figure}[H]
         \centering
@@ -236,10 +232,7 @@ The prototype implementation contains the following types of filters:
         \label{fig:beam-isosurface-layers}
     \end{figure}
 
-    \item \textbf{Attribute selection} -- 
-    % AttributeSelection // e.g. elements with specific property (material property) - TODO: pridat obrazek beamu s AttributeSelection filtrem, s viditelnyma 1D prvkama
-    
-    Figure \ref{fig:beam-attribute-selection-layer}
+    \item \textbf{Attribute selection} -- % Attribute selection filter allows to choose mesh entities (usually elements) having a particular attribute assigned and propagate them into a new layer, filtering out the other entities, that does not have the attribute assigned. It is useful for material property ... Figure \ref{fig:beam-attribute-selection-layer} shows an example of a layer 
     
     \begin{figure}[H]
         \centering
@@ -273,6 +266,10 @@ The prototype implementation contains the following types of filters:
 Displacement in Z axis: Figure \ref{fig:beam-master-layer} and Figure \ref{fig:beam-deformation-layer}.
 
 Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:beam-isosurface-layers}.
+
+% TODO: postprocesoru ma zobrazeny strom vrstev a muze jednotlive vrstvy vypinat ci zapinat a menit u nich zobrazovaci mod - outlines/wireframe/solid; po pridani nove vrstvy (napr. deformace) se typicky rodicovska prepne do modu outlines aby byl videt vztah puvodni a odvozene vrstvy.
+
+% TODO: obrazek obou post-procesoru? Nebo az do kapitoly Overall results?
 
 % TODO: barevna skala, prepinani skalarnich velicin?, vektorove veliciny - je treba nacist vice komponent najednou (to je jedine, kdy je to potreba). Dekomprese: prenasobeni matic - staci jeden radek. ... Jak probiha cely proces dotazu a zobrazeni dat ve webovem postprocesoru.
 
