@@ -185,7 +185,7 @@ The visualization of the master layer is in Figure \ref{fig:beam-master-layer}.
     \centering
     \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-master-layer}
     \decoRule
-    \caption{Visualization of a master layer.}
+    \caption{Visualization of a master layer with displacements in in Z axis.}
     \label{fig:beam-master-layer}
 \end{figure}
 
@@ -202,7 +202,7 @@ The prototype implementation contains the following types of filters:
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-deformation-layer}
         \decoRule
-        \caption{Visualization of a deformation layer.}
+        \caption{Visualization of a deformation layer with displacements in in Z axis.}
         \label{fig:beam-deformation-layer}
     \end{figure}
     
@@ -216,7 +216,7 @@ The prototype implementation contains the following types of filters:
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-slice-layers}
         \decoRule
-        \caption{Visualization of multiple slice layers.}
+        \caption{Visualization of multiple slice layers with displacements in X axis.}
         \label{fig:beam-slice-layers}
     \end{figure}
 
@@ -228,11 +228,11 @@ The prototype implementation contains the following types of filters:
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-isosurface-layers}
         \decoRule
-        \caption{Visualization of multiple iso-surface layers.}
+        \caption{Visualization of multiple iso-surface layers with displacements in X axis.}
         \label{fig:beam-isosurface-layers}
     \end{figure}
 
-    \item \textbf{Attribute selection} -- % Attribute selection filter allows to choose mesh entities (usually elements) having a particular attribute assigned and propagate them into a new layer, filtering out the other entities, that does not have the attribute assigned. It is useful for material property ... Figure \ref{fig:beam-attribute-selection-layer} shows an example of a layer 
+    \item \textbf{Attribute selection} -- Attribute selection filter allows to choose mesh entities (usually elements) having a particular attribute assigned (e.g., material property) and propagate them into a new layer, filtering out the other entities, that does not have the attribute assigned. In Figure \ref{fig:beam-attribute-selection-layer} there is shown how the attribute selection filter can be used to create a layer that contains only the one-dimensional elements of the original mesh.
     
     \begin{figure}[H]
         \centering
@@ -242,11 +242,7 @@ The prototype implementation contains the following types of filters:
         \label{fig:beam-attribute-selection-layer}
     \end{figure}
 
-    \item \textbf{Surface} -- 
-    % Surface, // surface of the mesh, dulezite pro webovy post-procesorm ktery umi jen trojuhelniky kvuli jednoduchosti - TODO: pridat obrazek povrchu beamu (upozornit na trojuhelniky misto krychli)
-    % Helper filter; attribute muze obsahovat cislovani a puvodni plochy prvku pak mohou byt rekonstruovany; pripadne se daji vygenerovat quady, ale trojuhelniky jsou nejjednodussi pro implementaci jedoducheho postprocesoru
-
-    Figure \ref{fig:beam-surface-layer}
+    \item \textbf{Surface} -- Surface filter is a helper transform that produces a surface representation of a given mesh and maps the corresponding data and attributes onto the surface. It allows to significantly simplify the implementation of a post-processor. The prototype implementation of the web-based post-processor is able to visualize only a mesh that consists of simple triangles. To be able to visualize all types of elements (as shown in Figure \ref{fig:supported-cell-types}) the post-processor requests a creation of a surface layer for each layer containing 3D elements. The hard work is offloaded to the server and the implementation of the post-processor is kept as simple as possible with low memory and CPU requirements. Figure \ref{fig:beam-surface-layer} shows the visualization of a surface layer. Notice the triangles instead of quads on the surface. To preserve the identity of the original finite elements, the ids of elements can be tracked using a dedicated attribute document.
 
     \begin{figure}[H]
         \centering
@@ -258,20 +254,11 @@ The prototype implementation contains the following types of filters:
 
 \end{itemize}
 
-% Ideas for another filters:
-% Clip // crop
-% Stream-lines
-% ...
+There are also ideas for other filters that are not yet implemented, e.g., Clip filter that creates a section through a mesh, but preserves (unlike Slice filter) the geometry behind the cut, or Stream-lines filter that enables to visualize a flow field by creating the tangent lines to the velocity vectors of the field.
 
-Displacement in Z axis: Figure \ref{fig:beam-master-layer} and Figure \ref{fig:beam-deformation-layer}.
+As stated, a post-processor does not need to implement the visual filters itself. Filters are the integral part of the storage format and there is an dedicated service component that does all the manipulations with the format. A post-processor provides just a user interface for the filter definition and for the layer tree management. Typically, it has a tree view that displays the current layer tree, similar to the one in Figure \ref{fig:layers-tree}, where the user can turn on or off a particular layer or change the display mode of the current layer. When a filter layer is selected, a post-processor also displays the outline of its parent layer to be able to see the relationship of both layers. E.g. a deformation layer can be compared to the undeformed geometry, or the position of a slice layer can be put into context of its parent mesh.
 
-Displacement in X axis: Figure \ref{fig:beam-slice-layers} and Figure \ref{fig:beam-isosurface-layers}.
-
-% TODO: postprocesoru ma zobrazeny strom vrstev a muze jednotlive vrstvy vypinat ci zapinat a menit u nich zobrazovaci mod - outlines/wireframe/solid; po pridani nove vrstvy (napr. deformace) se typicky rodicovska prepne do modu outlines aby byl videt vztah puvodni a odvozene vrstvy.
-
-% TODO: obrazek obou post-procesoru? Nebo az do kapitoly Overall results?
-
-% TODO: barevna skala, prepinani skalarnich velicin?, vektorove veliciny - je treba nacist vice komponent najednou (to je jedine, kdy je to potreba). Dekomprese: prenasobeni matic - staci jeden radek. ... Jak probiha cely proces dotazu a zobrazeni dat ve webovem postprocesoru.
+% TODO: Krome vrstev, ktere jsou reseny na serveru, post-processor musi umet nekolik veci, ktere nelze reprezentovat persistentne ve storage formatu: barevna skala, vektorove veliciny - je treba nacist vice komponent najednou (to je jedine, kdy je to potreba). 
 
 Figure \ref{fig:beam-vectors}
 
@@ -285,26 +272,31 @@ Figure \ref{fig:beam-vectors}
 
 % TODO: isoareas pomoci shaderu - pridat obrazek. neni to ve storage formatu, negeneruje se pro to jina geometrie, vse je elegantne zarizeno pomoci shaderu do ktereho je zakodovana barevna skala sestavajici z kontrolnich bodu...
 
+Figure \ref{fig:beam-isoareas-shader}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-isoareas-shader}
+    \decoRule
+    \caption{Iso-areas visualization of the xx component of the stress tensor.}
+    \label{fig:beam-isoareas-shader}
+\end{figure}
+
+
 \section{Implementation details}
 \label{sec:implementation-details}
 
-% Storage format nemuze existovat sam o sobe. Jeho soucasti je cloud-based API, ktere s nim umoznuje manipulovat, vytvaret vrstvy, odpovidat na dotazy...
-
+% vypsat zvolene technologie a algoritmy, ktere jsem pouzil pro implementaci jednotlivych komponent systemu. A pak zevrubne popsat implementaci weboveho post-procesoru - z jakych soucasti se sklada, jak komunikuje se serverem
 % implementation details; cloud-infrastructure, Azure functions, web frontend, backend providing project info, blob-storage with layer format; command-based console management - popsat prikazy; reference to appendix with storage format examples
-% Jak probiha komunikace s API a dotaz na vrstvy. Jak funguje RemoteSolutionController. Remote/Local solutions - neni rozdil, postprocessor je tenky klient
-% SVD compression using redsvd; How is realized postprocessing of compressed data
-% Encoding: converting to text representation, base64, NaN values, ... UTF8
-% Calculating CellOffsets from CellConnectivity and CellTypes
-
+% Storage format nemuze existovat sam o sobe. Jeho soucasti je cloud-based API, ktere s nim umoznuje manipulovat, vytvaret vrstvy, odpovidat na dotazy...
+% Jak probiha komunikace s API a dotaz na vrstvy. Jak probiha cely proces dotazu a zobrazeni dat ve webovem postprocesoru. Jak funguje RemoteSolutionController. Remote/Local solutions - neni rozdil, postprocessor je tenky klient
+% Dekomprese: prenasobeni matic - staci jeden radek. ... 
 % Webový browser, WebGL, THREE.js, Aurelia, Typescript, textové pole se zadáváním příkazů, veškeré zpracování příkazů na serveru, na klient se budou posílat jen grafické buffery
-
-% Přidat podkapitolku o implementaci barevné škály (diskrétní, spojitá, isoareas shader)
+% Přidat podkapitolku o implementaci barevné škály? (diskrétní, spojitá, isoareas shader)
 
 Figure \ref{fig:results-class-diagram} ...
 
 % TODO: do results class diagramu pridat pole FallBackLayerId a pak ho v textu popsat: Summary document muze take volitelne obsahovat property MeshFallbackLayerId, AttributeFallbackLayerId, a DataFallbackLayerId - vyuzito napr pro deformacni vrstvu - nemusi se kopirovat data
-
-% TODO: zminit optimalizaci v layer tree structure - sdileni dat u vrstev, ktere maji kompatibilni sit - napriklad Deformation filter - je tam odkaz na 
 
 \begin{figure}[H]
     \centering
@@ -315,7 +307,6 @@ Figure \ref{fig:results-class-diagram} ...
 \end{figure}
 
 % TODO: popsat, jak jsou soubory/bloby pojmenovane? - index je soucasti souboru. Cesta k danemu souboru je tedy .../{Guid}/{index}.{file-type}.json. Nebo dat az do kapitoly Implementation details?
-
 % nasledujici text dat do footnote na vhodne misto
 When the documents are stored as files in a file system, the names of the files are in the following form:
 \begin{verbatim}
