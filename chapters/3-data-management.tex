@@ -185,7 +185,7 @@ The visualization of the master layer is in Figure \ref{fig:beam-master-layer}.
     \centering
     \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-master-layer}
     \decoRule
-    \caption{Visualization of a master layer with displacements in in Z axis.}
+    \caption[Visualization of a master layer]{Visualization of a master layer with displacements in in Z axis.}
     \label{fig:beam-master-layer}
 \end{figure}
 
@@ -202,7 +202,7 @@ The prototype implementation contains the following types of filters:
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-deformation-layer}
         \decoRule
-        \caption{Visualization of a deformation layer with displacements in in Z axis.}
+        \caption[Visualization of a deformation layer]{Visualization of a deformation layer with displacements in in Z axis.}
         \label{fig:beam-deformation-layer}
     \end{figure}
     
@@ -216,7 +216,7 @@ The prototype implementation contains the following types of filters:
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-slice-layers}
         \decoRule
-        \caption{Visualization of multiple slice layers with displacements in X axis.}
+        \caption[Visualization of multiple slice layers]{Visualization of multiple slice layers with displacements in X axis.}
         \label{fig:beam-slice-layers}
     \end{figure}
 
@@ -228,7 +228,7 @@ The prototype implementation contains the following types of filters:
         \centering
         \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-isosurface-layers}
         \decoRule
-        \caption{Visualization of multiple iso-surface layers with displacements in X axis.}
+        \caption[Visualization of multiple iso-surface layers]{Visualization of multiple iso-surface layers with displacements in X axis.}
         \label{fig:beam-isosurface-layers}
     \end{figure}
 
@@ -258,9 +258,7 @@ There are also ideas for other filters that are not yet implemented, e.g., Clip 
 
 As stated, a post-processor does not need to implement the visual filters itself. Filters are the integral part of the storage format and there is an dedicated service component that does all the manipulations with the format. A post-processor provides just a user interface for the filter definition and for the layer tree management. Typically, it has a tree view that displays the current layer tree, similar to the one in Figure \ref{fig:layers-tree}, where the user can turn on or off a particular layer or change the display mode of the current layer. When a filter layer is selected, a post-processor also displays the outline of its parent layer to be able to see the relationship of both layers. E.g. a deformation layer can be compared to the undeformed geometry, or the position of a slice layer can be put into context of its parent mesh.
 
-% TODO: Krome vrstev, ktere jsou reseny na serveru, post-processor musi umet nekolik veci, ktere nelze reprezentovat persistentne ve storage formatu: barevna skala, vektorove veliciny - je treba nacist vice komponent najednou (to je jedine, kdy je to potreba). 
-
-Figure \ref{fig:beam-vectors}
+The post-processing involves a number of features that are not handled externally as they cannot be represented persistently by the storage format. An example of such feature is the visualization of vector fields using arrows as shown in Figure \ref{fig:beam-vectors}. It is not a good candidate for a layer filter as vector arrows does not have static geometry. A user may want to change a scale of the arrows or move the origin of the arrows. A downside is the requirement to load all the components of a vector field into the memory at once to be able to build a visual representation. Therefore, this feature is only implemented in the feature-rich desktop post-processor for the time being.
 
 \begin{figure}[H]
     \centering
@@ -270,13 +268,11 @@ Figure \ref{fig:beam-vectors}
     \label{fig:beam-vectors}
 \end{figure}
 
-% TODO: isoareas pomoci shaderu - pridat obrazek. neni to ve storage formatu, negeneruje se pro to jina geometrie, vse je elegantne zarizeno pomoci shaderu do ktereho je zakodovana barevna skala sestavajici z kontrolnich bodu...
-
-Figure \ref{fig:beam-isoareas-shader}
+One of the key features of a post-processor is the ability to map a data value, which is a floating-point number, to a color in color scale that is used to render a mesh surface. The mapping of the color can be configured. The implementation contains several predefined types of color scales including gray-scale, separated-by-zero\footnote{TODO: explain Separatedbyzero color scale}, or a user-defined color scale type. There are two modes for calculating a color between the data locations -- standard continuous interpolation and quantization, i.e., dividing the whole color scale into a few buckets, each corresponding to a different range of data values, and applying a constant color for each value in the range. In the implemented post-processor, this technique is called the iso-areas color scale and an example is shown in Figure \ref{fig:beam-isoareas-shader}. The iso-areas feature cannot be represented using the storage format. To avoid an ad-hoc generation of the corresponding geometry, which would be difficult to implement and would significantly degrade the performance, iso-areas feature is implemented purely inside the OpenGL pipeline using the special pixel shader\footnote{TODO: explain pixel shader}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/chapter-data-management/beam-isoareas-shader}
+    \includegraphics[width=0.75\textwidth]{figures/chapter-data-management/beam-isoareas-shader}
     \decoRule
     \caption{Iso-areas visualization of the xx component of the stress tensor.}
     \label{fig:beam-isoareas-shader}
