@@ -74,7 +74,8 @@ In the prototype implementation of the FEA data management system, it is suppose
 
 \subsection{Format specification}
 
-All documents that participate in the storage format are presented in JSON format. JSON is the today's standard for data transport in web technologies and also as a storage format in currently popular NoSQL\footnote{TODO: NoSQL ... Stands for Not-only SQL ...} databases. It is a consise textual format easily readable both for a human and for a computer. However, the storage format is not tightly coupled with JSON, data can be encoded in another structured format, such as XML. Also, as mentioned above in the text, there are two types of locations the data can be stored in -- \textbf{remote} and \textbf{local}. Both locations are supported in the prototype implementation. In either case the key part of the format is a solution document. An example of the solution document is given in Listing \ref{lst:solution.json}. In case of the remote storage, the solution document is stored in a relational database as part of the project-based data representation shown in Figure \ref{fig:FEA-db-schema-results}, while the rest of documents are stored in a blob storage as group of JSON documents. In case of the local storage, all documents, including the solution, are stored in a folder as JSON files in local file system on a personal computer on which the results are post-processed.
+All documents that participate in the storage format are presented in JSON format. JSON is the today's standard for data transport in web technologies and also as a storage format in currently popular NoSQL\footnote{TODO: NoSQL ... Stands for Not-only SQL ...} databases. It is a consise textual format easily readable both for a human and for a computer. However, the storage format is not tightly coupled with JSON, data can be encoded in another structured format, such as XML. Also, as mentioned above in the text, there are two types of locations the data can be stored in -- \textbf{remote} and \textbf{local}. Both locations are supported in the prototype implementation. In either case the key part of the format is a solution document. An example of the solution document is given in Listing \ref{lst:solution.json}. In case of the remote storage, the solution document is stored in a relational database as part of the project-based data representation shown in Figure \ref{fig:FEA-db-schema-results}, while the rest of documents are stored in a blob storage as group of JSON documents. In case of the local storage, all documents, including the solution, are stored in a folder as JSON files in local file system on a personal computer on which the results are post-processed.\footnote{If documents are stored as files in a file system, the paths and names of the files are in the following form:
+\file{\{path-to-folder\}/\{Layer-id-GUID\}/\{document-index\}.\{document-type\}.json}.}
 
 As can be seen in the example of the solution document in Listing \ref{lst:solution.json}, each layer is assigned a unique identifier, specifically a GUID\footnote{TODO: GUID... Globally unique identifier, sometimes the term UUID is used ... 128bit, 4bits reserved for version ...} number. A GUID in its textual representation is also used to unambigously determine the location of the layer documents. In case of a solution stored locally, a GUID is used as a name of the folder the related layer documents are stored in. For remote solutions, a GUID is used as a part of a URL when requesting resources from a database or a blob storage.
 
@@ -268,7 +269,9 @@ The post-processing involves a number of features that are not handled externall
     \label{fig:beam-vectors}
 \end{figure}
 
-One of the key features of a post-processor is the ability to map a data value, which is a floating-point number, to a color in color scale that is used to render a mesh surface. The mapping of the color can be configured. The implementation contains several predefined types of color scales including gray-scale, separated-by-zero\footnote{TODO: explain Separatedbyzero color scale}, or a user-defined color scale type. There are two modes for calculating a color between the data locations -- standard continuous interpolation and quantization, i.e., dividing the whole color scale into a few buckets, each corresponding to a different range of data values, and applying a constant color for each value in the range. In the implemented post-processor, this technique is called the iso-areas color scale and an example is shown in Figure \ref{fig:beam-isoareas-shader}. The iso-areas feature cannot be represented using the storage format. To avoid an ad-hoc generation of the corresponding geometry, which would be difficult to implement and would significantly degrade the performance, iso-areas feature is implemented purely inside the OpenGL pipeline using the special pixel shader\footnote{TODO: explain pixel shader}.
+One of the key features of a post-processor is the ability to map a data value, which is a floating-point number, to a color in color scale that is used to render a mesh surface. The mapping of the color can be configured. The implementation contains several predefined types of color scales including gray-scale, separated-by-zero\footnote{TODO: explain SeparatedByZero color scale}, or a user-defined color scale type. There are two modes for calculating a color between the data locations -- standard interpolation and quantization, i.e., dividing the whole color scale into a few buckets, each corresponding to a different range of data values, and applying a constant color for each value in the range. In the implemented post-processor, this technique is called the iso-areas color scale and an example is shown in Figure \ref{fig:beam-isoareas-shader}. The iso-areas feature cannot be represented using the storage format. To avoid an ad-hoc generation of the corresponding geometry, which would be difficult to implement and would significantly degrade the performance, iso-areas feature is implemented purely inside the OpenGL pipeline using the special pixel shader\footnote{TODO: explain pixel shader}.
+
+% TODO: rozvinout vysvetleni barevne skaly: pridat diskretni barevnou skalu, pridat obrazek s element property?
 
 \begin{figure}[H]
     \centering
@@ -282,29 +285,41 @@ One of the key features of a post-processor is the ability to map a data value, 
 \section{Implementation details}
 \label{sec:implementation-details}
 
-% vypsat zvolene technologie a algoritmy, ktere jsem pouzil pro implementaci jednotlivych komponent systemu. A pak zevrubne popsat implementaci weboveho post-procesoru - z jakych soucasti se sklada, jak komunikuje se serverem
-% implementation details; cloud-infrastructure, Azure functions, web frontend, backend providing project info, blob-storage with layer format; command-based console management - popsat prikazy; reference to appendix with storage format examples
-% Storage format nemuze existovat sam o sobe. Jeho soucasti je cloud-based API, ktere s nim umoznuje manipulovat, vytvaret vrstvy, odpovidat na dotazy...
-% Jak probiha komunikace s API a dotaz na vrstvy. Jak probiha cely proces dotazu a zobrazeni dat ve webovem postprocesoru. Jak funguje RemoteSolutionController. Remote/Local solutions - neni rozdil, postprocessor je tenky klient
-% Dekomprese: prenasobeni matic - staci jeden radek. ... 
-% Webový browser, WebGL, THREE.js, Aurelia, Typescript, textové pole se zadáváním příkazů, veškeré zpracování příkazů na serveru, na klient se budou posílat jen grafické buffery
-% Přidat podkapitolku o implementaci barevné škály? (diskrétní, spojitá, isoareas shader)
-
-Figure \ref{fig:results-class-diagram} ...
-
-% TODO: results class diagram bude popisovat objektovou reprezentaci Solution - obvykle je to json soubor na lokalnim ulozisti, nebo muze byt v relacni databazi napojeny na Projekt, Simulation a User.
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{figures/chapter-data-management/results-class-diagram}
     \decoRule
-    \caption{Class diagram of results representation}
+    \caption{Class diagram of results representation.}
     \label{fig:results-class-diagram}
 \end{figure}
 
-% TODO: popsat, jak jsou soubory/bloby pojmenovane? - index je soucasti souboru. Cesta k danemu souboru je tedy .../{Guid}/{index}.{file-type}.json. Nebo dat az do kapitoly Implementation details?
-% nasledujici text dat do footnote na vhodne misto
-When the documents are stored as files in a file system, the names of the files are in the following form:
-\begin{verbatim}
-    {path-to-folder}/{Layer-id-GUID}/{document-index}.{document-type}.json
-\end{verbatim}
+
+Figure \ref{fig:FEA-architecture}, Figure \ref{fig:FEA-workflow}
+
+% vypsat zvolene technologie a algoritmy, ktere jsem pouzil pro implementaci jednotlivych komponent systemu. A pak zevrubne popsat implementaci weboveho post-procesoru - z jakych soucasti se sklada, jak komunikuje se serverem
+% implementation details; cloud-infrastructure, Azure functions, web frontend, backend providing project info, blob-storage with layer format; command-based console management - popsat prikazy; reference to appendix with storage format examples
+
+\subsection*{Data storage}
+- Relational database
+- Blob storage
+
+
+Figure \ref{fig:results-class-diagram} ...
+% TODO: results class diagram bude popisovat objektovou reprezentaci Solution - obvykle je to json soubor na lokalnim ulozisti, nebo muze byt v relacni databazi napojeny na Projekt, Simulation a User.
+
+\subsection*{API}
+% Storage format nemuze existovat sam o sobe. Jeho soucasti je cloud-based API, ktere s nim umoznuje manipulovat, vytvaret vrstvy, odpovidat na dotazy...
+ASP.NET Core
+
+\subsection*{Microservices}
+- Azure Functions
+
+
+
+\subsection*{Web-based post-processor}
+% Dekomprese: prenasobeni matic - staci jeden radek. ... 
+% Webový browser, WebGL, THREE.js, Aurelia, Typescript, Command line tool (shell), veškeré zpracování příkazů na serveru, na klient se budou posílat jen grafické buffery
+% Jak probiha komunikace s API a dotaz na vrstvy. Jak probiha cely proces dotazu a zobrazeni dat ve webovem postprocesoru. Jak funguje RemoteSolutionController. Remote/Local solutions - neni rozdil, postprocessor je tenky klient
+
+\subsection*{Desktop post-processor}
+% odkazat se na kapitoly 4,5
