@@ -56,14 +56,22 @@ The Project entity holds the basic information about a set of related analyses. 
 
 % Pojmout tuto kapitolu jako detailni specifikaci formatu. Inspirovat se dokumentem GiD postprocess format (a take mozna C# proposals na githubu)
 
-The conceptual model presented in Figure \ref{fig:FEA-db-schema} can be naturally extended to contain entities representing the results of the simulations. The project-based data model enhanced with the representation of simulation results is depicted in Figure \ref{fig:FEA-db-schema-results}.
+The conceptual model presented in Figure \ref{fig:FEA-db-schema} can be naturally extended with the entities representing the results of the simulations. The project-based data model enhanced with the representation of simulation results is depicted in Figure \ref{fig:FEA-db-schema-results} as ER diagram. The corresponding class diagram is depicted in Figure \ref{fig:results-class-diagram}, which describes the object representation of the Solution entity. It is physically representated either by a JSON file in local file system or by several tables in relational database.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{figures/chapter-data-management/FEA-database-schema-only-results}
+    \includegraphics[width=0.8\textwidth]{figures/chapter-data-management/FEA-database-schema-only-results}
     \decoRule
     \caption[Database schema for FEA with results representation only]{Database schema for FEA with results representation only (without the input model).}
     \label{fig:FEA-db-schema-results}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/chapter-data-management/results-class-diagram}
+    \decoRule
+    \caption{Object representation of simulation results.}
+    \label{fig:results-class-diagram}
 \end{figure}
 
 The simulation results are represented by the Solution entity, which holds a structure representing the results from a FEM solver that are converted to the form suitable for post-processing. The structure has the form of a tree. A node of the tree is represented by the Layer entity. A layer is an association of a mesh and corresponding result fields and other attributes. The use of tree structure allows to preserve the relations between the parent layers and the layers that were derived from them. The mesh that is referenced by a layer need not be the same as the mesh used as the input mesh to the FEM solver. It could be modified by the solver during the calculation, e.g. due to the use of adaptive finite element techniques \footnote{TODO: ... which can automatically refine, coarsen, or relocate a mesh to achieve a solution having a specified accuracy}. Also, the resulting mesh can be further modified to facilitate the post-processor implementation, e.g. the surface representation of a 3D mesh can be generated. Also a number of cross-sections can created at uniform intervals to provide a look inside the mesh. Generally, multiple views on the results can be prepared in advance before the user even starts to investigate the results.
@@ -285,7 +293,7 @@ One of the key features of a post-processor is the ability to map a data value, 
 \section{Implementation details}
 \label{sec:implementation-details}
 
-The components of the data management system and their relations were outlined in Figure \ref{fig:FEA-architecture} and Figure \ref{fig:FEA-workflow}. This section discusses the implementation details of the application components based on the system design set out in the previous sections. The implementation of each component is discussed, including the languages, technologies, external providers, or libraries used in the application.
+The components of the data management system and their relations were outlined in Figure \ref{fig:FEA-architecture} and Figure \ref{fig:FEA-workflow}. This section discusses the implementation details of the application components based on the system design set out in the previous sections. The implementation of each component is discussed, including the programming languages, technologies, external providers, or libraries used in the application.
 
 % architektura je modularni, muze to bezet lokalne, pokud to chci v cloudu, tak to rozsirim o dalsi infrastrukturu - web api service, database, web postprocessor...
 
@@ -293,17 +301,6 @@ The components of the data management system and their relations were outlined i
 %- Relational database
 
 % TODO: tohle asi patri do kapitoly o designu, hned za ER diagram se simulation results, ne sem. Presunout. Do teto kapitoly zadne konceptualni diagramy nedavat, jen natvrdo vyjmenovat technologie.
-
-Figure \ref{fig:results-class-diagram} ...
-% TODO: results class diagram bude popisovat objektovou reprezentaci Solution - obvykle je to json soubor na lokalnim ulozisti, nebo muze byt v relacni databazi napojeny na Projekt, Simulation a User.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.6\textwidth]{figures/chapter-data-management/results-class-diagram}
-    \decoRule
-    \caption{Object representation of simulation results.}
-    \label{fig:results-class-diagram}
-\end{figure}
 
 \subsection*{FEM results storage}
 %- Blob storage
