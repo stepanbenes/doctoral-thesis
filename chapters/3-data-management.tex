@@ -295,10 +295,11 @@ One of the key features of a post-processor is the ability to map a data value, 
 
 The components of the data management system and their relations were outlined in Figure \ref{fig:FEA-architecture} and Figure \ref{fig:FEA-workflow}. This section discusses the implementation details of the application components based on the system design set out in the previous sections. The implementation of each component is discussed, including the programming languages, technologies, external providers, or libraries used in the application.
 
-% architektura je modularni, muze to bezet lokalne, pokud to chci v cloudu, tak to rozsirim o dalsi infrastrukturu - web api service, database, web postprocessor...
+The architecture of the data management system is designed as modular and it consists of several isolated services. The full list of services needed either for remote or local post-processing follows. If there is no need or desire to run the system in the distributed environment, one can simply use only the components necessary to post-process the simulation results locally. These are two components -- FEM results converter and Desktop post-processor.
 
 \subsection*{Project data storage}
 %- Relational database
+%Project-related data are stored in SQL database. The data are stored in tables Project, Simulation, User? ...
 
 \subsection*{FEM results storage}
 %- Blob storage
@@ -308,7 +309,7 @@ The components of the data management system and their relations were outlined i
 % Azure Functions, Webjob
 % umi pracovat take jako command-based console management - popsat prikazy;
 % zminit pouzite technologie a knihovny, napr. RedSVD
-
+ 
 \subsection*{Web API service}
 % Storage format nemuze existovat sam o sobe. Jeho soucasti je cloud-based API, ktere s nim umoznuje manipulovat, vytvaret vrstvy, odpovidat na dotazy...
 % ASP.NET Core
@@ -316,10 +317,12 @@ The components of the data management system and their relations were outlined i
 
 \subsection*{Web post-processor}
 % Presentation layer, Frontend, Data consuming and presenting
+% zobrazuje data pouze z remote storage
 % zevrubne popsat implementaci weboveho post-procesoru - z jakych soucasti se sklada, jak komunikuje se serverem
 % Dekomprese: prenasobeni matic - staci jeden radek. ... 
 % Webový browser, WebGL, THREE.js, Aurelia, Typescript, Command line tool (shell), veškeré zpracování příkazů na serveru, na klient se budou posílat jen grafické buffery
 % Jak probiha komunikace s API a dotaz na vrstvy. Jak probiha cely proces dotazu a zobrazeni dat ve webovem postprocesoru. Jak funguje RemoteSolutionController. Remote/Local solutions - neni rozdil, postprocessor je tenky klient
 
 \subsection*{Desktop post-processor}
+% zobrazuje data z local i z remote storage
 % odkazat se na kapitoly 4,5 - plynule navazat na dalsi kapitolu (Mesh visualization)
