@@ -16,7 +16,7 @@ The prototype implementation of the FEA data management system is designed as a 
     \label{fig:FEA-architecture}
 \end{figure}
 
-The architecture relies on an abstraction provided by Platform-as-a-Service\footnote{PaaS. TODO: These services can be carried in a public cloud or on-premises. ...} computing model. No service component is tied directly to a specific machine. Hardware resources are allocated when they are needed by a service infrastructure controller. This makes the scaling and deployment of components easier and allows to focus on the problem domain instead of solving server configuration and networking issues.
+The architecture relies on an abstraction provided by Platform-as-a-Service\footnote{PaaS. TODO: These services can be carried in a public cloud or on-premises. https://azure.microsoft.com/en-us/overview/what-is-paas/ ...} computing model. No service component is tied directly to a specific machine. Hardware resources are allocated when they are needed by a service infrastructure controller. This makes the scaling and deployment of components easier and allows to focus on the problem domain instead of solving server configuration and networking issues.
 
 The system contains two types of data storage. The relational-database type of storage is intended to store basic project-related data such as description of simulations, links to the simulation resources, information about the owner and other colaborating users, etc. The input to the FEA -- geometrical model, attribute assignments, and analysis parameters -- can also be stored in a relational database, eventhough, storing this complex type of information in the SQL database is questionable and has its drawbacks\footnote{TODO: Zminit vyhody i nevyhody. Jake jsou alternativy? No-SQL databaze?}.
 
@@ -293,15 +293,14 @@ One of the key features of a post-processor is the ability to map a data value, 
 \section{Implementation details}
 \label{sec:implementation-details}
 
-The components of the data management system and their relations were outlined in Figure \ref{fig:FEA-architecture} and Figure \ref{fig:FEA-workflow}. This section discusses the implementation details of the application components based on the system design set out in the previous sections. The implementation of each component is discussed, including the programming languages, technologies, external providers, or libraries used in the application.
+The components of the data management system and their relations were outlined in Figure \ref{fig:FEA-architecture} and Figure \ref{fig:FEA-workflow}. This section discusses the implementation details of the application components based on the system design set out in the previous sections. The implementation of each component is discussed, including the programming languages, technologies, external providers, or libraries used in the prototype implementation of the application.
 
-The architecture of the data management system is designed as modular and it consists of several isolated services. The full list of services needed either for remote or local post-processing follows. If there is no need or desire to run the system in the distributed environment, one can simply use only the components necessary to post-process the simulation results locally. These are two components -- FEM results converter and Desktop post-processor.
+The architecture of the data management system is designed as modular and it consists of several isolated services. The full list of services needed either for remote or local post-processing follows. If there is no need or desire to run the system in the distributed environment, one can simply use only the components necessary to post-process the simulation results locally. These are two components -- the FEM results converter and the desktop post-processor.
 
 \subsection*{Project data storage}
-%- Relational database
-%Project-related data are stored in SQL database. The data are stored in tables Project, Simulation, User? ...
+Project-related data are stored in the SQL database. The ER model depicted in Figure \ref{fig:FEA-db-schema-results} is mapped on the database schema consisting of tables Projects, Simulations, Solutions, and Layers. There is also the table Users that holds the information about the owners and collaborators connected with a particular project.
 
-TODO: \ldots
+Microsoft SQL Server is used as the underlying relational database management system, specifically, its cloud-based version that runs as platform-as-a-service in Microsoft Azure cloud.
 
 \subsection*{FEM results storage}
 %- Blob storage
@@ -320,6 +319,7 @@ TODO: \ldots
 % Storage format nemuze existovat sam o sobe. Jeho soucasti je cloud-based API, ktere s nim umoznuje manipulovat, vytvaret vrstvy, odpovidat na dotazy...
 % ASP.NET Core
 % Aggregation, Communication API providing, REST API, interface, backend providing project info
+% Entity framework pro OR mapovani relacni databaze
 
 TODO: \ldots
 
