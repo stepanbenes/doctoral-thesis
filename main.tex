@@ -43,9 +43,11 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{palatino} % Use the Palatino font by default
 
-\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+\usepackage[backend=bibtex,style=numeric,natbib=true]{biblatex} % Use authoryear citation style for "Author, year" citation style
 
 \addbibresource{references.bib} % The filename of the bibliography
+
+\usepackage{refcheck}
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 
@@ -348,6 +350,8 @@ TODO: \ldots
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
+
+\nocite{*} % check for unused references (package refcheck); comment out for filter out unused references
 
 \printbibliography[heading=bibintoc]
 
