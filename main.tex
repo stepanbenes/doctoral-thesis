@@ -43,7 +43,7 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{palatino} % Use the Palatino font by default
 
-\usepackage[backend=bibtex,style=numeric,natbib=true]{biblatex} % Use authoryear citation style for "Author, year" citation style
+\usepackage[backend=bibtex,style=numeric,natbib=true,sorting=none]{biblatex} % Use authoryear citation style for "Author, year" citation style
 
 \addbibresource{references.bib} % The filename of the bibliography
 
@@ -75,6 +75,9 @@ headsepline, % Uncomment to get a line under the header
 %----------------------------------------------------------------------------------------
 %	COMMAND DEFINITIONS
 %----------------------------------------------------------------------------------------
+
+\definecolor{todoColor}{rgb}{1,0.55,0.2}
+\newcommand{\todo}[1]{\textit{\color{todoColor}#1}}
 
 % define commands to keep the formatting separated from the content 
 \newcommand{\keyword}[1]{\textbf{#1}}
@@ -261,7 +264,7 @@ Building and Structural Engineering \\[0.5cm] % Supervisor name
 
 \begin{declaration}
 \addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
-TODO: \ldots
+\todo{TODO: \ldots}
 %\noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
 
 %\begin{itemize} 
@@ -289,7 +292,7 @@ TODO: \ldots
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
 %The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too
-TODO: \ldots
+\todo{TODO: \ldots}
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
@@ -299,7 +302,7 @@ TODO: \ldots
 \begin{acknowledgements}
 \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
 %The acknowledgments and the people to thank go here, don't forget to include your project advisor
-TODO: \ldots
+\todo{TODO: \ldots}
 \end{acknowledgements}
 
 %----------------------------------------------------------------------------------------

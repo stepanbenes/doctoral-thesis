@@ -7,13 +7,13 @@ Finite Element Analysis (FEA) is the term describing the entire process of model
 
 The solution of large-scale Finite element analysis itself can be parallelized and calculated in reasonable time on high-performance computing clusters. Nevertheless, in the end the results are transfered over network and post-processed on an ordinary personal computer. Another concern is the colaboration and sharing of the model and the results between engineers and researchers. All these limitation of the standard file-based approach lead to re-think the entire process of data management in FEA. The focus of the thesis is mainly on the post-processing of the results, and the way the results are stored, transfered, and visualized. However, the storage format for the results was designed with the whole picture in mind and there is proposed database-centric environment for complete FEA data management.
 
-As an motivation example can serve analysis of reactor vessels in nuclear power plants which is used in the process of prolongation of their service life. The vessels are approximately 40 years old and detailed thermo-hydro-mechanical analysis has to be performed. Usually, two-dimensional axisymmetric or fully three-dimensional models are considered and it means hundreds of thousands degrees of freedom are used. The number of time steps is between 10,000 and 15,000. The output files contain displacements, strain and stress components, temperature, relative humidity (or moisture content) and several internal parameters (e.g. creep strains, damage parameter, etc.) in all time steps. The output files with size in the order of gigabytes are generated. More details can be found in \cite{XXX-1,XXX-2}.
+As an motivation example can serve analysis of reactor vessels in nuclear power plants which is used in the process of prolongation of their service life. The vessels are approximately 40 years old and detailed thermo-hydro-mechanical analysis has to be performed. Usually, two-dimensional axisymmetric or fully three-dimensional models are considered and it means hundreds of thousands degrees of freedom are used. The number of time steps is between 10,000 and 15,000. The output files contain displacements, strain and stress components, temperature, relative humidity (or moisture content) and several internal parameters (e.g. creep strains, damage parameter, etc.) in all time steps. The output files with size in the order of gigabytes are generated. More details can be found in \cite{Kruis2010,Krejci2015}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-introduction/motivation-example}
 \decoRule
-\caption[TODO: ]{TODO: Motivation example visualization}
+\caption[\todo{TODO:}]{\todo{TODO: Motivation example visualization}}
 \label{fig:motivation-example}
 \end{figure}
 
@@ -45,7 +45,7 @@ Here follows a summary of basic terms and concepts the thesis is based on.
     \centering
     \includegraphics[width=\textwidth]{figures/chapter-introduction/FEA-phases}
     \decoRule
-    \caption[TODO: ]{TODO: FEA phases}
+    \caption[\todo{TODO:}]{\todo{TODO: FEA phases}}
     \label{fig:FEA-phases}
 \end{figure}
 
@@ -71,7 +71,7 @@ Current FEA software packages store the results either sequentially in formatted
 
 \begin{itemize}
     \item The main goal of the research work is to develop a new storage format that supports compression of results, and to outline the transition to a new post-processor that can read and visualize the compressed data in the new storage format. There is understandable resistance against invention of new data formats in the area of information technology. A new format leads to fragmentation of user base and compatibility issues. Conversion tools need to be created and maintained. There should be a strong motivation for introduction of a new format. However, there is no standard format for representation of results from FEM. Each software package uses proprietary format with syntax suitable for its internal implementation. There is also lack of support for compression methods that fit the character of FEM results. Standard file-based format does not allow for querying of specific information without the need to parse through the complete set of results. Chapter \ref{chapter:related-work} contains discussion about the existing formats in more detail and Chapter \ref{chapter:data-management} describes the proposed format.
-    \item In addition, several suitable compression methods are proposed. Singular Value Decomposition (SVD) (Chapter \ref{chapter:SVD}) is the most promising method used for compression of results in this research. Other methods, that are investigated, include Wavelet transform (\ref{XXX}) and approximation of discrete values by continuous polynomial functions (Chapter \ref{chapter:approximation}).
+    \item In addition, several suitable compression methods are proposed. Singular Value Decomposition (SVD) (Chapter \ref{chapter:SVD}) is the most promising method used for compression of results in this research. Other methods, that are investigated, include Wavelet transform (\cite{XXX}, \todo{Section \ref{XXX}}) and approximation of discrete values by continuous polynomial functions (Chapter \ref{chapter:approximation}).
     \item Finally, the product of this research is the implementation of two postprocessors. The first is a standard desktop postprocessor that is based on existing software and should present the way of transition from the convential file-based formats to the proposed structured database format utilizing compression. The second postprocessor is a web-based thin client intended to present advantages of the proposed format when incorporated into a complex FEA running on a remote server. Chapter \ref{chapter-implementation} summarizes implementation details.
 \end{itemize}
 
