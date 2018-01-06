@@ -318,11 +318,38 @@ In case of the local storage, the documents are stored in the local file system.
 %\footnote{The example of the path to a document in the local file system:\par \file{C:/Solutions/3fe47370-fb09-4c17-9bb7-0e75807d531f/4.result.json}}
 
 \subsection*{FEM results converter}
+
+\todo{TODO: finish this section}
+
+FEM results converter is the core component of the data management system that implements all the operations related to the storage format manipulation.
+
+three intended uses/deployments
+\begin{itemize}
+    \item Function/Webjob
+    \item Command line tool
+    \item directly referenced library by the desktop post-processor to eliminate interface overhead
+\end{itemize}
+
+It is designed as an independent service that can run either in the remote or a local environment.
+It is capable of loading the solution object from its storage location, from which it reads the corresponding layer tree and performs the transform on the specified layer.
+
+
+
+It exposes rich command-line interface that allows the component to be run manually from the terminal as the console application
+
+
+\begin{itemize}
+    \item \textbf{import} -- Convert supported mesh and result files to universal layer format
+    \item \textbf{filter} -- Add new filter layer based on parent layer
+    \item \textbf{compress} -- Compress layer results
+    \item \textbf{list} -- Enumerate all layers in solution
+    \item \textbf{delete} -- Delete layer
+    \item \textbf{help} -- Display more information on a specific command.
+\end{itemize}
+
 % Azure Functions, Webjob
 % umi pracovat take jako command-based console management - popsat prikazy;
 % zminit pouzite technologie a knihovny, napr. RedSVD
-
-\todo{TODO: \ldots}
 
 \subsection*{Web API service}
 % Storage format nemuze existovat sam o sobe. Jeho soucasti je cloud-based API, ktere s nim umoznuje manipulovat, vytvaret vrstvy, odpovidat na dotazy...
