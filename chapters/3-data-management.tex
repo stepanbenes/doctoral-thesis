@@ -296,7 +296,7 @@ The components of the data management system and their relations were outlined i
 
 The architecture of the data management system is designed as modular and it consists of several isolated services. The full list of services needed either for remote or local post-processing follows. If there is no need or desire to run the system in the distributed environment, one can simply use only the components necessary to post-process the simulation results locally. These are two components -- the FEM results converter and the desktop post-processor.
 
-\todo{TODO: Poznamenejme, ze prototype implementation pouziva verejny cloud Microsoft Azure, ale to neni nutne. Je mozne vyuzit i jiny vejerny cloud, pripadne cely system provozovat on-premises, pokud mame neduveru ke cloudum.}
+It is worth noting that the prototype implementation uses the Microsoft Azure public cloud as an enviroment to test and demonstrate the whole system. However, any other cloud provider can be used in production. The system can also be run on-premises if there is any concern about data privacy.
 
 \subsection*{Project data storage}
 
@@ -319,39 +319,29 @@ In case of the local storage, the documents are stored in the local file system.
 
 \subsection*{FEM results converter}
 
-\todo{TODO: finish this section}
+FEM results converter is the core component of the data management system. It does implement all the necessary operations that query or manipulate the data in the proposed layer-based storage format. It is designed as an independent service that can run either in a remote or a local environment. It supports three deployment options:
 
-FEM results converter is the core component of the data management system that implements all the operations related to the storage format manipulation.
+\begin{enumerate}
+    \item It works as a stand-alone console application that exposes command-line interface.
+    \item It can run as a background task on the remote server, communicating via http requests.
+    \item It can be directly referenced as a third party library by the post-processor, which eliminates the overhead of the communication interface.
+\end{enumerate}
 
-three intended uses/deployments
-\begin{itemize}
-    \item Function/Webjob
-    \item Command line tool
-    \item directly referenced library by the desktop post-processor to eliminate interface overhead
-\end{itemize}
-
-It is designed as an independent service that can run either in the remote or a local environment.
-It is capable of loading the solution object from its storage location, from which it reads the corresponding layer tree and performs the transform on the specified layer.
-
-
-
-It exposes rich command-line interface that allows the component to be run manually from the terminal as the console application
-
+The FEM results converter component supports the following commands. (The commands can either be called directly by the post-processor, triggered by the message sent over the network, or even entered manually to the terminal as command-line arguments.)
 
 \begin{itemize}
-    \item \textbf{import} -- Convert supported mesh and result files to universal layer format
-    \item \textbf{filter} -- Add new filter layer based on parent layer
-    \item \textbf{compress} -- Compress layer results
-    \item \textbf{list} -- Enumerate all layers in solution
-    \item \textbf{delete} -- Delete layer
-    \item \textbf{help} -- Display more information on a specific command.
+    \item \keyword{import} -- converts the output from a FEM solver to the universal storage format. (GiD and VTK file formats are currently supported.) The command creates a new solution with a single layer in it -- the master layer.
+    \item \keyword{filter} -- creates a new layer by applying the requested filter on the specified parent layer.
+    \item \keyword{list} -- enumerates all the layers in the solution. It is used to present the current layer tree to the user.
+    \item \keyword{delete} -- deletes a layer.
+    \item \keyword{help} -- displays more information on a specific command.
 \end{itemize}
 
-% Azure Functions, Webjob
-% umi pracovat take jako command-based console management - popsat prikazy;
-% zminit pouzite technologie a knihovny, napr. RedSVD
+The filter command at first downloads the solution object from its storage location, then it retrieves the documents corresponding to a specific layer from either the remote blob storage, or the local file system, then it applies the requested filter on the layer's documents and generates the new filter layer consisting of transformed data. Finally, the layer tree is then updated to contain this new layer. As soon as any new layer is generated, it is considered as immutable and cannot be modified by any command. This simple principle prevents the conflicts when accessing the layer documents simultaneously from multiple locations, eliminates the consistency issues, and helps to avoid any need for sychronization mechanisms.
 
-% odkazat se na kapitolu 6, kde je popsana klicova metoda pro kompresi dat
+Both the import and the filter commands support the compression of the layer data. There is an optional argument for specifying the name of compression method and additional list of parameters that varies by the chosen compression method. E.g., the SVD compression method, accepts either ``error'' or ``size'' parameter (see Chapter \ref{chapter:SVD} for details). To support the SVD compression the converter component references the \textit{RedSVD} \cite{XXX} library that provides the compression method with the optimized algorithms for matrix decompositions.
+
+The FEM results converter is implemented in C\# language and targets .NET Core framework, which among other things ensures cross-platform availability. The component can be either hosted as a webjob inside the Azure App Service (on a dedicated virtual server), or run on demand as a serverless\footnote{\todo{TODO: explain serverless}} application using the Azure Functions infrastructure.
 
 \subsection*{Web API service}
 % Storage format nemuze existovat sam o sobe. Jeho soucasti je cloud-based API, ktere s nim umoznuje manipulovat, vytvaret vrstvy, odpovidat na dotazy...
