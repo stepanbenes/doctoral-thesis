@@ -6,7 +6,7 @@ Together with growing complexity of finite element calculations, the importance 
 \section{System architecture}
 \label{sec:system-architecture}
 
-The prototype implementation of the FEA data management system is designed as a collaborative framework that can be accessed by users from different client devices. Figure \ref{fig:FEA-architecture} depicts the schema of the system architecture. System consists of several independent modules. The FEM calculation itself runs on a remote server as one of micro-services\footnote{\todo{TODO: micro-services}} along with mesh generation service, results processing service, etc. These services are controlled by the application service that provides interface to the client applications in form of REST-ful web API\footnote{\todo{TODO: REST; REST-ful service; REST web API.}}.
+The prototype implementation of the FEA data management system is designed as a collaborative framework that can be accessed by users from different client devices. Figure \ref{fig:FEA-architecture} depicts the schema of the system architecture. System consists of several independent modules. The FEM calculation itself runs on a remote server as one of micro-services\footnote{\todo{TODO: micro-services}} along with mesh generation service, results processing service, etc. These services are controlled by the application service that provides interface to the client applications in form of REST-ful web API\footnote{\todo{TODO: REST; REST-ful service; REST web API. API = Application Programming Interface}}.
 
 \begin{figure}[H]
     \centering
@@ -294,7 +294,7 @@ One of the key features of a post-processor is the ability to map a data value, 
 
 The components of the data management system and their relations were outlined in Figure \ref{fig:FEA-architecture} and Figure \ref{fig:FEA-workflow}. This section discusses the implementation details of the application components based on the system design set out in the previous sections. The implementation of each component is discussed, including the programming languages, technologies, external providers, or libraries used in the prototype implementation of the application.
 
-The architecture of the data management system is designed as modular and it consists of several isolated services. The full list of services needed either for remote or local post-processing follows. If there is no need or desire to run the system in the distributed environment, one can simply use only the components necessary to post-process the simulation results locally. These are two components -- the FEM results converter and the desktop post-processor.
+The architecture of the data management system is designed as modular and it consists of several isolated services. The full list of services needed either for remote or local post-processing follows below. If there is no need or desire to run the system in the distributed environment, one can simply use only the components necessary to post-process the simulation results locally. These are two components -- the FEM results converter and the desktop post-processor.
 
 It is worth noting that the prototype implementation uses the Microsoft Azure public cloud as an enviroment to test and demonstrate the whole system. However, any other cloud provider can be used in production. The system can also be run on-premises if there is any concern about data privacy.
 
@@ -315,7 +315,7 @@ FEM results converted to the proposed format are represented by a series of JSON
 In case of the local storage, the documents are stored in the local file system. The documents corresponding to a single layer are stored in a single folder and the paths and the names of the files are in the following form:
 
 \file{\{path-to-folder\}/\{Layer-id-GUID\}/\{document-index\}.\{document-type\}.json}
-%\footnote{The example of the path to a document in the local file system:\par \file{C:/Solutions/3fe47370-fb09-4c17-9bb7-0e75807d531f/4.result.json}}
+\footnote{The example of the path to a document in the local file system:\par \file{C:/Projects/Project1/3fe47370-fb09-4c17-9bb7-0e75807d531f/4.result.json}}
 
 \subsection*{FEM results converter}
 
@@ -339,19 +339,22 @@ The FEM results converter component supports the following commands. (The comman
 
 The filter command at first downloads the solution object from its storage location, then it retrieves the documents corresponding to a specific layer from either the remote blob storage, or the local file system, then it applies the requested filter on the layer's documents and generates the new filter layer consisting of transformed data. Finally, the layer tree is then updated to contain this new layer. As soon as any new layer is generated, it is considered as immutable and cannot be modified by any command. This simple principle prevents the conflicts when accessing the layer documents simultaneously from multiple locations, eliminates the consistency issues, and helps to avoid any need for sychronization mechanisms.
 
-Both the import and the filter commands support the compression of the layer data. There is an optional argument for specifying the name of compression method and additional list of parameters that varies by the chosen compression method. E.g., the SVD compression method, accepts either ``error'' or ``size'' parameter (see Chapter \ref{chapter:SVD} for details). To support the SVD compression the converter component references the \textit{RedSVD} \cite{XXX} library that provides the compression method with the optimized algorithms for matrix decompositions.
+Both the import and the filter commands support the compression of the layer data. There is an optional argument for specifying the name of compression method and additional list of parameters that varies by the chosen compression method. E.g., the SVD compression method, accepts either ``error'' or ``size'' parameter (see Chapter \ref{chapter:SVD} for details). To support the SVD compression the converter component references the RedSVD library \cite{XXX} that provides the compression method with the optimized algorithms for matrix decompositions.
 
-The FEM results converter is implemented in C\# language and targets .NET Core framework, which among other things ensures cross-platform availability. The component can be either hosted as a webjob inside the Azure App Service (on a dedicated virtual server), or run on demand as a serverless\footnote{\todo{TODO: explain serverless}} application using the Azure Functions infrastructure.
+The FEM results converter is implemented in C\# language and targets .NET Core framework, which among other things ensures cross-platform availability. The component can be either hosted as a webjob inside the Azure Web app service (on a dedicated virtual server), or run on demand as a serverless\footnote{\todo{TODO: explain serverless}} application using the Azure Functions infrastructure.
 
 \subsection*{Web API service}
-% Storage format nemuze existovat sam o sobe. Jeho soucasti je cloud-based API, ktere s nim umoznuje manipulovat, vytvaret vrstvy, odpovidat na dotazy...
-% ASP.NET Core
-% Aggregation, Communication API providing, REST API, interface, backend providing project info
-% Entity framework pro OR mapovani relacni databaze
 
-\todo{TODO: \ldots}
+The Web API is a simple service that provides the access to the project-related data to all client applications in form of REST API. It also serves as the backend for the web post-processor.
+
+ASP.NET Core was chosen for the implementation as it is cross-platform, high-performance, and open-source modern framework for building web applications. As an object-relational mapper that enables to simplify the writing of data-access code, the Entity Framework Core is used.
+
+If there will be a need in the future for the system to be extended to handle the pre-processing of the input to the FEA, the Web API will be the service that will need to be extended to provide all the operations handling the input model.
 
 \subsection*{Web post-processor}
+
+% thin client
+
 % Presentation layer, Frontend, Data consuming and presenting
 % zobrazuje data pouze z remote storage
 % zevrubne popsat implementaci weboveho post-procesoru - z jakych soucasti se sklada, jak komunikuje se serverem
