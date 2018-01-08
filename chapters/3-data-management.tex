@@ -339,33 +339,35 @@ The FEM results converter component supports the following commands. (The comman
 
 The filter command at first downloads the solution object from its storage location, then it retrieves the documents corresponding to a specific layer from either the remote blob storage, or the local file system, then it applies the requested filter on the layer's documents and generates the new filter layer consisting of transformed data. Finally, the layer tree is then updated to contain this new layer. As soon as any new layer is generated, it is considered as immutable and cannot be modified by any command. This simple principle prevents the conflicts when accessing the layer documents simultaneously from multiple locations, eliminates the consistency issues, and helps to avoid any need for sychronization mechanisms.
 
-Both the import and the filter commands support the compression of the layer data. There is an optional argument for specifying the name of compression method and additional list of parameters that varies by the chosen compression method. E.g., the SVD compression method, accepts either ``error'' or ``size'' parameter (see Chapter \ref{chapter:SVD} for details). To support the SVD compression the converter component references the RedSVD library \cite{XXX} that provides the compression method with the optimized algorithms for matrix decompositions.
+Both the import and the filter commands support the compression of the layer data. There is an optional argument for specifying the name of compression method and additional list of parameters that varies by the chosen compression method. E.g., the SVD compression method, accepts either ``error'' or ``size'' parameter (see Chapter \ref{chapter:SVD} for details). To support the SVD compression the converter component references RedSVD\footnote{\todo{TODO: RedSVD URI}} library that provides the compression method with the optimized algorithms for matrix decompositions.
 
-The FEM results converter is implemented in C\# language and targets .NET Core framework, which among other things ensures cross-platform availability. The component can be either hosted as a webjob inside the Azure Web app service (on a dedicated virtual server), or run on demand as a serverless\footnote{\todo{TODO: explain serverless}} application using the Azure Functions infrastructure.
+The FEM results converter is implemented in C\# language and targets .NET Core\footnote{\todo{TODO: .NET Core URI}} framework, which among other things ensures cross-platform availability. The component can be either hosted as a webjob inside the Azure Web app service (on a dedicated virtual server), or run on demand as a serverless\footnote{\todo{TODO: explain serverless}} application using the Azure Functions infrastructure.
 
 \subsection*{Web API service}
 
 The Web API is a simple service that provides the access to the project-related data to all client applications in form of REST API. It also serves as the backend for the web post-processor.
 
-ASP.NET Core was chosen for the implementation as it is cross-platform, high-performance, and open-source modern framework for building web applications. As an object-relational mapper that enables to simplify the writing of data-access code, the Entity Framework Core is used.
+ASP.NET Core\footnote{\todo{TODO: ASP.NET Core URI}} was chosen for the implementation as it is cross-platform, high-performance, and open-source modern framework for building web applications. As an object-relational mapper that enables to simplify the writing of data-access code, the Entity Framework Core\footnote{\todo{TODO: EF Core URI}} is used.
 
 If there will be a need in the future for the system to be extended to handle the pre-processing of the input to the FEA, the Web API will be the service that will need to be extended to provide all the operations handling the input model.
 
 \subsection*{Web post-processor}
 
-% thin client
+The Web post-processor is a simple frontend application that directly communicates with the Web API service to provide the user with the remote access to the projects he is involved in, the state of simulations running on the remote machine, and also the visualization of the results from the simulations with basic post-processing features. Its implementation highly depends on the storage format design. In fact the storage format itself was designed to allow efficient implementation of a thin presentation client suitable for resource-limited devices.
 
-% Presentation layer, Frontend, Data consuming and presenting
-% zobrazuje data pouze z remote storage
-% zevrubne popsat implementaci weboveho post-procesoru - z jakych soucasti se sklada, jak komunikuje se serverem
-% Dekomprese: prenasobeni matic - staci jeden radek. ... 
-% Webový browser, WebGL, THREE.js, Aurelia, Typescript, Command line tool (shell), veškeré zpracování příkazů na serveru, na klient se budou posílat jen grafické buffery
-% Jak probiha komunikace s API a dotaz na vrstvy. Jak probiha cely proces dotazu a zobrazeni dat ve webovem postprocesoru. Jak funguje RemoteSolutionController. Remote/Local solutions - neni rozdil, postprocessor je tenky klient
+It is implemented as a single-page application (SPA)\footnote{\todo{TODO: explain SPA -- from Wikipedia: A single-page application (SPA) is a web application or web site that interacts with the user by dynamically rewriting the current page rather than loading entire new pages from a server. This approach avoids interruption of the user experience between successive pages, making the application behave more like a desktop application.}} using Aurelia\footnote{\todo{TODO: Aurelia URI}} client framework and it is written in Typescript language. It uses Bootstrap\footnote{\todo{TODO: Bootstrap URI}} library to enable resposive layout of HTML components. THREE.js\footnote{\todo{TODO: THREE.js URI}} library is used for the 3D visualization. It is a high-level JavaScript library built on top of the low-level WebGL\footnote{WebGL is a cross-platform web standard for a low-level 3D graphics API based on OpenGL ES, exposed to ECMAScript (JavaScript) via the HTML5 Canvas element.} standard.
 
-\todo{TODO: \ldots}
+% TODO: Zevrubne popsat implementaci weboveho post-procesoru - z jakych soucasti se sklada, jak komunikuje se serverem. Jak probiha komunikace s API a dotaz na vrstvy. Jak probiha cely proces dotazu a zobrazeni dat ve webovem postprocesoru. Jak funguje RemoteSolutionController. Remote/Local solutions - neni rozdil, postprocessor je tenky klient; veškeré zpracování příkazů na serveru, na klient se posílaji jen grafické buffery
+% TODO: to lower the latency between the requests, delay between the user actions
+% TODO: Dekomprese: prenasobeni matic - staci jeden radek. ... 
 
 \subsection*{Desktop post-processor}
-% zobrazuje data z local i z remote storage
-% odkazat se na kapitoly 4,5 - plynule navazat na dalsi kapitolu (Mesh visualization)
 
 \todo{TODO: \ldots}
+
+% zobrazuje data z local i z remote storage
+% je sofistikovanejsi, umi pokrocilejsi operace se siti nezavisle na layer formatu - napr automaticke vytvoreni povrchove reprezentace, nalezeni vyznamnych hran, pokrocilejsi pohyb kamery, vypinani/zapinani jednotlivych prvku, atd.
+% jazyk C#, .NET framework, pro cross-platform mono, pro OpenGL grafiku OpenTK, pro shadery GLSL
+% implementace zobrazovani site, a vytvoreni povrchove reprezentace je popsano v kapitole 4. Alternativni metoda pro kompresi dat je v kapitole 5. plynule navazat na dalsi kapitolu (Mesh visualization)
+% obrazky a benchmarky obou post-procesoru jsou v kapitole Overall results
+
