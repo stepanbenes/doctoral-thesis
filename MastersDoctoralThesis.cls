@@ -214,6 +214,7 @@
 }
 \DeclareDocumentCommand { \author     } { m } { \DeclareDocumentCommand    { \authorname } { } {#1}
 \DeclareDocumentCommand { \@author    } {   } {#1}   }
+\NewDocumentCommand     { \authornodegree } { m } { \DeclareDocumentCommand { \authornamenodegree } { } {#1}  }
 \NewDocumentCommand     { \supervisor } { m } { \DeclareDocumentCommand { \supname       } { } {#1}  }
 \NewDocumentCommand     { \examiner   } { m } { \DeclareDocumentCommand { \examname      } { } {#1}  }
 \NewDocumentCommand     { \degree     } { m } { \DeclareDocumentCommand { \degreename    } { } {#1}  }
@@ -345,7 +346,7 @@ KOMA-script documentation for details.}]{fancyhdr}
 \ifbool{consistentlayout}{
 	\DeclareDocumentEnvironment{abstract}{ O{} }{%
 		\addchap*{\abstractname}%
-		{\chapteralign\normalsize\abstractauthorfont \authorname \par} % Author name
+		{\chapteralign\normalsize\abstractauthorfont \authornamenodegree \par} % Author name
 		\vspace{\baselineskip}
 		{\chapteralign\parbox{.7\linewidth}{\chapteralign\normalsize\itshape\abstracttitlefont\@title}\par}% Thesis title
 		\bigskip\noindent\ignorespaces
@@ -358,18 +359,11 @@ KOMA-script documentation for details.}]{fancyhdr}
 		#1%added to be able to have abstract more than one page long
 		\thispagestyle{plain}
 		\begin{center}
-			{\normalsize \MakeUppercase{\univname} \par} % University name in capitals
-			\bigskip
 			{\huge\textit{\abstractname} \par}
-			\bigskip
-			{\normalsize \facname \par} % Faculty name
-			{\normalsize \deptname \par} % Department name
-			\bigskip
-			{\normalsize \degreename\par} % Degree name
 			\bigskip
 			{\normalsize\bfseries \@title \par} % Thesis title
 			\medskip
-			{\normalsize \byname{} \authorname \par} % Author name
+			{\normalsize \byname{} \authornamenodegree \par} % Author name
 			\bigskip
 		\end{center}
 	}
