@@ -208,6 +208,12 @@ basicstyle=\ttfamily\tiny,
 \definecolor{negativeColor}{rgb}{1,0,0}
 \definecolor{neutralColor}{rgb}{0.6,0.6,0.6}
 
+% https://tex.stackexchange.com/questions/12703/how-to-create-fixed-width-table-columns-with-text-raggedright-centered-raggedlef
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
 \begin{document}
 
 
@@ -264,7 +270,23 @@ Building and Structural Engineering \\[0.5cm] % Supervisor name
 
 \begin{declaration}
 \addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
-\todo{TODO: \ldots}
+\vspace{1cm}
+\noindent
+\textbf{Author:} \authorname
+\vspace{5mm} \\
+\noindent
+\textbf{Title:} \ttitle
+\vspace{1.5cm} \\
+\noindent
+I hereby declare that this thesis is my own work. The thesis was elaborated uder the guidance
+of my supervisor prof. Ing. Jaroslav Kruis, Ph.D. at the Czech Technical University in Prague, Faculty
+of Civil Engineering, Department of Mechanics.
+All the sources which have been used are mentioned in the bibliography.
+\vspace{2.9cm} \\
+\begin{tabular}{L{200pt} L{100pt}}
+In Prague, \today & Signature:
+\end{tabular}
+
 %\noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
 
 %\begin{itemize} 
