@@ -46,7 +46,7 @@ Domain space has to be divided into subdomains of the size which allows to repla
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/chapter-approximation/figure1}
+\includegraphics[width=0.8\textwidth]{figures/chapter-approximation/figure1}
 \decoRule
 \caption[Octree visualization]{Octree visualization. Left: Recursive subdivision of a cube into octants. Right: The corresponding octree.}
 \label{fig:octree-visualization}
@@ -161,7 +161,7 @@ After loading a data block, compression is started. Listing \ref{alg:approximati
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/chapter-approximation/figure2}
+\includegraphics[width=0.8\textwidth]{figures/chapter-approximation/figure2}
 \decoRule
 \caption[Octree generation]{Octree generation algorithm in form of activity diagram.}
 \label{fig:octree-generation}
@@ -244,20 +244,23 @@ Various approximation functions were investigated and tested. Besides polynomial
 
 \end{itemize}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{figures/chapter-approximation/figure5}
-\decoRule
-\caption[Octree creation]{Octree creation example based on linear approximation error.}
-\label{fig:octree-creation}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{figures/chapter-approximation/figure6}
-\decoRule
-\caption[Nodal value computation]{Nodal value computation diagram.}
-\label{fig:nodal-value-computation}
+\begin{figure}[!tbp]
+  \centering
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{figures/chapter-approximation/figure5}
+    \rule{\textwidth}{.4pt}
+    \captionsetup{width=\linewidth}
+    \caption[Octree creation]{Octree creation example based on linear approximation error.}
+    \label{fig:octree-creation}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{figures/chapter-approximation/figure6}
+    \rule{\textwidth}{.4pt}
+    \captionsetup{width=\linewidth}
+    \caption[Nodal value computation]{Nodal value computation diagram.}
+    \label{fig:nodal-value-computation}
+  \end{minipage}
 \end{figure}
 
 Figure \ref{fig:nodal-value-computation} depicts computation of nodal value via traversing octree from the root to the leaves and simultaneously summing up approximation errors. Root node of the octree contains all data components in all time steps where data value of an arbitrary element node can be computed. If an approximation is not sufficiently accurate in current octree node, correction can be made with the help of data stored in lower levels of the octree and summing up corrections together with initial value to compute final value for the node.
