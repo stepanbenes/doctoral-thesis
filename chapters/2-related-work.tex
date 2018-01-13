@@ -1,18 +1,63 @@
 \chapter{Related work}
 \label{chapter:related-work}
 
-\todo{This chapter gives a brief revision of related work performed in FEA data management, file formats, data compression, and post-processing of the results.}
-\todo{TODO: State of the art and discussion about related work in the area of FEM results post-processing, storage formats, and cloud-based FEA \ldots}
+This chapter gives a brief revision of related research work that deals with visualization of finite element meshes and results from FEM, file formats used for representation of FEM data, compression methods, and FEA data management.
 
-\section{FEM post-processing / Mesh visualization}
+% TODO: State of the art and discussion about related work in the area of FEM results post-processing, storage formats, and cloud-based FEA.
+
+\section{Data compression and visualization}
 % Vrstva je koncept, ktery se vyskytuje i u jinych postprocessoru (napr. Simscale)
 
+mesh compression:
 
-\section{Storage of results / File formats}
+surface mesh visualization (refinement/progressive meshes):
+\cite{Gudukbay2002}
+\cite{Vasa2011}
+\cite{Alliez2001}
+\cite{Maglo2012}
+\cite{Valette2004}
+
+\cite{Hoppe1996}
+
+% Quite surprisingly, most of the existing algorithms mainly use only general compression techniques, such as entropy coding, quantisation, PCA or wavelet decomposition, while the inherent geometrical properties of the compressed surface remain unexploited. In this paper we focus on geometry specific optimisation: we extend the PCA-based dynamic mesh compression by optimising the order in which the mesh is traversed.
+
+volumetric mesh visualization:
+\cite{Ueng2004}, \cite{Robaina2010}
+
+Iso geometric analysis + post-processing
+\cite{Stahl2017}
+
+3D graphics on the web:
+\cite{Evans2014}
+% TODO: add more citations for 3D graphics on the web (from the survey paper)
+
+% Data compression is a very wide area - image compression is related, fem data compression se nedela, VTK sice podpoduje kompresi ale obycejnou zip?
+Image compression methods:
+\cite{Lui2001}
+\cite{Watson1994}
+
+\section{File formats}
+% univerzalni formaty pro vstupni geometrii:
+IGES (Initial Graphics Exchange Specification) \cite{Groton2006}, STEP (STandard for the Exchange of Product model data) \cite{Pratt2001}
+
+% http://blog.grabcad.com/blog/2014/10/14/get-over-iges/
+
+% BREP, STL, ... formats; VRML
+
+% OpenCASCADE
+
+\cite{McHenry2008}  presents about 140 file formats for representation of 3D models...
+
+
 % VTK format podporuje kompresi, ale bez znalosti obsahu dat. Pouze nejakou ZIP kompresi ci co. Neni to tak efektivni. Kazdy casovy krok ulozeny zvlast. Ale umi ukladat v ascii i binarne (base64 kodovani)
 
-% pro vstupni geometrii:  STEP, IGES, BREP, STL, ... formats; 
-% pro vysledky: VTK, GiD, ...
+
+
+% pro vysledky: proprietary formats, VTK open source - used in scientific reasearch mainly, GiD, ...
+
+% zatimco pro reprezentaci geometrickeho modelu existuje spousta standardizovanych formatu, pro reprezentaci vysledku neexistuje otevreny univerzalni format podporujici kompresi. snad jen s vyjimkou VTK, ale ten ma sve nedostatky
+
+% https://scicomp.stackexchange.com/questions/23882/what-is-a-common-file-data-format-for-a-mesh-for-fem
 
 \cite{VTK2015}
 \cite{GiDPostProcess}
@@ -21,13 +66,7 @@
 
 % TODO: prozkoumat dalsi formaty pro ulozeni vysledku (vetsinou asi proprietarni, zadny standard neexistuje?)
 
-\section{Compression methods}
-
-Image compression methods:
-\cite{Lui2001}
-\cite{Watson1994}
-
-\section{Web-based FEA}
+\section{Web-based data management}
 
 % citovat papery
 \cite{Ari2013}
