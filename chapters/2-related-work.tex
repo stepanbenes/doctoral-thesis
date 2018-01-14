@@ -6,76 +6,61 @@ This chapter gives a brief revision of related research work that deals with vis
 % TODO: State of the art and discussion about related work in the area of FEM results post-processing, storage formats, and cloud-based FEA.
 
 \section{Data compression and visualization}
-% Vrstva je koncept, ktery se vyskytuje i u jinych postprocessoru (napr. Simscale)
 
-mesh compression:
+The visualization of data produced by finite element methods is of two kinds. The discretization of the domain, called the finite element mesh, and the result fields that are mapped on the points inside the domain (either nodes or integration points). The general methods for visualization of 2D or 3D polygon (usually triangle) meshes have been researched in great depth. These data, when describing an object in great detail, can be relatively large in size if unoptimised. Therefore, many methods for reducing the size of data have been developed \cite{Alliez2005}. In \cite{Evans2014}, there is a wide survey of methods for data visualization and compression, especially with the focus on the web environment.
 
-surface mesh visualization (refinement/progressive meshes):
-\cite{Gudukbay2002}
-\cite{Vasa2011}
-\cite{Alliez2001}
-\cite{Maglo2012}
-\cite{Valette2004}
+Progressive meshes represent one category of methods aiming for size reduction. They allow continuous, progressive coarsening or refinement of a polygonal mesh using a sequence of vertex-split operations. Progressive meshes were introduced originally in 1996 by Hoppe \cite{Hoppe1996} and their efficient implementation was presented in 1998 \cite{Hoppe1998}. Since then, there were various attempts to use Progressive meshes for compression and decompression of 3D meshes \cite{Gudukbay2002, Valette2004, Valette2009, Lavoue2013} and also for streaming of geometrical information from web server to client \cite{Alliez2001, Maglo2012}.
 
-\cite{Hoppe1996}
+However, basic implementations of Progressive meshes and similar methods do not take into account vertex properties other than position. These methods are not designed to satisfactorily handle attributes assigned to mesh entities and their reconstruction. This is a major obstacle for the application to the data produced by FEM. Also, despite a considerable progress in the area of performance of Progressive meshes, decompression time is still a significant issue \cite{Limper2013}. In order to keep compression and decompression time within reasonable limits, an untolerable compromise must be made in compactness of the compressed representation.
 
-% Quite surprisingly, most of the existing algorithms mainly use only general compression techniques, such as entropy coding, quantisation, PCA or wavelet decomposition, while the inherent geometrical properties of the compressed surface remain unexploited. In this paper we focus on geometry specific optimisation: we extend the PCA-based dynamic mesh compression by optimising the order in which the mesh is traversed.
+To avoid the problems with mapping FEM results on a coarsened mesh, the volumetric visualization can be used as shown in \cite{Ueng2004}. Volumetric modeling and rendering approaches are a common choice for visualization of large data from numerical simulations. It is useful technique for visualizing FEA data either by generating semi-transparent 3D cloud images, or by extracting iso-surfaces. However, volumetric rendering can lead to the loss of details in regions where singularities or discontinuities in the data occur. Although, this is partially solved in \cite{Robaina2010}, volumetric rendering is computationally intensive task and it is best suited for uniformly sampled data sets, which need not be the case for a general finite element mesh.
 
-volumetric mesh visualization:
-\cite{Ueng2004}, \cite{Robaina2010}
+A new way to visualize FEM data brings the isogeometric analysis introduced by Hughes \cite{Hughes2005}, which reuses the matematical representation of the input geometry created in CAD tools during the entire engineering process, including FEM analysis itself. In \cite{Stahl2017}, there is proposed an extension of this concept also for post-processing and visualization purposes.
 
-Iso geometric analysis + post-processing
-\cite{Stahl2017}
-
-3D graphics on the web:
-\cite{Evans2014}
-\newline
-\cite{Hoppe1998}, \cite{Limper2013}, \cite{Maglo2012}, \cite{Lavoue2013}, \cite{Valette2009}, \cite{Charland2011}, \cite{Behr2012}, \cite{OpenCTM2010}, \cite{Mouton2011}, \cite{Marion2012}, \cite{Alliez2005}
-
-% Data compression is a very wide area - image compression is related, fem data compression se nedela, VTK sice podpoduje kompresi ale obycejnou zip?
-Image compression methods:
-\cite{Lui2001}
-\cite{Watson1994}
+Different approach for post-processing of FEM data can be to avoid trying to compress geometrical part (the finite element mesh) and compress only the result fields instead. The finite element mesh itself can be visualized using well-known methods of computer graphics and the result fields, as they can be viewed as a series of arbitrary rectangular matrices, can be handled separately by methods used for image compression. There are many image compression methods, the most commonly used are the discrete cosine transform \cite{Watson1994} used in JPEG standard and the wavelet transform used in JPEG 2000 standard \cite{Lui2001}.
 
 \section{File formats}
 % univerzalni formaty pro vstupni geometrii:
-IGES (Initial Graphics Exchange Specification) \cite{Groton2006}, STEP (STandard for the Exchange of Product model data) \cite{Pratt2001}
+IGES\footnote{Initial Graphics Exchange Specification} \cite{Groton2006}, STEP\footnote{STandard for the Exchange of Product model data} \cite{Pratt2001}
 
 % http://blog.grabcad.com/blog/2014/10/14/get-over-iges/
 
 % BREP, STL, ... formats; VRML
 
-% OpenCASCADE
-\cite{OpenCASCADE}
-
-% Abaqus
-\cite{Abaqus}
-
 \cite{McHenry2008}  presents about 140 file formats for representation of 3D models...
-
-
-% VTK format podporuje kompresi, ale bez znalosti obsahu dat. Pouze nejakou ZIP kompresi ci co. Neni to tak efektivni. Kazdy casovy krok ulozeny zvlast. Ale umi ukladat v ascii i binarne (base64 kodovani)
-
-
-
-% pro vysledky: proprietary formats, VTK open source - used in scientific reasearch mainly, Gmsh - open, GiD - proprietary, Abaqus, ...
 
 % zatimco pro reprezentaci geometrickeho modelu existuje spousta standardizovanych formatu, pro reprezentaci vysledku neexistuje otevreny univerzalni format podporujici kompresi. snad jen s vyjimkou VTK, ale ten ma sve nedostatky
 
 % https://scicomp.stackexchange.com/questions/23882/what-is-a-common-file-data-format-for-a-mesh-for-fem
 
+% pro vysledky: proprietary formats, VTK open source - used in scientific reasearch mainly, Gmsh - open, GiD - proprietary, Abaqus, ...
 VTK: \cite{VTK2015}
+% VTK format podporuje kompresi, ale bez znalosti obsahu dat. Pouze nejakou ZIP kompresi ci co. Neni to tak efektivni. Kazdy casovy krok ulozeny zvlast. Ale umi ukladat v ascii i binarne (base64 kodovani)
 Gmsh: \cite{Geuzaine2009}
 GiD: \cite{GiDPostProcess}
-Abaqus: 
-\newline
-\cite{Ivanyi2012}
 
-% TODO: prozkoumat dalsi formaty pro ulozeni vysledku (vetsinou asi proprietarni, zadny standard neexistuje?)
+% dalsi formaty pro ulozeni vysledku jsou vetsinou asi proprietarni, zadny standard neexistuje?
+Abaqus: \cite{Abaqus}
+
+\cite{OpenCTM2010}
+%From 3D graphics on the web paper: Transmission speed of binary data can be reduced by compressing it, for example using the OpenCTM format \cite{OpenCTM2010}, which is designed specifically to compress mesh data. The downside of using compression for web-based methods is, as always, the associated decompression cost in the Javascript layer.
+
+Pokus of jednotny format: \cite{Ivanyi2012}
+
+% OpenCASCADE
+? \cite{OpenCASCADE}
+
+
 
 \section{Web-based data management}
 
-% citovat papery
+% 3D graphics on the web:
+JavaScript typed arrays: \cite{Behr2012}
+Propose a system which uses Three.JS and WebSockets: \cite{Marion2012}
+Web benefits over desktop: \cite{Mouton2011}
+web vs native: \cite{Charland2011}
+
+% FEM in cloud:
 \cite{Ari2013}
 \cite{Yu2010}
 \cite{Peng2003}
@@ -87,3 +72,6 @@ Abaqus:
 Paraview web: \cite{Jourdain2011}
 
 % uvest Simscale
+% https://en.wikipedia.org/wiki/SimScale
+\cite{SimScale}
+% Vrstva je koncept, ktery se vyskytuje i u jinych postprocessoru (napr. SimScale)
