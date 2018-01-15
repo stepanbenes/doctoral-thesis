@@ -1,9 +1,10 @@
 \chapter{Related work}
 \label{chapter:related-work}
 
+% State of the art and discussion about related work in the area of FEM results post-processing, storage formats, and cloud-based FEA.
+
 This chapter gives a brief revision of related research work that deals with visualization of finite element meshes and results from FEM, file formats used for representation of FEM data, compression methods, and FEA data management.
 
-% TODO: State of the art and discussion about related work in the area of FEM results post-processing, storage formats, and cloud-based FEA.
 
 \section{Data compression and visualization}
 
@@ -19,38 +20,25 @@ A new way to visualize FEM data brings the isogeometric analysis introduced by H
 
 Different approach for post-processing of FEM data can be to avoid trying to compress geometrical part (the finite element mesh) and compress only the result fields instead. The finite element mesh itself can be visualized using well-known methods of computer graphics and the result fields, as they can be viewed as a series of arbitrary rectangular matrices, can be handled separately by methods used for image compression. There are many image compression methods, the most commonly used are the discrete cosine transform \cite{Watson1994} used in JPEG standard and the wavelet transform used in JPEG 2000 standard \cite{Lui2001}.
 
+OpenCTM \cite{OpenCTM2010} is a 3D geometry technology for storing triangle-based meshes in a compact binary format. Its compression method is based on lossless entropy reduction. The downside of using this format is the associated decompression cost.
+
+
 \section{File formats}
-% univerzalni formaty pro vstupni geometrii:
-IGES\footnote{Initial Graphics Exchange Specification} \cite{Groton2006}, STEP\footnote{STandard for the Exchange of Product model data} \cite{Pratt2001}
+
+There are many file formats that can be used for representation of input geometry of finite element software. In fact, McHenry in \cite{McHenry2008} presents about 140 file formats for representation of 3D models. The most common universal standards for representation of geometry in CAD systems are IGES\footnote{Initial Graphics Exchange Specification} \cite{Groton2006} and STEP\footnote{STandard for the Exchange of Product model data} \cite{Pratt2001}.
 
 % http://blog.grabcad.com/blog/2014/10/14/get-over-iges/
-
 % BREP, STL, ... formats; VRML
-
-\cite{McHenry2008}  presents about 140 file formats for representation of 3D models...
-
-% zatimco pro reprezentaci geometrickeho modelu existuje spousta standardizovanych formatu, pro reprezentaci vysledku neexistuje otevreny univerzalni format podporujici kompresi. snad jen s vyjimkou VTK, ale ten ma sve nedostatky
-
 % https://scicomp.stackexchange.com/questions/23882/what-is-a-common-file-data-format-for-a-mesh-for-fem
 
-% pro vysledky: proprietary formats, VTK open source - used in scientific reasearch mainly, Gmsh - open, GiD - proprietary, Abaqus, ...
-VTK: \cite{VTK2015}
+% zatimco pro reprezentaci geometrickeho modelu existuje spousta standardizovanych formatu, pro reprezentaci vysledku neexistuje otevreny univerzalni standard, ktery navic podporujici kompresi. snad jen s vyjimkou VTK, ale ten ma sve nedostatky
 % VTK format podporuje kompresi, ale bez znalosti obsahu dat. Pouze nejakou ZIP kompresi ci co. Neni to tak efektivni. Kazdy casovy krok ulozeny zvlast. Ale umi ukladat v ascii i binarne (base64 kodovani)
-Gmsh: \cite{Geuzaine2009}
-GiD: \cite{GiDPostProcess}
 
-% dalsi formaty pro ulozeni vysledku jsou vetsinou asi proprietarni, zadny standard neexistuje?
-Abaqus: \cite{Abaqus}
+On the other hand, there are very few open formats for representation of finite element meshes and results from the finite element method. Commercial software packages, such as Abaqus \cite{Abaqus}, use proprietary formats that are intended for internal use only, or their documentation is not available. The available open formats are provided by open-source projects, e.g., Gmsh \cite{Geuzaine2009}, or ParaView \cite{ParaView2005}, which are mainly used in academia. ParaView is based on the VTK file format \cite{VTK2015}. VTK can be considered as the only universal format for the representation of results from FEM that also supports data compression, eventhough the compression is based on ZIP method, which is not very suitable for FEM results. There is also not so widely used Gambit file format \cite{GAMBIT}, which supports representation of solution results.
 
-\cite{OpenCTM2010}
-%From 3D graphics on the web paper: Transmission speed of binary data can be reduced by compressing it, for example using the OpenCTM format \cite{OpenCTM2010}, which is designed specifically to compress mesh data. The downside of using compression for web-based methods is, as always, the associated decompression cost in the Javascript layer.
+GiD \cite{GiDWeb} is a pre and post processor for numerical simulations in science and engineering. Although it is a commercial software, its file format is documented \cite{GiDPostProcess} and accessible as the GiD is often connected to other finite element software provided by other organizations.
 
-Pokus of jednotny format: \cite{Ivanyi2012}
-
-% OpenCASCADE
-? \cite{OpenCASCADE}
-
-
+In \cite{Ivanyi2012}, there is presented a possible way to convert different types of finite element mesh files to one format. The paper considers only ASCII file representations and the conversion method is based on regular expressions.
 
 \section{Web-based data management}
 
