@@ -3,7 +3,7 @@
 
 % State of the art and discussion about related work in the area of FEM results post-processing, storage formats, and cloud-based FEA.
 
-This chapter gives a brief revision of related research work that deals with visualization of finite element meshes and results from FEM, file formats used for representation of FEM data, compression methods, and FEA data management.
+This chapter gives a brief revision of related research work that deals with visualization of finite element meshes and results from FEM, file formats used for representation of FEM data, compression methods, and web-oriented FEA data management.
 
 
 \section{Data compression and visualization}
@@ -12,13 +12,13 @@ The visualization of data produced by finite element methods is of two kinds. Th
 
 Progressive meshes represent one category of methods aiming for size reduction. They allow continuous, progressive coarsening or refinement of a polygonal mesh using a sequence of vertex-split operations. Progressive meshes were introduced originally in 1996 by Hoppe \cite{Hoppe1996} and their efficient implementation was presented in 1998 \cite{Hoppe1998}. Since then, there were various attempts to use Progressive meshes for compression and decompression of 3D meshes \cite{Gudukbay2002, Valette2004, Valette2009, Lavoue2013} and also for streaming of geometrical information from web server to client \cite{Alliez2001, Maglo2012}.
 
-However, basic implementations of Progressive meshes and similar methods do not take into account vertex properties other than position. These methods are not designed to satisfactorily handle attributes assigned to mesh entities and their reconstruction. This is a major obstacle for the application to the data produced by FEM. Also, despite a considerable progress in the area of performance of Progressive meshes, decompression time is still a significant issue \cite{Limper2013}. In order to keep compression and decompression time within reasonable limits, an untolerable compromise must be made in compactness of the compressed representation.
+However, basic implementations of Progressive meshes and similar methods do not take into account vertex properties other than position. These methods are not designed to satisfactorily handle attributes assigned to mesh entities and their reconstruction. This is a major obstacle when applying the method to the data produced by FEM. Also, despite a considerable progress in the area of performance of Progressive meshes, decompression time is still a significant issue \cite{Limper2013}. In order to keep compression and decompression time within reasonable limits, an untolerable compromise must be made in compactness of the compressed representation.
 
-To avoid the problems with mapping FEM results on a coarsened mesh, the volumetric visualization can be used as shown in \cite{Ueng2004}. Volumetric modeling and rendering approaches are a common choice for visualization of large data from numerical simulations. It is useful technique for visualizing FEA data either by generating semi-transparent 3D cloud images, or by extracting iso-surfaces. However, volumetric rendering can lead to the loss of details in regions where singularities or discontinuities in the data occur. Although, this is partially solved in \cite{Robaina2010}, volumetric rendering is computationally intensive task and it is best suited for uniformly sampled data sets, which need not be the case for a general finite element mesh.
+To avoid the problems with mapping FEM results on a coarsened mesh, the volumetric visualization can be used as shown in \cite{Ueng2004}. Volumetric modeling and rendering approaches are a common choice for visualization of large data from numerical simulations. It is a useful technique for visualization of FEA data either by generating semi-transparent 3D cloud images, or by extracting iso-surfaces. However, volumetric rendering can lead to the loss of details in regions where singularities or discontinuities in the data occur. Although this is partially solved in \cite{Robaina2010}, volumetric rendering is computationally intensive task and it is best suited for uniformly sampled data sets, which need not be the case for a general finite element mesh.
 
 A new way to visualize FEM data brings the isogeometric analysis introduced by Hughes \cite{Hughes2005}, which reuses the matematical representation of the input geometry created in CAD tools during the entire engineering process, including FEM analysis itself. In \cite{Stahl2017}, there is proposed an extension of this concept also for post-processing and visualization purposes.
 
-Different approach for post-processing of FEM data can be to avoid trying to compress geometrical part (the finite element mesh) and compress only the result fields instead. The finite element mesh itself can be visualized using well-known methods of computer graphics and the result fields, as they can be viewed as a series of arbitrary rectangular matrices, can be handled separately by methods used for image compression. There are many image compression methods, the most commonly used are the discrete cosine transform \cite{Watson1994} used in JPEG standard and the wavelet transform used in JPEG 2000 standard \cite{Lui2001}.
+Different approach for post-processing of FEM data can be to avoid trying to compress geometrical part (finite element mesh) and compress only result fields instead. The finite element mesh itself can be visualized using well-known methods of computer graphics and the result fields, as they can be viewed as a series of arbitrary rectangular matrices, can be handled separately by methods used for image compression. There are many image compression methods. The most commonly used are the discrete cosine transform \cite{Watson1994} used in JPEG standard and the wavelet transform used in JPEG 2000 standard \cite{Lui2001}.
 
 OpenCTM \cite{OpenCTM2010} is a 3D geometry technology for storing triangle-based meshes in a compact binary format. Its compression method is based on lossless entropy reduction. The downside of using this format is the associated decompression cost.
 
@@ -34,32 +34,21 @@ There are many file formats that can be used for representation of input geometr
 % zatimco pro reprezentaci geometrickeho modelu existuje spousta standardizovanych formatu, pro reprezentaci vysledku neexistuje otevreny univerzalni standard, ktery navic podporujici kompresi. snad jen s vyjimkou VTK, ale ten ma sve nedostatky
 % VTK format podporuje kompresi, ale bez znalosti obsahu dat. Pouze nejakou ZIP kompresi ci co. Neni to tak efektivni. Kazdy casovy krok ulozeny zvlast. Ale umi ukladat v ascii i binarne (base64 kodovani)
 
-On the other hand, there are very few open formats for representation of finite element meshes and results from the finite element method. Commercial software packages, such as Abaqus \cite{Abaqus}, use proprietary formats that are intended for internal use only, or their documentation is not available. The available open formats are provided by open-source projects, e.g., Gmsh \cite{Geuzaine2009}, or ParaView \cite{ParaView2005}, which are mainly used in academia. ParaView is based on the VTK file format \cite{VTK2015}. VTK can be considered as the only universal format for the representation of results from FEM that also supports data compression, eventhough the compression is based on ZIP method, which is not very suitable for FEM results. There is also not so widely used Gambit file format \cite{GAMBIT}, which supports representation of solution results.
+On the other hand, there are very few open formats for representation of finite element meshes and results from the finite element method. Commercial software packages, such as Abaqus \cite{Abaqus}, use proprietary formats that are intended for internal use only or their documentation is not available. The available open formats are provided by open-source projects, e.g., Gmsh \cite{Geuzaine2009} or ParaView \cite{ParaView2005}, which are mainly used in academia. ParaView is based on the VTK file format \cite{VTK2015}. VTK can be considered as the only universal format for the representation of results from FEM that also supports data compression, eventhough the compression is based on ZIP method, which is not very suitable for FEM results. There is also not so widely used Gambit file format \cite{GAMBIT}, which supports representation of solution results.
 
-GiD \cite{GiDWeb} is a pre and post processor for numerical simulations in science and engineering. Although it is a commercial software, its file format is documented \cite{GiDPostProcess} and accessible as the GiD is often connected to other finite element software provided by other organizations.
+GiD \cite{GiDWeb} is a pre and post processor for numerical simulations in science and engineering. Although it is a commercial software, its file format is documented \cite{GiDPostProcess} and accessible as the GiD is often connected to finite element software provided by other companies or organizations.
 
-In \cite{Ivanyi2012}, there is presented a possible way to convert different types of finite element mesh files to one format. The paper considers only ASCII file representations and the conversion method is based on regular expressions.
+In \cite{Ivanyi2012}, there is presented a possible way to convert different types of finite element mesh files to one universal format. The paper considers only ASCII file representations and the conversion method is based on regular expressions.
+
 
 \section{Web-based data management}
 
-% 3D graphics on the web:
-JavaScript typed arrays: \cite{Behr2012}
-Propose a system which uses Three.JS and WebSockets: \cite{Marion2012}
-Web benefits over desktop: \cite{Mouton2011}
-web vs native: \cite{Charland2011}
+Peng et al. in \cite{Peng2003} propose an implementation of an engineering data access system for a finite element analysis, which utilizes the Internet as the communication channel to access the analysis results. Besides the description of the overall architecture of the data management system and the communication between its components, the paper addresses three important aspects of any data management system: data storage scheme, data representation, and data retrieval. Although the exact type of database is not mentioned there, the relational type of database is expected to be used. Peng and Law in \cite{Peng2004} further build on the idea and present an Internet-enabled framework that allows users easy access to the FEA core service and the analysis results by using a web browser or other application programs.
 
-% FEM in cloud:
-\cite{Ari2013}
-\cite{Yu2010}
-\cite{Peng2003}
-\cite{Heber2007I}
-\cite{Heber2007II}
-\cite{Weng2011}
-\cite{Chen2008}
+The authors in \cite{Heber2007I} and \cite{Heber2007II} advocate for the use of a relational database management system in support of finite element analysis. They also propose a new way of thinking about data management in FEA as neither extreme data sizes nor integration (with other applications over the Web) was a design concern 40 years ago when the paradigm for FEA implementation first was formed. The papers also discuss how to make the transition from a file-based to a database-centric environment in support of large scale FEA.
 
-Paraview web: \cite{Jourdain2011}
+Chen and Lin in \cite{Chen2008} present an Internet-based finite-element analysis framework, named Web-FEM, which allows users to access existing finite-element analysis service running on their machines from remote sites over the Internet. Weng in \cite{Weng2011} focuses on post-processing of FEA data using web technologies. The paper points out the fact that the Web is actually the only truly cross-platform environment. The implementation of the finite element simulation as cloud computing service is discussed in \cite{Ari2013}. The authors deal with the technical issues related to the design and implementation, as well as the issues related to the data privacy and security of the cloud services.
 
-% uvest Simscale
-% https://en.wikipedia.org/wiki/SimScale
-\cite{SimScale}
-% Vrstva je koncept, ktery se vyskytuje i u jinych postprocessoru (napr. SimScale)
+The benefits of web-based applications with respect to native desktop (or mobile) applications are summarized and explained in detail in \cite{Mouton2011} and \cite{Charland2011}. An example of remote rendering service for visualization of scientific data is ParaViewWeb \cite{Jourdain2011}. It is a JavaScript library that can be used to build applications with interactive 3D visualization inside a web browser. SimScale \cite{SimScale} is a commercial computer-aided engineering software product based on cloud computing that utilizes ParaViewWeb for the data visualization.
+
+However, Marion and Jomier point out \cite{Marion2012} a downside of this and similar frameworks. They require customized client setup either with plugins or external applications. Therefore, the authors present a system which uses Three.JS and WebSockets to counter these issues. The WebSockets specification \cite{WebSockets} introduces a full-duplex connection between server and client to allow fast data transmission with low latency. Behr et al. \cite{Behr2012} point out the draw-backs of formats used to transfer geometrical data from server to browser and propose to separate vertex coordinates from other vertex attributes. Their approach takes advantage of JavaScript typed arrays to allow the downloaded data to be passed directly to the GPU memory, which eliminates relatively slow parsing and interpreting of data stored in complex structured formats.
