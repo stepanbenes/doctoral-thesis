@@ -372,4 +372,17 @@ The desktop post-processor is the feature-rich visualization tool that allows to
 The application is written in C\# language and targets full .NET framework. It supports both Microsoft Windows OS and Linux OS (tested on Debian-based Linux distributions; Mono framework \cite{MonoProject} is required). It uses OpenTK library \cite{OpenTK} for 3D visualizations, which is a low-level wrapper for OpenGL.
 % TODO: GLSL for shaders: isoareas, hatching
 
-The design and implementation of the efficient representation of mesh surface and its construction algorithm is described in detail in Chapter \ref{chapter:mesh-visualization}. Chapter \ref{chapter:approximation} discusses an alternative method to SVD compression -- the approximation of FEM results by polynomial functions, which is implemented only in the desktop post-processor and it is not related to the proposed storage format. The screenshots and performance characteristics of both post-processors are included in Chapter \ref{chapter:overall-results}.
+The design and implementation of the efficient representation of mesh surface and its construction algorithm is described in detail in Chapter \ref{chapter:mesh-visualization}. Chapter \ref{chapter:approximation} discusses an alternative method to SVD compression -- the approximation of FEM results by polynomial functions, which is implemented only in the desktop post-processor and it is not related to the proposed storage format.
+
+
+% =======================================================================================
+% Results and evaluation
+% =======================================================================================
+
+\section{Results and evaluation}
+
+% This section contains screenshots and performance characteristics of both post-processors.
+
+% TODO: Obrázky obou postprocessoru (desktop, web-based), různé filtry - řezy, isoplochy (temelin a karluv most bude vypadat pekne (chotkova a shear beam uz jsou pouzity v predchozich kapitolach)).
+% TODO: Zmerit latenci - pocatecni delay, pred zobrazenim site/dat. Zmerit pocet snimku za sekundu. Porovnat napr s tradicnim postprocesorem a pak se Simscale? Zmerit pametovou narocnost puvodniho a noveho postprocesoru (porovnat s GiDem jako s tradicnim postprocesorem).
+% TODO: Vysvetlit, proc jsem navrhl tyto testy a benchmarky. Co se snazim dokazat? Snazim se ospravedlnit vyvoj noveho formatu a kompresni metody...
