@@ -379,10 +379,73 @@ The design and implementation of the efficient representation of mesh surface an
 % Results and evaluation
 % =======================================================================================
 
+\pagebreak
+
 \section{Results and evaluation}
 
-% This section contains screenshots and performance characteristics of both post-processors.
+% This section contains screenshots (and performance characteristics) of both desktop post-processor and web post-processor.
 
-% TODO: Obrázky obou postprocessoru (desktop, web-based), různé filtry - řezy, isoplochy (temelin a karluv most bude vypadat pekne (chotkova a shear beam uz jsou pouzity v predchozich kapitolach)).
-% TODO: Zmerit latenci - pocatecni delay, pred zobrazenim site/dat. Zmerit pocet snimku za sekundu. Porovnat napr s tradicnim postprocesorem a pak se Simscale? Zmerit pametovou narocnost puvodniho a noveho postprocesoru (porovnat s GiDem jako s tradicnim postprocesorem).
+In Figure \ref{fig:desktop-post-processor-remote-solutions}, there is a screenshot of the desktop post-processor that demonstrates the ability to connect to the remote web API providing the list of solutions stored in the database.
+Figure \ref{fig:desktop-post-processor-master} shows ... 
+Figure \ref{fig:web-post-processor-surface} ...
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter-data-management/desktop-post-processor-remote-solutions}
+    \decoRule
+    \caption[Desktop post-processor screenshot. List of remote solutions.]{Desktop post-processor screenshot. Demonstration of connection to the web API (listing of remote solutions).}
+    \label{fig:desktop-post-processor-remote-solutions}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter-data-management/desktop-post-processor-master}
+    \decoRule
+    \caption{Desktop post-processor screenshot. Visualization of a master layer.}
+    \label{fig:desktop-post-processor-master}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter-data-management/web-post-processor-surface}
+    \decoRule
+    \caption{Web post-processor screenshot. Visualization of a surface layer.}
+    \label{fig:web-post-processor-surface}
+\end{figure}
+
+
+
+
+Figure \ref{fig:desktop-post-processor-slice},
+Figure \ref{fig:desktop-post-processor-isosurface},
+Figure \ref{fig:web-post-processor-slice}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter-data-management/desktop-post-processor-slice}
+    \decoRule
+    \caption{Desktop post-processor screenshot. Visualization of a slice layer.}
+    \label{fig:desktop-post-processor-slice}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter-data-management/desktop-post-processor-isosurface}
+    \decoRule
+    \caption{Desktop post-processor screenshot. Visualization of a iso-surface layer.}
+    \label{fig:desktop-post-processor-isosurface}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/chapter-data-management/web-post-processor-slice}
+    \decoRule
+    \caption{Web post-processor screenshot. Visualization of a slice layer.}
+    \label{fig:web-post-processor-slice}
+\end{figure}
+
+% TODO: napsat strucne zhodnoceni implementace. Ceho si povsimnout na obrazcich, popsat jak probiha zobrazeni dat - jak dlouho to trva ve srovnani s tradicnim postprocesorem (aspon pocit, merit se to da tezko)
+
+% TODO: Benchmarky? Zmerit latenci - pocatecni delay, pred zobrazenim site/dat. Zmerit pocet snimku za sekundu. Porovnat napr s tradicnim postprocesorem a pak se Simscale? Zmerit pametovou narocnost puvodniho a noveho postprocesoru (porovnat s GiDem jako s tradicnim postprocesorem).
 % TODO: Vysvetlit, proc jsem navrhl tyto testy a benchmarky. Co se snazim dokazat? Snazim se ospravedlnit vyvoj noveho formatu a kompresni metody...
