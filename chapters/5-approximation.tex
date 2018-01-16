@@ -501,18 +501,18 @@ The value of $\tilde{d}$ is then compared to $\epsilon$ value. The value $\epsil
 Results of the approximation in time are summarized in Table \ref{tab:reactor-vessel-spacetime}. For spatial approximation the trilinear regression was chosen as the method with the best results in the previous benchmark. The reactor vessel simulation results were used in the test (see Figure \ref{fig:reactor-vessel-displacements}).
 
 \begin{table}[H]
-\caption[Approximated results of reactor vessel 2D simulation (space and time)]{Reactor vessel 2D. Spatial and temporal octree approximation results.}
-\label{tab:reactor-vessel-spacetime}
-\centering
-\begin{tabular}{| l | r | r | r |}
-\hline
-\tabhead{ } & \tabhead{Max error [\%]} & \tabhead{Average error [\%]} & \tabhead{Compression ratio [\%]} \\
-\hline
-Mean value & 100.7 \textcolor{negativeColor}{(+25.42)} & 0.7835 \textcolor{negativeColor}{(+0.16)} & 7.53 \textcolor{positiveColor}{(-47.77)}\\
-Linear regression & 44.23 \textcolor{neutralColor}{(+0.0)} & 0.2262 \textcolor{negativeColor}{(+0.042)} & 2.57 \textcolor{positiveColor}{(-15.13)}\\
-Trilinear regression & 81.41 \textcolor{negativeColor}{(+0.14)} & 0.2158 \textcolor{negativeColor}{(+0.041)} & 2.54 \textcolor{positiveColor}{(-14.34)}\\
-\hline
-\end{tabular}
+  \caption[Approximated results of reactor vessel 2D simulation (space and time)]{Reactor vessel 2D. Spatial and temporal octree approximation results.}
+  \label{tab:reactor-vessel-spacetime}
+  \centering
+  \begin{tabular}{| l | r | r | r |}
+    \hline
+    \tabhead{ } & \tabhead{Max error [\%]} & \tabhead{Average error [\%]} & \tabhead{Compression ratio [\%]} \\
+    \hline
+    Mean value & 100.7 \textcolor{negativeColor}{(+25.42)} & 0.7835 \textcolor{negativeColor}{(+0.16)} & 7.53 \textcolor{positiveColor}{(-47.77)}\\
+    Linear regression & 44.23 \textcolor{neutralColor}{(+0.0)} & 0.2262 \textcolor{negativeColor}{(+0.042)} & 2.57 \textcolor{positiveColor}{(-15.13)}\\
+    Trilinear regression & 81.41 \textcolor{negativeColor}{(+0.14)} & 0.2158 \textcolor{negativeColor}{(+0.041)} & 2.54 \textcolor{positiveColor}{(-14.34)}\\
+    \hline
+  \end{tabular}
 \end{table}
 
 Time compression procedure presented in Listing \ref{alg:approximation-in-time} was applied to already created octree-based structure containing approximations of original data values. Generation of this octree is described in section \ref{sec:approximation-in-space}.
@@ -520,21 +520,47 @@ Time compression procedure presented in Listing \ref{alg:approximation-in-time} 
 
 \section{Evaluation}
 
-% TODO: add results evaluation from papers \cite{Benes2016} and \cite{Benes2016Pollack
-
-% figures from chapter overall results
+As an another benchmark that compares maximal relative approximation error, average error, and compression ratio serves the thermo-mechanical analysis of model of Charles Bridge in Prague. Analysis results contain displacement vector values with three components ($u$, $v$ and $w$) (see Figure \ref{fig:charles-bridge-model}) and scalar values of temperature distribution (see Figure \ref{fig:charles-bridge-temperature}). Analysis has $46$ time steps. Total number of data sets that are processed by compression algorithm is therefore $184$. Each data set has $73749$ values that correspond to number of nodes in the finite element mesh. Results are summarized in Table \ref{tab:charles-bridge-benchmark}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{figures/chapter-results/charles-bridge-model}
+  \includegraphics[width=\textwidth]{figures/chapter-approximation/charles-bridge-model}
   \decoRule
-  \caption[Model of Charles Bridge in Prague -- heat transport analysis results]{Model of Charles Bridge in Prague: heat transport analysis results (displacements).}
+  \caption[Model of Charles Bridge in Prague -- heat transport analysis, displacements]{Model of Charles Bridge in Prague: heat transport analysis results (displacements).}
   \label{fig:charles-bridge-model}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{figures/chapter-results/charles-bridge-exact-data-values}
+  \includegraphics[width=\textwidth]{figures/chapter-approximation/charles-bridge-temperature}
+  \decoRule
+  \caption[Model of Charles Bridge in Prague -- heat transport analysis results, temperature]{Model of Charles Bridge in Prague: heat transport analysis results (temperature).}
+  \label{fig:charles-bridge-temperature}
+\end{figure}
+
+\begin{table}[H]
+  \caption[Benchmark results: heat transport analysis of Charles Bridge in Prague]{Benchmark results: heat transport analysis of Charles Bridge in Prague (approximation error and compression ratio)}
+  \label{tab:charles-bridge-benchmark}
+  \centering
+  \begin{tabular}{| l | r | r | r |}
+    \hline
+    \tabhead{ } & \tabhead{Max error [\%]} & \tabhead{Average error [\%]} & \tabhead{Compression ratio [\%]} \\
+    \hline
+    Displacement $u$ & 26.49 & 0.13 & 13.3\\
+    Displacement $v$ & 70.71 & 0.19 & 27.4\\
+    Displacement $w$ & 48.49 & 0.14 & 16.3\\
+    Temperature & \textcolor{negativeColor}{92.46} & 0.41 & 59.0\\
+    \hline
+    Average &  & 0.22 & 29.0\\
+    \hline
+  \end{tabular}
+\end{table}
+
+Figure \ref{fig:charles-bridge-exact-data-values} contains visualization of the exact data values, whereas Figure \ref{fig:charles-bridge-approximation-method-artifacts} contains visualization of approximation of the same data series. Significant visible approximation errors are marked by arrows. Figure \ref{fig:charles-bridge-glitches-in-approximation} shows same kind of error on different data set. The red lines represent the octree segments.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/chapter-approximation/charles-bridge-exact-data-values}
   \decoRule
   \caption[Model of Charles Bridge -- exact data values]{Model of Charles Bridge in Prague: exact data values of heat transport analysis results, no approximation applied.}
   \label{fig:charles-bridge-exact-data-values}
@@ -542,7 +568,7 @@ Time compression procedure presented in Listing \ref{alg:approximation-in-time} 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{figures/chapter-results/charles-bridge-approximation-method-artifacts}
+  \includegraphics[width=\textwidth]{figures/chapter-approximation/charles-bridge-approximation-method-artifacts}
   \decoRule
   \caption[Model of Charles Bridge -- approximation method's artifacts]{Model of Charles Bridge in Prague: heat transport analysis results, approximation method's artifacts (marked by arrows).}
   \label{fig:charles-bridge-approximation-method-artifacts}
@@ -550,8 +576,12 @@ Time compression procedure presented in Listing \ref{alg:approximation-in-time} 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{figures/chapter-results/charles-bridge-glitches-in-approximation}
+  \includegraphics[width=\textwidth]{figures/chapter-approximation/charles-bridge-glitches-in-approximation}
   \decoRule
   \caption[Model of Charles Bridge -- glitches in approximation function]{Model of Charles Bridge in Prague: glitches in approximation function caused by octree-based space decomposition. The red lines represent the octree segments.}
   \label{fig:charles-bridge-glitches-in-approximation}
 \end{figure}
+
+The imperfections of the method can have two causes. Artifacts can appear typically for results with high-frequency changes in data, for which the octree data structure cannot be fine enough. Special condition in the octree creation algorithm specifies the minimum number of discrete function values to be contained in the octree cell to replace them by the continuous approximation function. This minimum number is related to the type and order of the approximation method that is used in the algorithm. If the condition is not met, the octree cell cannot be divided into eight child cells even if the approximation error is still too high. The possible solution could be to allow the use of higher-order approximation functions in these rare cases, but it would grow the memory consumption and considerably complicate the algorithm. The second reason for these kinds of errors is strictly local nature of the approximation algorithm that cares only about data values in current octree cell and does not take the neighbor segments into account. The transitions between cells can be sometimes far from smooth as can be seen in Figure \ref{fig:charles-bridge-glitches-in-approximation}.
+
+The method described in this chapter is a lossy compression method. In average case the compression ratio is about 30\% with quite low relative approximation error at 0.2\%. However, in some extreme cases (rough, unpredictable function shape) the maximal error can be quite high, up to 100\% and the method does not even guarantee any upper limit on the approximation error. The compression ratio is not as low as was expected at the beginning, but in the following work the compression ratio can be significantly decreased by applying the same approach also for time -- the temporal dimension of the problem. The current algorithm produces the continuous approximation functions for each time step. The algorithm can be extended to recognize the time steps in which the function does not change or changes linearly and can be therefore interpolated from neighboring time steps. Whole approximation functions in these steps can be then disposed, because they are not necessary -- they can be computed from other time steps. However, isolated but unpredictable and excessive maximum approximation error is the crucial disadvantage of the method.
