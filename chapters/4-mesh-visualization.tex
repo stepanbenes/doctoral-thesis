@@ -259,7 +259,7 @@ Set<Element2D> SelectSurface(Element2D startFace, float borderAngleLimit)
 
 \section{Results}
 
-The program was benchmarked against other commonly used editors that have similar capabilities. We chose the \textbf{GiD} \cite{GiD2013} postprocessor, \textbf{ParaView} \cite{ParaView2005} and \textbf{VisIt} \cite{VisIt2005}. The initial loading time (see Table \ref{tab:loading-time}) and memory consumption were measured (see Table \ref{tab:memory-consumption}). The memory requirements of our mesh editor grows slightly faster than requirements of other tools for meshes with high number of finite elements. It is caused by auxiliary data structures assembled for future fast manipulation with meshes. The mesh Beam with $651.873$ elements represents a limit task which can be solvable on a single processor computer. For smaller problems, memory requirements of our editor are comparable or even smaller in comparison with GiD, ParaView and VisIt. Figure \ref{fig:benchmark-meshes} contains visualizations of the meshes that were used in the benchmark.
+The program was benchmarked against other commonly used editors that have similar capabilities. We chose the \textbf{GiD} \cite{GiD2013} post-processor, \textbf{ParaView} \cite{ParaView2005} and \textbf{VisIt} \cite{VisIt2005}. The initial loading time (see Table \ref{tab:loading-time}) and memory consumption were measured (see Table \ref{tab:memory-consumption}). The memory requirements of our mesh editor grows slightly faster than requirements of other tools for meshes with high number of finite elements. It is caused by auxiliary data structures assembled for future fast manipulation with meshes. The mesh Beam with $651.873$ elements represents a limit task which can be solvable on a single processor computer. For smaller problems, memory requirements of our editor are comparable or even smaller in comparison with GiD, ParaView and VisIt. Figure \ref{fig:benchmark-meshes} contains visualizations of the meshes that were used in the benchmark.
 
 \begin{table}
 \caption[Initial loading time comparison]{Measured results: Initial loading time in seconds (CPU time).}
@@ -307,7 +307,7 @@ Robo (244188 elements) & 291.836 & 200.484 & 543.316 & 355.268\\
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure9}
 \decoRule
-\caption[Visualization of significant edges]{Finding and visualization of significant edges. a) GiD postprocessor. b) The Mesh Editor.}
+\caption[Visualization of significant edges]{Finding and visualization of significant edges. a) GiD post-processor. b) The MeshEditor.}
 \label{fig:significant-edges}
 \end{figure}
 
