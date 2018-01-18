@@ -30,7 +30,7 @@ The objective of a compression algorithm is to reduce amount of data representin
 
 A compression method can be lossy or lossless. Lossless methods are able to fully reconstruct original data. Lossy methods, on the other hand, produce only approximations of original data.
 
-SVD is used in this paper as a part of the compression algorithm. The SVD method applied to arbitrary matrix produces decomposition that consists of corresponding singular values and singular vectors. This process is fully reversible (with the assumption that the numerical errors are negligible). The original matrix can be reconstructed by the multiplication of decomposed parts. However, the compression algorithm is based on modification of decomposition to create low-rank approximation matrix. The reconstructed matrix slightly differs from the original matrix and algorithm therefore performs lossy compression.
+SVD is used in this thesis as a part of the compression algorithm. The SVD method applied to arbitrary matrix produces decomposition that consists of corresponding singular values and singular vectors. This process is fully reversible (with the assumption that the numerical errors are negligible). The original matrix can be reconstructed by the multiplication of decomposed parts. However, the compression algorithm is based on modification of decomposition to create low-rank approximation matrix. The reconstructed matrix slightly differs from the original matrix and algorithm therefore performs lossy compression.
 
 \subsection{Low-rank approximation matrix}
 
@@ -72,7 +72,7 @@ where $m$ is the number of rows and $n$ is the number of columns of matrix $\mtr
 \subsection{Error estimation}
 \label{sec:error-estimation}
 
-Low-rank approximation matrix method that is described in this paper is a lossy compression technique. Several error metrics are used to control the quality of results.
+Low-rank approximation matrix method, which was described above, is a lossy compression technique. Several error metrics are used to control the quality of results.
 
 \begin{itemize}
 
@@ -99,7 +99,7 @@ reconstructed matrix of dimension $m \times n$.
 \end{equation}
 
 \noindent
-where $X_{min}$ and $X_{max}$ are elements of input matrix $\mtrx{A}$ with minimum and maximum value, respectively. This error metric is able to measure and compare errors in datasets with different scales. Therefore, it is the main parameter that is used to control the quality of compression in the algorithm presented in this paper.
+where $X_{min}$ and $X_{max}$ are elements of input matrix $\mtrx{A}$ with minimum and maximum value, respectively. This error metric is able to measure and compare errors in datasets with different scales. Therefore, it is the main parameter that is used to control the quality of compression in the proposed compression algorithm.
 
 \item \textbf{Peak Signal to Noise Ratio}
 
