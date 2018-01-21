@@ -48,7 +48,7 @@ Domain space has to be divided into subdomains of the size which allows to repla
 \centering
 \includegraphics[width=0.8\textwidth]{figures/chapter-approximation/figure1}
 \decoRule
-\caption[Octree visualization]{Octree visualization. Left: Recursive subdivision of a cube into octants. Right: The corresponding octree.}
+\caption[Octree visualization.]{Octree visualization. Left: Recursive subdivision of a cube into octants. Right: The corresponding octree.}
 \label{fig:octree-visualization}
 \end{figure}
 
@@ -85,7 +85,7 @@ The procedure is reading the FEM results divided to data sets from the external 
 
 Compression has to be made on-the-fly during loading of data from the file to the memory between each data component. Starting compression after all results has been loaded to the memory would not make sense, because the main purpose of the compression step is to save overall memory consumption of the post-processor. Therefore, the format of data should ideally be designed in the way that each data component is separated in single data file or at least in one isolated data block in the file not mixed with other data. No particular order of data components is required. However, data formats used by common finite element software packages are usually designed in the way that the components of each quantity are grouped together. We rely mainly on GiD postprocess file format (\file{.res}) described in detail in \cite{GiDPostProcess} where data are divided to blocks according to physical quantity and time step. Each block is the list of value tuples introduced by a node number (or element number in case of values in gauss-points), e.g. $x$, $y$ and $z$ component triplet for displacement vector in node $42$ in time step $3.0$. To avoid multiple passes through the data file the value tuples are cached and processed right after reading the whole data block.
 
-\begin{lstlisting}[caption=Core of aproximation procedure,label=alg:approximation]
+\begin{lstlisting}[caption=Core of aproximation procedure.,label=alg:approximation]
 function OctreeInternalNode.InsertDataValues(dataValues, dataComponentId, depth, approximationMethod)
 {
   // find approximation function and save it in current octree node
@@ -163,7 +163,7 @@ After loading a data block, compression is started. Listing \ref{alg:approximati
 \centering
 \includegraphics[width=0.8\textwidth]{figures/chapter-approximation/figure2}
 \decoRule
-\caption[Octree generation]{Octree generation algorithm in form of activity diagram.}
+\caption[Octree generation.]{Octree generation algorithm in form of activity diagram.}
 \label{fig:octree-generation}
 \end{figure}
 
@@ -171,7 +171,7 @@ After loading a data block, compression is started. Listing \ref{alg:approximati
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-approximation/figure3}
 \decoRule
-\caption[Diagram of octree generation classes]{Class diagram of types involved in octree generation algorithm.}
+\caption[Diagram of octree generation classes.]{Class diagram of types involved in octree generation algorithm.}
 \label{fig:octree-class-diagram}
 \end{figure}
 
@@ -200,7 +200,7 @@ Various approximation functions were investigated and tested. Besides polynomial
   \centering
   \includegraphics[width=\textwidth]{figures/chapter-approximation/figure4}
   \decoRule
-  \caption[Mean value approximation diagram]{Mean value approximation diagram. Dashed lines denote octree division process. Shorter the line the deeper subdivision represents. Mean value is not suitable because of high errors and discontinuities between approximation cells. $v$ stands for function value and $x$ for spatial dimension.}
+  \caption[Mean value approximation diagram.]{Mean value approximation diagram. Dashed lines denote octree division process. Shorter the line the deeper subdivision represents. Mean value is not suitable because of high errors and discontinuities between approximation cells. $v$ stands for function value and $x$ for spatial dimension.}
   \label{fig:mean-value-approx}
   \end{figure}
 
@@ -250,7 +250,7 @@ Various approximation functions were investigated and tested. Besides polynomial
     \includegraphics[width=\textwidth]{figures/chapter-approximation/figure5}
     \rule{\textwidth}{.4pt}
     \captionsetup{width=\linewidth}
-    \caption[Octree creation]{Octree creation example based on linear approximation error.}
+    \caption[Octree creation.]{Octree creation example based on linear approximation error.}
     \label{fig:octree-creation}
   \end{minipage}
   \hfill
@@ -258,7 +258,7 @@ Various approximation functions were investigated and tested. Besides polynomial
     \includegraphics[width=\textwidth]{figures/chapter-approximation/figure6}
     \rule{\textwidth}{.4pt}
     \captionsetup{width=\linewidth}
-    \caption[Nodal value computation]{Nodal value computation diagram.}
+    \caption[Nodal value computation.]{Nodal value computation diagram.}
     \label{fig:nodal-value-computation}
   \end{minipage}
 \end{figure}
@@ -277,12 +277,12 @@ The benchmark is designed to compare maximal relative approximation error, avera
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-approximation/figure7}
 \decoRule
-\caption[Reactor vessel 2D]{Reactor vessel 2D. Displacements visualization.}
+\caption[Reactor vessel 2D.]{Reactor vessel 2D. Displacements visualization.}
 \label{fig:reactor-vessel-displacements}
 \end{figure}
 
 \begin{table}[H]
-\caption[Approximated results of reactor vessel 2D simulation]{Reactor vessel 2D. Spatial octree approximation results.}
+\caption[Approximated results of reactor vessel 2D simulation.]{Reactor vessel 2D. Spatial octree approximation results.}
 \label{tab:reactor-vessel-results}
 \centering
 \begin{tabular}{| l | r | r | r |}
@@ -300,12 +300,12 @@ Trilinear regression & 81.27 & 0.1751 & 16.9\\
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-approximation/figure8}
 \decoRule
-\caption[Segment of reactor containment]{Segment of reactor containment. Displacements visualization.}
+\caption[Segment of reactor containment.]{Segment of reactor containment. Displacements visualization.}
 \label{fig:reactor-containment-displacements}
 \end{figure}
 
 \begin{table}[H]
-\caption[Approximated results of reactor containment simulation]{Segment of reactor containment. Spatial octree approximation results.}
+\caption[Approximated results of reactor containment simulation.]{Segment of reactor containment. Spatial octree approximation results.}
 \label{tab:reactor-containment-results}
 \centering
 \begin{tabular}{| l | r | r | r |}
@@ -323,7 +323,7 @@ Trilinear regression & 89.46 & 0.2237 & 56\\
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-approximation/figure9}
 \decoRule
-\caption[Geological layers simulation results]{Geological layers simulation results. Exact data values, no approximation applied.}
+\caption[Geological layers simulation results.]{Geological layers simulation results. Exact data values, no approximation applied.}
 \label{fig:geological-layers-exact}
 \end{figure}
 
@@ -331,7 +331,7 @@ Trilinear regression & 89.46 & 0.2237 & 56\\
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-approximation/figure10}
 \decoRule
-\caption[Mean value approximation of geological layers simulation results]{Geological layers simulation results. Mean value approximation of data values. Nodes in each cell have constant approximated value. High average error of an approximation. High memory consumption due to high average depth of the octree. Non-smooth transition between cells.}
+\caption[Mean value approximation of geological layers simulation results.]{Geological layers simulation results. Mean value approximation of data values. Nodes in each cell have constant approximated value. High average error of an approximation. High memory consumption due to high average depth of the octree. Non-smooth transition between cells.}
 \label{fig:geological-layers-mean}
 \end{figure}
 
@@ -339,7 +339,7 @@ Trilinear regression & 89.46 & 0.2237 & 56\\
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-approximation/figure11}
 \decoRule
-\caption[Trilinear approximation of geological layers simulation results]{Geological layers simulation results. Trilinear approximation of data values. Seamless transition between cells. Low depth of the octree in smooth areas. Can't capture high frequent changes in data which is common disadvantage of all lossy compressions.}
+\caption[Trilinear approximation of geological layers simulation results.]{Geological layers simulation results. Trilinear approximation of data values. Seamless transition between cells. Low depth of the octree in smooth areas. Can't capture high frequent changes in data which is common disadvantage of all lossy compressions.}
 \label{fig:geological-layers-trilinear}
 \end{figure}
 
@@ -360,7 +360,7 @@ Figure \ref{fig:interpolation-in-time} illustrates the idea of interpolation in 
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-approximation/figure12}
 \decoRule
-\caption[Interpolation in time diagram]{Interpolation in time. Intermediate time steps (blue) can be interpolated from the key time steps (red) if they have similar shape.}
+\caption[Interpolation in time diagram.]{Interpolation in time. Intermediate time steps (blue) can be interpolated from the key time steps (red) if they have similar shape.}
 \label{fig:interpolation-in-time}
 \end{figure}
 
@@ -379,7 +379,7 @@ Octree for each time frame of an animation is memory inefficient as well as 4D t
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-approximation/figure13}
 \decoRule
-\caption[Illustration of unifying time steps in octree nodes]{Illustration of unifying time steps in octree nodes. For the sake of simplicity the binary tree is shown instead of octree. T1 and T2 represent approximation functions of the same data component in different time steps. Result of the union is single octree that contains sequences of corresponding time steps in its nodes.}
+\caption[Illustration of unifying time steps in octree nodes.]{Illustration of unifying time steps in octree nodes. For the sake of simplicity the binary tree is shown instead of octree. T1 and T2 represent approximation functions of the same data component in different time steps. Result of the union is single octree that contains sequences of corresponding time steps in its nodes.}
 \label{fig:unifying-time-steps}
 \end{figure}
 
@@ -389,7 +389,7 @@ Original nodal value retrieving is the same octree traversal as was depicted in 
 
 Temporal-data-containing-octree is created by algorithm that works with already created octree having approximation functions for all time steps. At first it finds time steps that must be preserved. Those can be explicitly picked by the user or the algorithm itself determines automatically the first and the last time step as key times. Then the program traverses steps between key events of time interval. In each time step the algorithm iterates over space approximations for each loaded quantities and computes difference between each function and function created by interpolation of functions in key intervals. If this difference is lower than some preset fixed value, approximation function in current time step can be disposed because it can be created on demand in the future. Otherwise time interval is divided in current step and algorithm is recursively called on each of both intervals. It is therefore similar algorithm to approximation in space, but instead of octree a binary tree is used because there is only one temporal dimension instead of three spatial dimensions. Pseudo-code of approximation in time is shown in Listing \ref{alg:approximation-in-time}.
 
-\begin{lstlisting}[caption=Approximation in time procedure,label=alg:approximation-in-time]
+\begin{lstlisting}[caption=Approximation in time procedure.,label=alg:approximation-in-time]
 function compressTimeSteps(fromIndex, toIndex)
 {
   // recursion stopping criterion
@@ -501,7 +501,7 @@ The value of $\tilde{d}$ is then compared to $\epsilon$ value. The value $\epsil
 Results of the approximation in time are summarized in Table \ref{tab:reactor-vessel-spacetime}. For spatial approximation the trilinear regression was chosen as the method with the best results in the previous benchmark. The reactor vessel simulation results were used in the test (see Figure \ref{fig:reactor-vessel-displacements}).
 
 \begin{table}[H]
-  \caption[Approximated results of reactor vessel 2D simulation (space and time)]{Reactor vessel 2D. Spatial and temporal octree approximation results.}
+  \caption[Approximated results of reactor vessel 2D simulation (space and time).]{Reactor vessel 2D. Spatial and temporal octree approximation results.}
   \label{tab:reactor-vessel-spacetime}
   \centering
   \begin{tabular}{| l | r | r | r |}
@@ -526,7 +526,7 @@ As an another benchmark that compares maximal relative approximation error, aver
   \centering
   \includegraphics[width=\textwidth]{figures/chapter-approximation/charles-bridge-model}
   \decoRule
-  \caption[Model of Charles Bridge in Prague -- heat transport analysis, displacements]{Model of Charles Bridge in Prague: heat transport analysis results (displacements).}
+  \caption[Model of Charles Bridge in Prague -- heat transport analysis, displacements.]{Model of Charles Bridge in Prague: heat transport analysis results (displacements).}
   \label{fig:charles-bridge-model}
 \end{figure}
 
@@ -534,12 +534,12 @@ As an another benchmark that compares maximal relative approximation error, aver
   \centering
   \includegraphics[width=\textwidth]{figures/chapter-approximation/charles-bridge-temperature}
   \decoRule
-  \caption[Model of Charles Bridge in Prague -- heat transport analysis results, temperature]{Model of Charles Bridge in Prague: heat transport analysis results (temperature).}
+  \caption[Model of Charles Bridge in Prague -- heat transport analysis results, temperature.]{Model of Charles Bridge in Prague: heat transport analysis results (temperature).}
   \label{fig:charles-bridge-temperature}
 \end{figure}
 
 \begin{table}[H]
-  \caption[Benchmark results: heat transport analysis of Charles Bridge in Prague]{Benchmark results: heat transport analysis of Charles Bridge in Prague (approximation error and compression ratio)}
+  \caption[Benchmark results: heat transport analysis of Charles Bridge in Prague.]{Benchmark results: heat transport analysis of Charles Bridge in Prague (approximation error and compression ratio)}
   \label{tab:charles-bridge-benchmark}
   \centering
   \begin{tabular}{| l | r | r | r |}
@@ -562,7 +562,7 @@ Figure \ref{fig:charles-bridge-exact-data-values} contains visualization of the 
   \centering
   \includegraphics[width=\textwidth]{figures/chapter-approximation/charles-bridge-exact-data-values}
   \decoRule
-  \caption[Model of Charles Bridge -- exact data values]{Model of Charles Bridge in Prague: exact data values of heat transport analysis results, no approximation applied.}
+  \caption[Model of Charles Bridge -- exact data values.]{Model of Charles Bridge in Prague: exact data values of heat transport analysis results, no approximation applied.}
   \label{fig:charles-bridge-exact-data-values}
 \end{figure}
 
@@ -570,7 +570,7 @@ Figure \ref{fig:charles-bridge-exact-data-values} contains visualization of the 
   \centering
   \includegraphics[width=\textwidth]{figures/chapter-approximation/charles-bridge-approximation-method-artifacts}
   \decoRule
-  \caption[Model of Charles Bridge -- approximation method's artifacts]{Model of Charles Bridge in Prague: heat transport analysis results, approximation method's artifacts (marked by arrows).}
+  \caption[Model of Charles Bridge -- approximation method's artifacts.]{Model of Charles Bridge in Prague: heat transport analysis results, approximation method's artifacts (marked by arrows).}
   \label{fig:charles-bridge-approximation-method-artifacts}
 \end{figure}
 
@@ -578,7 +578,7 @@ Figure \ref{fig:charles-bridge-exact-data-values} contains visualization of the 
   \centering
   \includegraphics[width=\textwidth]{figures/chapter-approximation/charles-bridge-glitches-in-approximation}
   \decoRule
-  \caption[Model of Charles Bridge -- glitches in approximation function]{Model of Charles Bridge in Prague: glitches in approximation function caused by octree-based space decomposition. The red lines represent the octree segments.}
+  \caption[Model of Charles Bridge -- glitches in approximation function.]{Model of Charles Bridge in Prague: glitches in approximation function caused by octree-based space decomposition. The red lines represent the octree segments.}
   \label{fig:charles-bridge-glitches-in-approximation}
 \end{figure}
 

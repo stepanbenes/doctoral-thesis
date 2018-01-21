@@ -35,7 +35,7 @@ Figure \ref{fig:winged-edge} shows the adjusted data structure describing mesh s
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure1}
 \decoRule
-\caption[Winged edge data structure]{Winged edge data structure. (a) Entity dependencies. (b) Storage in lists with references.}
+\caption[Winged edge data structure.]{Winged edge data structure. (a) Entity dependencies. (b) Storage in lists with references.}
 \label{fig:winged-edge}
 \end{figure}
 
@@ -53,7 +53,7 @@ All types of elements that are handled by the program are represented by the cla
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure2}
 \decoRule
-\caption[Class diagram of element types]{Class diagram with hierarchy of all supported element types.}
+\caption[Class diagram of element types.]{Class diagram with hierarchy of all supported element types.}
 \label{fig:class-diagram-elements}
 \end{figure}
 
@@ -74,7 +74,7 @@ The interface helps to include reference to the parent 3D element at each face. 
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure3}
 \decoRule
-\caption[Class diagram of surface representation]{Class diagram with mesh surface representation.}
+\caption[Class diagram of surface representation.]{Class diagram with mesh surface representation.}
 \label{fig:class-diagram-surface}
 \end{figure}
 
@@ -98,7 +98,7 @@ The modified winged-edge data structure was used to describe the internal surfac
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure4}
 \decoRule
-\caption[Data structure overview]{Diagram with data structure overview.}
+\caption[Data structure overview.]{Diagram with data structure overview.}
 \label{fig:data-structure-mesh}
 \end{figure}
 
@@ -126,7 +126,7 @@ The main problem is to find those faces of 3D elements that belong to the mesh s
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure6}
 \decoRule
-\caption[Activity diagram of mesh construction]{Activity diagram of loading and construction mesh surface representation.}
+\caption[Activity diagram of mesh construction.]{Activity diagram of loading and construction mesh surface representation.}
 \label{fig:mesh-construction}
 \end{figure}
 
@@ -248,7 +248,7 @@ Set<Element2D> SelectSurface(Element2D startFace, float borderAngleLimit)
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure7}
 \decoRule
-\caption[Selection of element faces]{Selection of element faces on the mesh surface. (a) Result after mouse double-click. (b) Result after mouse triple-click.}
+\caption[Selection of element faces.]{Selection of element faces on the mesh surface. (a) Result after mouse double-click. (b) Result after mouse triple-click.}
 \label{fig:element-face-selection}
 \end{figure}
 
@@ -262,7 +262,7 @@ Set<Element2D> SelectSurface(Element2D startFace, float borderAngleLimit)
 The program was benchmarked against other commonly used editors that have similar capabilities. We chose the \textbf{GiD} \cite{GiD2013} post-processor, \textbf{ParaView} \cite{ParaView2005} and \textbf{VisIt} \cite{VisIt2005}. The initial loading time (see Table \ref{tab:loading-time}) and memory consumption were measured (see Table \ref{tab:memory-consumption}). The memory requirements of our mesh editor grows slightly faster than requirements of other tools for meshes with high number of finite elements. It is caused by auxiliary data structures assembled for future fast manipulation with meshes. The mesh Beam with $651.873$ elements represents a limit task which can be solvable on a single processor computer. For smaller problems, memory requirements of our editor are comparable or even smaller in comparison with GiD, ParaView and VisIt. Figure \ref{fig:benchmark-meshes} contains visualizations of the meshes that were used in the benchmark.
 
 \begin{table}
-\caption[Initial loading time comparison]{Measured results: Initial loading time in seconds (CPU time).}
+\caption[Initial loading time comparison.]{Measured results: Initial loading time in seconds (CPU time).}
 \label{tab:loading-time}
 \centering
 \begin{tabular}{| l | r | r | r | r |}
@@ -279,7 +279,7 @@ Robo (244188 elements) & 7 & 7 & 7 & 7\\
 \end{table}
 
 \begin{table}
-\caption[Memory consumption comparison]{Measured results: Memory consumption in megabytes (Private working set) [MB]}
+\caption[Memory consumption comparison.]{Measured results: Memory consumption in megabytes (Private working set) [MB]}
 \label{tab:memory-consumption}
 \centering
 \begin{tabular}{| l | r | r | r | r |}
@@ -299,7 +299,7 @@ Robo (244188 elements) & 291.836 & 200.484 & 543.316 & 355.268\\
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure8}
 \decoRule
-\caption[Meshes for benchmarks]{Visualizations of meshes used in benchmark. Three different densities of the Beam mesh were used to demonstrate the effects of mesh size. Meshes Sphere and Robo show effect of surface area/volume ratio. a) Beam. b) Sphere. c) Robo.}
+\caption[Meshes for benchmarks.]{Visualizations of meshes used in benchmark. Three different densities of the Beam mesh were used to demonstrate the effects of mesh size. Meshes Sphere and Robo show effect of surface area/volume ratio. a) Beam. b) Sphere. c) Robo.}
 \label{fig:benchmark-meshes}
 \end{figure}
 
@@ -307,7 +307,7 @@ Robo (244188 elements) & 291.836 & 200.484 & 543.316 & 355.268\\
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-mesh-visualization/figure9}
 \decoRule
-\caption[Visualization of significant edges]{Finding and visualization of significant edges. a) GiD post-processor. b) The MeshEditor.}
+\caption[Visualization of significant edges.]{Finding and visualization of significant edges. a) GiD post-processor. b) The MeshEditor.}
 \label{fig:significant-edges}
 \end{figure}
 
