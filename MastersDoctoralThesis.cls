@@ -440,9 +440,21 @@ KOMA-script documentation for details.}]{fancyhdr}
 }{
 	\DeclareDocumentEnvironment{declaration}{}{
 		\checktoopen
+
+		\noindent\begin{minipage}{0.19\textwidth}% adapt widths of minipages to your needs
+		\includegraphics[width=\linewidth]{figures/logo-cvut}
+		\end{minipage}%
+		\hfill%
+		\begin{minipage}{0.75\textwidth}
+			{\scshape \univname}\\[-0.3cm]
+			\rule{\linewidth}{0.4pt}\\
+			\facname\\ % Faculty name
+			\addressname\\
+		\end{minipage}\\[2cm]
+
 		\tttypeout{\authorshipname}
 		\thispagestyle{plain}
-		\null\vfil
+		%\null\vfil
 		{\noindent\huge\bfseries\authorshipname\par\vspace{10pt}}
 	}{}
 }
