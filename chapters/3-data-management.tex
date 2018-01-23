@@ -383,11 +383,7 @@ The design and implementation of the efficient representation of mesh surface an
 
 \section{Results and evaluation}
 
-% This section contains screenshots (and performance characteristics) of both desktop post-processor and web post-processor.
-
-\todo{TODO: complete this section}
-
-In Figure \ref{fig:desktop-postprocessor-remote-solutions}, there is a screenshot of the desktop post-processor that demonstrates the ability to connect to the remote web API providing the list of solutions stored in the database. Figure \ref{fig:desktop-postprocessor-master} shows...
+This section contains screenshots and performance evaluation of both the desktop post-processor and the web post-processor. In Figure \ref{fig:desktop-postprocessor-remote-solutions}, there is a screenshot of the desktop post-processor that demonstrates the ability to connect to the remote web API providing the list of solutions stored in the database.
 
 \begin{figure}[H]
     \centering
@@ -397,6 +393,8 @@ In Figure \ref{fig:desktop-postprocessor-remote-solutions}, there is a screensho
     \label{fig:desktop-postprocessor-remote-solutions}
 \end{figure}
 
+Figure \ref{fig:desktop-postprocessor-master} shows the visualization of the master layer of the selected solution in the desktop post-processor window. The left panel contains the layer tree view that allows to choose the layers to show in the main window. There are also the options to visualize components of scalar, vector, or tensor data using the color scale on the mesh surface. Vector fields can be also visualized using arrows in the data locations pointing in the direction corresponding to the vector field. The top panel contains the tools for manipulation with the mesh, changing the camera view, selecting mesh entities, and assigning attributes to them.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/chapter-data-management/desktop-postprocessor-master}
@@ -405,33 +403,11 @@ In Figure \ref{fig:desktop-postprocessor-remote-solutions}, there is a screensho
     \label{fig:desktop-postprocessor-master}
 \end{figure}
 
-Figure \ref{fig:web-postprocessor-surface} shows the web post-processor that is connected to the same database as the desktop post-processor.
-Figure \ref{fig:web-postprocessor-mobile} ...
+The post-processor also provides the user interface for definition of the parameters of a visual filter that the user wants to be applied on the selected layer. The parameters are sent as a part of the filter command that is sent to the FEM format converter component that generates the new layer. The layer tree is then updated and the new layer is displayed. The examples of slice and iso-surface layers are shown in Figure \ref{fig:desktop-postprocessor-slice} and Figure \ref{fig:desktop-postprocessor-isosurface}, respectively.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/chapter-data-management/web-postprocessor-surface}
-    \decoRule
-    \caption{Web post-processor screenshot. Visualization of a surface layer.}
-    \label{fig:web-postprocessor-surface}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.4\textwidth]{figures/chapter-data-management/web-postprocessor-mobile}
-    \decoRule
-    \caption{Web post-processor screenshot taken on a mobile device.}
-    \label{fig:web-postprocessor-mobile}
-\end{figure}
-
-
-Figure \ref{fig:desktop-postprocessor-slice},
-Figure \ref{fig:desktop-postprocessor-isosurface},
-Figure \ref{fig:web-postprocessor-slice}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter-data-management/desktop-postprocessor-slice}
+    \includegraphics[width=0.85\textwidth]{figures/chapter-data-management/desktop-postprocessor-slice}
     \decoRule
     \caption{Desktop post-processor screenshot. Visualization of a slice layer.}
     \label{fig:desktop-postprocessor-slice}
@@ -439,22 +415,41 @@ Figure \ref{fig:web-postprocessor-slice}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/chapter-data-management/desktop-postprocessor-isosurface}
+    \includegraphics[width=0.85\textwidth]{figures/chapter-data-management/desktop-postprocessor-isosurface}
     \decoRule
     \caption{Desktop post-processor screenshot. Visualization of a iso-surface layer.}
     \label{fig:desktop-postprocessor-isosurface}
 \end{figure}
 
-% nechat tenhle? asi ho spis odebrat, jeden z weboveho postprocesoru uz tu je...
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/chapter-data-management/web-postprocessor-slice}
+    \includegraphics[width=0.75\textwidth]{figures/chapter-data-management/web-postprocessor-surface}
+    \decoRule
+    \caption{Web post-processor screenshot. Visualization of a surface layer.}
+    \label{fig:web-postprocessor-surface}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/chapter-data-management/web-postprocessor-slice}
     \decoRule
     \caption{Web post-processor screenshot. Visualization of a slice layer.}
     \label{fig:web-postprocessor-slice}
 \end{figure}
 
-% TODO: napsat strucne zhodnoceni implementace. Ceho si povsimnout na obrazcich, popsat jak probiha zobrazeni dat - jak dlouho to trva ve srovnani s tradicnim postprocesorem (aspon pocit, merit se to da tezko)
+Figure \ref{fig:web-postprocessor-surface} shows the web post-processor that is connected to the same database as the desktop post-processor. The user interface also allows to select the layer of the current solution and the data component that should be visualized on the mesh surface. Figure \ref{fig:web-postprocessor-slice} contains the visualization of a slice layer.
 
-% TODO: Benchmarky? Zmerit latenci - pocatecni delay, pred zobrazenim site/dat. Zmerit pocet snimku za sekundu. Porovnat napr s tradicnim postprocesorem a pak se Simscale? Zmerit pametovou narocnost puvodniho a noveho postprocesoru (porovnat s GiDem jako s tradicnim postprocesorem).
-% TODO: Vysvetlit, proc jsem navrhl tyto testy a benchmarky. Co se snazim dokazat? Snazim se ospravedlnit vyvoj noveho formatu a kompresni metody...
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.35\textwidth]{figures/chapter-data-management/web-postprocessor-mobile}
+    \decoRule
+    \caption{Web post-processor screenshot taken on a mobile device.}
+    \label{fig:web-postprocessor-mobile}
+\end{figure}
+
+Figure \ref{fig:web-postprocessor-mobile} demonstrates the fact that the web post-processor is fully capable of running on a mobile device with limited CPU and memory resources. The web application is designed to support multiple form factors and can be used comfortably even on a small device with touch screen.
+
+Generation of a new filter layer is off-loaded to the server and can took tens of seconds for large solutions. However, it is a one-time operation because the result is stored in a persistent storage. The subsequent requests for documents containing layer data are very fast. For a common mesh having around 300000 elements the web post-processor needs only tens of milliseconds to render layer geometry and selected data component on the mesh surface, even though it downloads all the necessary data from a remote server over the Internet. This speed allows to avoid caching of the data on the client device and helps to keep the memory consumption of the proposed post-processors very low (tens of megabytes for common mesh sizes) compared to traditional post-processors that need to load and process all the results from a file in order to display selected information.
+
+% TODO: Benchmarky? Zmerit latenci - pocatecni delay, pred zobrazenim site/dat. Zmerit pocet snimku za sekundu. Porovnat napr s tradicnim postprocesorem a pak se Simscale? Zmerit pametovou narocnost puvodniho a noveho postprocesoru (porovnat s GiDem jako s tradicnim postprocesorem). Vysvetlit, proc jsem navrhl tyto testy a benchmarky. Co se snazim dokazat? Snazim se ospravedlnit vyvoj noveho formatu a kompresni metody...
