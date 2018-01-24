@@ -430,7 +430,7 @@ KOMA-script documentation for details.}]{fancyhdr}
 %----------------------------------------------------------------------------------------
 
 \newcommand{\authorshipname}{Declaration of Authorship}
-\providecaptionname{american,australian,british,canadian,english,newzealand,UKenglish,USenglish}{\authorshipname}{Declaration} % Declaration of Authorship text for English countries
+\providecaptionname{american,australian,british,canadian,english,newzealand,UKenglish,USenglish}{\authorshipname}{DECLARATION} % Declaration of Authorship text for English countries
 \providecaptionname{german,ngerman,austrian,naustrian}{\authorshipname}{Eidesstattliche Erkl\"arung} % Declaration of Authorship text for Germanic countries
 
 \ifbool{consistentlayout}{
@@ -455,7 +455,7 @@ KOMA-script documentation for details.}]{fancyhdr}
 		\tttypeout{\authorshipname}
 		\thispagestyle{plain}
 		%\null\vfil
-		\begin{center}{\scshape\noindent\huge\bfseries\authorshipname\par\vspace{10pt}}\end{center}
+		\begin{center}{\noindent\LARGE\bfseries\authorshipname\par\vspace{10pt}}\end{center}
 	}{}
 }
 
