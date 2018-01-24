@@ -1,10 +1,21 @@
 \chapter{Conclusions}
 \label{chapter:conclusions}
 
-\todo{TODO: Final remarks \ldots}\\
-% Vsechny cile splneny!
-\todo{Vyjmenovat cile z kapitoly Aims a ke kazdemu napsat, jak se povedlo splneni. Dolozit to vysledkami z kapitoly Overlall results.}\\
+% Final remarks
+% Vyjmenovat cile z kapitoly Aims a ke kazdemu napsat, jak se povedlo splneni. Vsechny cile splneny! Dolozit to vysledkami z kapitoly Overlall results.
+
+There were three main goals of the thesis as described in Section \ref{sec:aims}. The first goal was to design a new storage format for representation of the results from the finite element method with the support for compression. This goal was fulfilled, examples of the format are given, and the application that can convert the results from the FEM solver to the new storage format was implemented. This converter component further supports generation of visual filters and is designed to be run either locally on a PC or externally on in a cloud environment.
+
+The second objective of the thesis was to investigate suitable methods for compression of results from FEM and develop a compression algorithm with reasonable performance characteristics and producing approximations with low and predictable error. The compression method based on singular value decomposition satisfies these requirements. The SVD compression method became the integral part of the storage format. The results of its application on real data have been presented. The algorithm is able to compress arbitrary data using low-rank approximation matrices. When the maximum allowed error was set to $10^{-5}$, the compression ratio was at most 10\% for all tested results. In many cases compression ratio can be even better -- bellow 1\% of the original size. The important property of the compression algorithm is the fact that the approximation error can be set in advance and there is a guarantee that it will not be exceeded.
+
+% The main disadvantage is the computational complexity of the compression algorithm. SVD is a very time-consuming operation. However, this operation is performed only once after FEM analysis is finished and before the post-processing is started. Also, the randomized version of the decomposition algorithm is much faster and can be used if a slight increase of the approximation error is tolerated.
+
+The third objective ...
+
+
+
+
 \todo{Zopakovat proc jsem vlastne delal co jsem delal. Proc jsem vynalezal novy format. Proc jsem resil kompresi dat.}\\
 \todo{Shrnuti, co se povedlo, co se nepovedlo (nedostatky jednotlivych metod reseni - aproximace nevhodna napr pro diskontinuity, SVD super).}\\
-\todo{Porovnani s jinymi resenimi predstavenymi v kapitole related work. Kompresi meshe (napr. PM, LoD) jsem vlastne uplne odmitnul - nevyplati se, je vypocetne narocne, soustredim se pouze na kompresi vysledku}\\
-\todo{Future work? moznosti pro vylepseni SVD komprese: main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet, mohu pouzit vzorkovani...}\\
+\todo{Porovnani s jinymi resenimi predstavenymi v kapitole related work. Kompresi meshe (napr. PM, LoD) jsem vlastne uplne odmitnul - nevyplati se, je vypocetne narocne, soustredim se pouze na kompresi vysledku. Multigrid metoda (ktera je i soucasti nazvu) byla pouze inspiraci pro aproximaci vysledku - vytvoreni hierarchie siti, ale nakonec se neukazala jako efektivni - komprese/dekomprese je moc vypocetne narocna, nelze ji presunout na server, nelze ji provadet v GPU, atd.}\\
+\todo{Future work? moznosti pro vylepseni SVD komprese: main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet, mohu pouzit vzorkovani...; vylepseni weboveho postprocesoru; pridani dalsich filtru do format converteru, napr. ...; ambitious: rozsireni data management systemu o moznost preprocessingu - pripravy vstupniho modelu do FEM, na coz je system pripraveny}\\

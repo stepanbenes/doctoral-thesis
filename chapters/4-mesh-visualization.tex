@@ -19,7 +19,7 @@ It is sufficient to have only the list of nodes with their coordinates and the l
 
 Other mesh classification is based upon the \textbf{dimension} and the type of elements present. Depending upon the analysis type and solver requirements, meshes can be composed of one-, two- or three-dimensional elements. \textbf{Homogenous} meshes contain elements of the same type and dimension. \textbf{Hybrid} meshes are composed of elements of different type and/or dimension, e.g., tetrahedral mesh with 1D bars.
 
-Additional classification can be made upon whether the mesh is \textbf{conformal} or not. An intersection of any two elements is either by a face, an edge or a node in conformal mesh. A non-conformal mesh contains for instance two quadrilaterals sharing two edges or two quadrilaterals sharing only a half of one edge. Non-conformal meshes are usually created during distributed generation of meshes from sub-domains and can cause issues during creation of the surface representation of non-conformal meshes. This issue is described in detail in section \ref{sec:A-implementation}.
+Additional classification can be made upon whether the mesh is \textbf{conformal} or not. An intersection of any two elements is either by a face, an edge or a node in conformal mesh. A non-conformal mesh contains for instance two quadrilaterals sharing two edges or two quadrilaterals sharing only a half of one edge. Non-conformal meshes are usually created during distributed generation of meshes from sub-domains and can cause issues during creation of the surface representation of non-conformal meshes. This issue is described in detail in section \ref{sec:mesh-visualization-implementation}.
 
 Three-dimensional meshes can be replaced for the purpose of visualization with its surface representation. The elements (or parts of elements) that are hidden inside the volume of the mesh can be omitted. Visualization is much more efficient then. Most of the operations on entities, such as selection or setting of properties, can also be made on the mesh surface. The implementation of cuts through the volume is a problem. In order to show the entities on the cross-section, the surface representation must be regenerated each time. Making a cut is therefore a little more computationally intensive but it is outweighed by the fact that 2D surface representation is sufficient to handle any finite element mesh.
 
@@ -45,7 +45,7 @@ Figure \ref{fig:winged-edge} shows the adjusted data structure describing mesh s
 %----------------------------------------------------------------------------------------
 
 \section{Implementation details}
-\label{sec:A-implementation}
+\label{sec:mesh-visualization-implementation}
 
 All types of elements that are handled by the program are represented by the class hierarchy depicted in Figure \ref{fig:class-diagram-elements}. The common properties of all elements are accommodated in an abstract base class Element. The next level of the abstraction classifies the elements according to their spatial dimension. The particular class Beam stands for the one-dimensional element with linear approximation. The class inheriting from the Beam gains quadratic approximation by adding extra node in the middle of the line. The approximation type of other elements is distinguished by the type of their edges (a data structure describing the edge is similar to the one for 1D-elements).
 
