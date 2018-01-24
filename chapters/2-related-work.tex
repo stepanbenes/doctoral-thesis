@@ -3,7 +3,7 @@
 
 % State of the art and discussion about related work in the area of FEM results post-processing, storage formats, and cloud-based FEA.
 
-This chapter gives a brief revision of related research work that deals with visualization of finite element meshes and results from FEM, file formats used for representation of FEM data, compression methods, and web-oriented FEA data management.
+This chapter gives a brief revision of related research work that deals with visualization of finite element meshes and results from FEM, file formats used for representation of FEM data, compression methods, and web-based FEA data management.
 
 
 \section{Data compression and visualization}
@@ -25,7 +25,7 @@ OpenCTM \cite{OpenCTM2010} is a 3D geometry technology for storing triangle-base
 
 \section{File formats}
 
-There are many file formats that can be used for representation of input geometry of finite element software. In fact, McHenry in \cite{McHenry2008} presents about 140 file formats for representation of 3D models. The most common universal standards for representation of geometry in CAD systems are IGES\footnote{Initial Graphics Exchange Specification} \cite{Groton2006} and STEP\footnote{STandard for the Exchange of Product model data} \cite{Pratt2001}.
+There are many file formats that can be used for representation of input geometry of finite element software. In fact, McHenry in \cite{McHenry2008} presents about 140 file formats for representation of 3D models. To give an example, the commonly used universal standards for representation of geometry in CAD systems are IGES\footnote{Initial Graphics Exchange Specification} \cite{Groton2006} and STEP\footnote{STandard for the Exchange of Product model data} \cite{Pratt2001}.
 
 % http://blog.grabcad.com/blog/2014/10/14/get-over-iges/
 % BREP, STL, ... formats; VRML
@@ -38,7 +38,7 @@ On the other hand, there are very few open formats for representation of finite 
 
 GiD \cite{GiDWeb} is a pre and post processor for numerical simulations in science and engineering. Although it is a commercial software, its file format is documented \cite{GiDPostProcess} and accessible as the GiD is often connected to finite element software provided by other companies or organizations.
 
-In \cite{Ivanyi2012}, there is presented a possible way to convert different types of finite element mesh files to one universal format. The paper considers only ASCII file representations and the conversion method is based on regular expressions.
+In \cite{Ivanyi2012}, there is presented a possibility to convert different types of finite element mesh files to one universal format. The paper considers only ASCII file representations and the conversion method is based on regular expressions.
 
 
 \section{Web-based data management}
@@ -49,6 +49,6 @@ The authors in \cite{Heber2007I} and \cite{Heber2007II} advocate for the use of 
 
 Chen and Lin in \cite{Chen2008} present an Internet-based finite-element analysis framework, named Web-FEM, which allows users to access existing finite-element analysis service running on their machines from remote sites over the Internet. Weng in \cite{Weng2011} focuses on post-processing of FEA data using web technologies. The paper points out the fact that the Web is actually the only truly cross-platform environment. The implementation of the finite element simulation as cloud computing service is discussed in \cite{Ari2013}. The authors deal with the technical issues related to the design and implementation, as well as the issues related to the data privacy and security of the cloud services.
 
-The benefits of web-based applications with respect to native desktop (or mobile) applications are summarized and explained in detail in \cite{Mouton2011} and \cite{Charland2011}. An example of remote rendering service for visualization of scientific data is ParaViewWeb \cite{Jourdain2011}. It is a JavaScript library that can be used to build applications with interactive 3D visualization inside a web browser. SimScale \cite{SimScale} is a commercial computer-aided engineering software product based on cloud computing that utilizes ParaViewWeb for the data visualization.
+The benefits of web-based applications with respect to native desktop (or mobile) applications are summarized and explained in detail in \cite{Mouton2011} and \cite{Charland2011}. An example of remote rendering service for visualization of scientific data is ParaViewWeb \cite{Jourdain2011}. It is a JavaScript library that can be used to build applications with interactive 3D visualization inside the web browser. SimScale \cite{SimScale} is a commercial computer-aided engineering software product based on cloud computing that utilizes ParaViewWeb for the data visualization.
 
 However, Marion and Jomier point out \cite{Marion2012} a downside of this and similar frameworks. They require customized client setup either with plugins or external applications. Therefore, the authors present a system which uses Three.JS and WebSockets to counter these issues. The WebSockets specification \cite{WebSockets} introduces a full-duplex connection between server and client to allow fast data transmission with low latency. Behr et al. \cite{Behr2012} point out the draw-backs of formats used to transfer geometrical data from server to browser and propose to separate vertex coordinates from other vertex attributes. Their approach takes advantage of JavaScript typed arrays to allow the downloaded data to be passed directly to the GPU memory, which eliminates relatively slow parsing and interpreting of data stored in complex structured formats.
