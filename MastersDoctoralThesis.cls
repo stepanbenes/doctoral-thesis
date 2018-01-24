@@ -212,6 +212,9 @@
 	\DeclareDocumentCommand{\@title}{ }{#2}
 	\DeclareDocumentCommand{\ttitle}{ }{#2}
 }
+\DeclareDocumentCommand{\thesistitlecs} { m }{
+	\DeclareDocumentCommand{\ttitlecs}{ }{#1}
+}
 \DeclareDocumentCommand { \author     } { m } { \DeclareDocumentCommand    { \authorname } { } {#1}
 \DeclareDocumentCommand { \@author    } {   } {#1}   }
 \NewDocumentCommand     { \authornodegree } { m } { \DeclareDocumentCommand { \authornamenodegree } { } {#1}  }
@@ -225,6 +228,7 @@
 \NewDocumentCommand     { \faculty    } { m } { \DeclareDocumentCommand { \facname       } { } {#1}  }
 \NewDocumentCommand     { \subject    } { m } { \DeclareDocumentCommand { \subjectname   } { } {#1}  }
 \NewDocumentCommand     { \keywords   } { m } { \DeclareDocumentCommand { \keywordnames  } { } {#1}  }
+\NewDocumentCommand     { \keywordscs   } { m } { \DeclareDocumentCommand { \keywordnamescs  } { } {#1}  }
 
 \newcommand{\checktoopen}{% New command to move content to the next page which prints to the next odd page if twosided mode is active  
 	\if@openright\cleardoublepage\else\clearpage\fi
@@ -341,6 +345,9 @@ KOMA-script documentation for details.}]{fancyhdr}
 \DeclareDocumentCommand{\abstracttitlefont}{}{}
 \newcommand{\byname}{by}
 \newcommand{\abstractname}{Abstract}
+\newcommand{\abstractnamecs}{Abstrakt}
+\newcommand{\keywordstitle}{Keywords:}
+\newcommand{\keywordstitlecs}{Kl\'i\v{c}ov\'a slova:}
 \providecaptionname{german,ngerman,austrian,naustrian}{\byname}{von}
 \providecaptionname{american,australian,british,canadian,english,newzealand,UKenglish,USenglish}{\byname}{by}
 \ifbool{consistentlayout}{
@@ -353,17 +360,16 @@ KOMA-script documentation for details.}]{fancyhdr}
 	}%
 	{}%end alt-abstract
 }{%
-	\DeclareDocumentEnvironment{abstract}{ O{\null\vfill} }{
+	\DeclareDocumentEnvironment{abstract}{ }{
 		\checktoopen
 		\tttypeout{\abstractname}
-		#1%added to be able to have abstract more than one page long
 		\thispagestyle{plain}
 		\begin{center}
 			{\huge\textit{\abstractname} \par}
 			\bigskip
-			{\normalsize\bfseries \@title \par} % Thesis title
+			{\normalsize\bfseries \ttitle \par} % Thesis title
 			\medskip
-			{\normalsize \byname{} \authornamenodegree \par} % Author name
+			{\normalsize \authornamenodegree \par} % Author name
 			\bigskip
 		\end{center}
 	}
@@ -372,24 +378,16 @@ KOMA-script documentation for details.}]{fancyhdr}
 	}
 }
 
-\DeclareDocumentEnvironment{extraAbstract}{ O{\null\vfill} }{
+\DeclareDocumentEnvironment{abstractcs}{ }{
 	\checktoopen
-	\tttypeout{\abstractname}
-	#1%added to be able to have abstract more than one page long
-	\thispagestyle{empty}
+	\tttypeout{\abstractnamecs}
+	\thispagestyle{plain}
 	\begin{center}
-		{\normalsize \MakeUppercase{\univname} \par} % University name in capitals
+		{\huge\textit{\abstractnamecs} \par}
 		\bigskip
-		{\huge\textit{\abstractname} \par}
-		\bigskip
-		{\normalsize \facname \par} % Faculty name
-		{\normalsize \deptname \par} % Department name
-		\bigskip
-		{\normalsize \degreename\par} % Degree name
-		\bigskip
-		{\normalsize\bfseries \@title \par} % Thesis title
+		{\normalsize\bfseries \ttitlecs \par} % Thesis title in czech
 		\medskip
-		{\normalsize \byname{} \authorname \par} % Author name
+		{\normalsize \authornamenodegree \par} % Author name
 		\bigskip
 	\end{center}
 }

@@ -112,6 +112,7 @@ headsepline, % Uncomment to get a line under the header
 %----------------------------------------------------------------------------------------
 \title{Doctoral Thesis}
 \thesistitle[0, 0]{Multimesh Methods for Data Visualization and Finite Element Analysis} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
+\thesistitlecs{V\'ices\'i\v{t}ov\'e metody pro vizualizaci dat a v\'ypo\v{c}ty MKP} % Your thesis title in Czech, this is used in the title and abstract, print it elsewhere with \ttitlecs
 \supervisor{prof. Ing. Jaroslav Kruis, Ph.D.} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
 \examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
 \degree{Doctor of Philosophy} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
@@ -120,7 +121,8 @@ headsepline, % Uncomment to get a line under the header
 \addresses{Th\'akurova 7, 166 29 Praha 6} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
 
 \subject{Engineering software} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
-\keywords{} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
+\keywords{Keyword1, Keyword2, Keyword3} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
+\keywordscs{Klicove-slovo1, Klicove-slovo2, Klicove-slovo3} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
 \university{\href{http://www.cvut.cz}{Czech Technical University in Prague}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
 \department{\href{http://mech.fsv.cvut.cz}{Department of Mechanics}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
 \faculty{\href{http://www.fsv.cvut.cz}{Faculty of Civil Engineering}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
@@ -317,7 +319,17 @@ In Prague on \today & Signature:
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
 %The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too
 \todo{TODO: \ldots}
+\\[1cm]
+\textbf{\keywordstitle} \keywordnames
 \end{abstract}
+
+\begin{abstractcs}
+  \addchaptertocentry{\abstractnamecs} % Add the abstract to the table of contents
+  %The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too
+  \todo{TODO: cs\ldots}
+  \\[1cm]
+  \textbf{\keywordstitlecs} \keywordnamescs
+\end{abstractcs}
 
 %----------------------------------------------------------------------------------------
 %	ACKNOWLEDGEMENTS
