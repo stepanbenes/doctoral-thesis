@@ -333,12 +333,18 @@ To demonstrate the proposed methods, the thesis describes the implementation of 
 \end{abstract}
 
 \begin{abstractcs}
-  \addchaptertocentry{\abstractnamecs} % Add the abstract to the table of contents
-  %The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too
-  TODO: cs\ldots\\
+\addchaptertocentry{\abstractnamecs} % Add the abstract to the table of contents
+  
+Kone\v{c}n\v{e} prvkov\'a anal\'yza je proces slou\v{z}\'ic\'i k simulaci pr\r{u}b\v{e}h\r{u} fyzik\'aln\'ich veli\-\v{c}in, kter\'y sest\'av\'a z n\v{e}kolika f\'az\'i -- vytvo\v{r}en\'i geometrick\'eho modelu, generov\'an\'i s\'it\v{e} kone\v{c}n\'ych prvk\r{u}, p\v{r}i\v{r}azen\'i parametr\r{u} modelu, kone\v{c}n\v{e} prvkov\'y v\'ypo\v{c}et a zpracov\'an\'i v\'ysledk\r{u}. S pokra\v{c}uj\'ic\'i snahou o st\'ale vy\v{s}\v{s}\'i p\v{r}esnost v\'ypo\v{c}tu, ka\v{z}d\'a z f\'az\'i anal\'yzy mus\'i zpracov\'avat obrovsk\'e mno\v{z}stv\'i dat. Tradi\v{c}n\'i reprezentace s\'it\v{e}, vstupn\'ich para\-metr\r{u} a v\'ysledk\r{u} zalo\v{z}en\'a na oby\v{c}ejn\'ych nestrukturovan\'ch souborech je \'uzk\'ym hrdlem cel\'eho procesu. Tento fakt komplikuje v\'yvoj n\'astroj\r{u} pro in\v{z}en\'yry a v\v{e}dce, kte\v{r}\'i p\v{r}ipravuj\'i vstupn\'i data do MKP nebo interpretuj\'i v\'ysledky z MKP.
 
-  \noindent
-  \textbf{\keywordstitlecs} \keywordnamescs
+Nev\'yhody a omezen\'i tradi\v{c}n\'iho p\v{r}\'istupu zalo\v{z}en\'eho na souborech je motivac\'i pro v\'yrazn\'e p\v{r}epracov\'an\'i cel\'eho zp\r{u}sobu nakl\'ad\'an\'i s daty v kone\v{c}n\v{e} prvkov\'e ana\-l\'yze. Pr\'ace je zam\v{e}\v{r}ena p\v{r}edev\v{s}\'im na zpracov\'an\'i v\'ysledk\r{u} z MKP a na zp\r{u}sob jejich ukl\'ad\'an\'i, p\v{r}enos a zobrazov\'an\'i. Nicm\'en\v{e}, dizerta\v{c}n\'i pr\'ace popisuje tak\'e n\'avrh a implementaci kompletn\'iho syst\'emu pro spr\'avu dat, kter\'y propoj\'i v\v{s}echny \v{c}\'asti kone\v{c}n\v{e} prvkov\'e anal\'yzy a poskytne rozhran\'i pro dotazov\'an\'i nad daty a vzd\'alen\'y p\v{r}\'istup p\v{r}es Internet. Je zde rovn\v{e}\v{z} p\v{r}edstaven nov\'y form\'at pro reprezentaci v\'ysled\-k\r{u} z MKP, kter\'y mimo jin\'e podporuje ulo\v{z}en\'i vizu\'aln\'ich filtr\r{u} aplikovan\'ych na data, co\v{z} usnad\v{n}uje implementaci post-procesoru.
+
+Hlavn\'i v\'yhoda nov\'eho form\'atu je podpora pro kompresi dat. Kompresn\'i metoda zalo\v{z}en\'a na singul\'arn\'im rozkladu je p\v{r}edstavena a pops\'ana. Metoda je schopna zkompresovat libovolnou sadu v\'ysledk\r{u} z MKP pou\v{z}it\'im aproximace matic\'i s ni\v{z}\v{s}\'i hodnost\'i. Kompresn\'i pom\v{e}r je nejv\'y\v{s}e 10\% pro v\v{s}echny testovan\'e v\'ysledky. V~mno\-ha p\v{r}\'ipadech je kompresn\'i pom\v{e}r pod 1\% p\r{u}vodn\'i velikosti, zat\'imco relativn\'i chybu aproximace se poda\v{r}ilo udr\v{z}et pod $10^{-5}$.
+
+Pro demostraci uveden\'ych metod dizerta\v{c}n\'i pr\'ace rovn\v{e}\v{z} popisuje implementaci dvou post-procesor\r{u}. Desktopov\'y post-procesor je zalo\v{z}en na existuj\'ic\'i aplikaci, kter\'a byla p\v{r}epracov\'ana a byla j\'i p\v{r}id\'ana podpora pro nov\'y form\'at. Post-pro\-ce\-sor je schopen vytvo\v{r}it efektivn\'i reprezentaci kone\v{c}n\v{e} prvkov\'e s\'it\v{e} a implementuje po\-kro\-\v{c}il\'e techniky pro manipulaci s uzly, hranami a prvky s\'it\v{e}. Webov\'y post-procesor je jednoduch\'a multi-platformn\'i aplikace, kter\'a um\'i zobrazit v\'ysledky z MKP um\'i\-st\v{e}\-n\'e ve vzd\'alen\'em \'ulo\v{z}i\v{s}ti. D\'iky tomu, \v{z}e v\'ypo\v{c}etn\v{e} n\'aro\v{c}n\'e operace souvisej\'ic\'i se zpracov\'an\'im v\'ysledk\r{u} jsou prov\'ad\v{e}ny na vzd\'alen\'em serveru, webov\'a aplikace je pouze tenk\'y klient, kter\'y je schopen pracovat dokonce i na za\v{r}\'izen\'ich s velmi omezen\'ym v\'ykonem a pam\v{e}t\'i.\\
+
+\noindent
+\textbf{\keywordstitlecs} \keywordnamescs
 \end{abstractcs}
 
 %----------------------------------------------------------------------------------------
