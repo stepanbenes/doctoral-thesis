@@ -1,0 +1,93 @@
+
+\input{config}
+
+\input{hyphenation}
+
+\begin{document}
+
+
+\frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
+
+\pagestyle{plain} % Default to the plain heading style until the thesis style is called for the body content
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{titlepage}
+\begin{center}
+
+% Logo CVUT
+\includegraphics[width=30mm]{figures/logo-cvut} \\
+{\scshape\LARGE \univname\par} % University name
+\HRule \\[0.2cm] % Horizontal line
+%\vspace*{.06\textheight}
+\facname\\[0.2cm] % Faculty name
+\deptname % Department name
+\vspace{3.5cm}
+
+{\huge \bfseries \ttitle\par}\vspace{1.0cm} % Thesis title
+
+\textsc{\Large Doctoral Thesis}\\[1.5cm] % Thesis type
+ 
+{\large \authorname}\\[3.0cm] % Author name
+
+
+\begin{minipage}[t]{\textwidth}
+\begin{flushleft}
+\emph{Doctoral study programme:} \\
+Civil Engineering \\[0.5cm] % Supervisor name  
+\emph{Branch of study:} \\
+Building and Structural Engineering \\[0.5cm] % Supervisor name  
+
+\emph{Supervisor:} \\
+\supname % Supervisor name  
+\end{flushleft}
+\end{minipage}\\[3cm]
+
+\vfill
+
+{\large Prague, 2018}\\[2cm] % Date
+ 
+\vfill
+\end{center}
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+\addchaptertocentry{\abstractname} % Add the abstract to the table of contents
+
+\input{abstract-en}
+
+\noindent
+\textbf{\keywordstitle} \keywordnames
+
+\end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	THESIS CONTENT - CHAPTERS
+%----------------------------------------------------------------------------------------
+
+\mainmatter % Begin numeric (1,2,3...) page numbering
+
+\pagestyle{thesis} % Return the page headers back to the "thesis" style
+
+\include{chapters/1-introduction}
+\include{chapters/2-related-work}
+\include{chapters/7-conclusions}
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+%\nocite{*} % check for unused references (package refcheck); comment out to filter out unused references
+
+\printbibliography[heading=bibintoc]
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

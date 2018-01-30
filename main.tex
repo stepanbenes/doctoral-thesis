@@ -1,224 +1,7 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Masters/Doctoral Thesis 
-% LaTeX Template
-% Version 2.4 (22/11/16)
-%
-% This template has been downloaded from:
-% http://www.LaTeXTemplates.com
-%
-% Version 2.x major modifications by:
-% Vel (vel@latextemplates.com)
-%
-% This template is based on a template by:
-% Steve Gunn (http://users.ecs.soton.ac.uk/srg/softwaretools/document/templates/)
-% Sunil Patel (http://www.sunilpatel.co.uk/thesis-template/)
-%
-% Template license:
-% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%----------------------------------------------------------------------------------------
-%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%----------------------------------------------------------------------------------------
+\input{config}
 
-\documentclass[
-11pt, % The default document font size, options: 10pt, 11pt, 12pt
-%oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
-english, % ngerman for German
-singlespacing, % Single line spacing, alternatives: onehalfspacing or doublespacing
-%draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
-%nolistspacing, % If the document is onehalfspacing or doublespacing, uncomment this to set spacing in lists to single
-%liststotoc, % Uncomment to add the list of figures/tables/etc to the table of contents
-%toctotoc, % Uncomment to add the main table of contents to the table of contents
-%parskip, % Uncomment to add space between paragraphs
-%nohyperref, % Uncomment to not load the hyperref package
-headsepline, % Uncomment to get a line under the header
-%chapterinoneline, % Uncomment to place the chapter title next to the number on one line
-%consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout
-]{MastersDoctoralThesis} % The class file specifying the document structure
-
-\usepackage[utf8]{inputenc} % Required for inputting international characters
-\usepackage[T1]{fontenc} % Output font encoding for international characters
-
-\usepackage{palatino} % Use the Palatino font by default
-
-\usepackage[backend=bibtex,style=numeric,giveninits=true,natbib=true,sorting=none]{biblatex} % Use authoryear citation style for "Author, year" citation style
-
-\addbibresource{references.bib} % The filename of the bibliography
-
-%\usepackage{refcheck} % checks for correct reference usage and produces warnings; enable \nocite command
-
-\usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
-
-\usepackage{float} % In order to use the [H] option for figure alignment
-
-\usepackage{fancyvrb} % keep tabs in verbatim sections, see: https://tex.stackexchange.com/questions/231083/how-to-stop-verbatim-from-converting-tabs-to-spaces
-
-\usepackage{listings} % enable to reference source code, see: https://tex.stackexchange.com/questions/74155/how-to-treat-verbatim-as-a-block-that-can-be-referenced-just-like-a-figure
-
-\usepackage{amssymb} % The amssymb package provides various useful mathematical symbols
-
-\usepackage{mathtools} % math tools (ceiling signs, see: http://tex.stackexchange.com/questions/42271/floor-and-ceiling-functions)
-\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
-
-% following packages allows to write algorithms as pseudocode
-\usepackage{amsmath}
-\usepackage{algorithmicx}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\algnewcommand\algorithmicinput{\textbf{INPUT:}}
-\algnewcommand\INPUT{\item[\algorithmicinput]}
-\algnewcommand\algorithmicoutput{\textbf{OUTPUT:}}
-\algnewcommand\OUTPUT{\item[\algorithmicoutput]}
-
-\usepackage{caption}
-\captionsetup{width=0.8\textwidth} % global width of captions in figures, tables, etc. https://tex.stackexchange.com/questions/110393/too-wide-figure-caption
-
-%----------------------------------------------------------------------------------------
-%	COMMAND DEFINITIONS
-%----------------------------------------------------------------------------------------
-
-\definecolor{todoColor}{rgb}{1,0.55,0.2}
-\newcommand{\todo}[1]{\textit{\color{todoColor}#1}}
-
-% define commands to keep the formatting separated from the content 
-\newcommand{\keyword}[1]{\textbf{#1}}
-%\newcommand{\tabhead}[1]{\textbf{#1}}
-\newcommand{\code}[1]{\texttt{#1}}
-\newcommand{\file}[1]{\texttt{\bfseries#1}}
-\newcommand{\option}[1]{\texttt{\itshape#1}}
-\newcommand{\tabhead}[1]{\textbf{#1}}
-\newcommand*\diff{\mathop{}\!\mathrm{d}} % dx
-\newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}} % d^2x
-\newcommand{\mtrx}[1]{\mathbf{#1}}
-
-%----------------------------------------------------------------------------------------
-%	MARGIN SETTINGS
-%----------------------------------------------------------------------------------------
-
-\geometry{
-	paper=a4paper, % Change to letterpaper for US letter
-	inner=2.5cm, % Inner margin
-	outer=3.8cm, % Outer margin
-	bindingoffset=.5cm, % Binding offset
-	top=1.5cm, % Top margin
-	bottom=1.5cm, % Bottom margin
-	%showframe, % Uncomment to show how the type block is set on the page
-}
-
-%----------------------------------------------------------------------------------------
-%	THESIS INFORMATION
-%----------------------------------------------------------------------------------------
-\title{Doctoral Thesis}
-\thesistitle[0, 0]{Multimesh Methods for Data Visualization and Finite Element Analysis} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
-\thesistitlecs{V\'ices\'i\v{t}ov\'e metody pro vizualizaci dat a v\'ypo\v{c}ty MKP} % Your thesis title in Czech, this is used in the title and abstract, print it elsewhere with \ttitlecs
-\supervisor{prof. Ing. Jaroslav Kruis, Ph.D.} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
-\examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
-\degree{Doctor of Philosophy} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
-\author{Ing. \v{S}t\v{e}p\'{a}n Bene\v{s}} % Your name, this is used in the title page, print it elsewhere with \authorname
-\authornodegree{\v{S}t\v{e}p\'{a}n Bene\v{s}} % Your name without degrees, this is used in the abstract and declaration page, print it elsewhere with \authornamenodegree
-\addresses{Th\'akurova 7, 166 29 Praha 6} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
-
-\subject{Engineering software} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
-\keywords{Finite Element Method (FEM), Finite Element Analysis (FEA), Post-processing, Data visualization, Data compression, Data management, Singular Value Decomposition (SVD)} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
-\keywordscs{Metoda kone\v{c}n\'ych prvk\r{u} (MKP), Kone\v{c}n\v{e} prvkov\'a anal\'yza, Vizualizace dat, Komprese dat, Spr\'ava dat, Singul\'arn\'i rozklad (SVD)} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
-\university{\href{http://www.cvut.cz}{Czech Technical University in Prague}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
-\department{\href{http://mech.fsv.cvut.cz}{Department of Mechanics}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
-\faculty{\href{http://www.fsv.cvut.cz}{Faculty of Civil Engineering}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
-
-\AtBeginDocument{
-\hypersetup{pdftitle={Multimesh Methods for Data Visualization and Finite Element Analysis}} % Set the PDF's title to your title
-\hypersetup{pdfauthor={\v{S}t\v{e}p\'{a}n Bene\v{s}}} % Set the PDF's author to your name
-\hypersetup{pdfkeywords={Finite Element Method (FEM), Finite Element Analysis (FEA), Post-processing, Data visualization, Data compression, Data management, Singular Value Decomposition (SVD)}} % Set the PDF's keywords to your keywords
-}
-
-%----------------------------------------------------------------------------------------
-%	SOURCE CODE STYLE
-%----------------------------------------------------------------------------------------
-
-\usepackage{inconsolata}
-
-\definecolor{keywordsColor}{rgb}{0,0,1}
-\definecolor{commentsColor}{rgb}{0,0.5,0}
-\definecolor{stringsColor}{rgb}{0.64,0.08,0.08}
-\definecolor{xmlcommentsColor}{rgb}{0.5,0.5,0.5}
-\definecolor{typesColor}{rgb}{0.17,0.57,0.68}
-\definecolor{numbersColor}{rgb}{0.25,0.6,0.83}
-
-\usepackage{listings}
-\lstset{language=[Sharp]C,
-%captionpos=b,
-%numbers=left, %Nummerierung
-%numberstyle=\tiny, % kleine Zeilennummern
-frame=lines, % Oberhalb und unterhalb des Listings ist eine Linie
-showspaces=false,
-showtabs=false,
-breaklines=true,
-showstringspaces=false,
-breakatwhitespace=true,
-escapeinside={(*@}{@*)},
-commentstyle=\color{commentsColor},
-morekeywords={partial, var, value, get, set},
-keywordstyle=\color{keywordsColor},
-stringstyle=\color{stringsColor},
-basicstyle=\ttfamily\tiny,
-}
-
-\newcommand\JSONnumbervaluestyle{\color{numbersColor}}
-\newcommand\JSONstringvaluestyle{\color{stringsColor}}
-
-% switch used as state variable
-\newif\ifcolonfoundonthisline
-
-\makeatletter
-
-\lstdefinestyle{json}
-{
-  showstringspaces    = false,
-  keywords            = {false,true},
-  alsoletter          = 0123456789.,
-  morestring          = [s]{"}{"},
-  stringstyle         = \ifcolonfoundonthisline\JSONstringvaluestyle\fi,
-  MoreSelectCharTable =%
-    \lst@DefSaveDef{`:}\colon@json{\processColon@json},
-  basicstyle          = \ttfamily\tiny,
-  keywordstyle        = \ttfamily\bfseries,
-}
-
-% flip the switch if a colon is found in Pmode
-\newcommand\processColon@json{%
-  \colon@json%
-  \ifnum\lst@mode=\lst@Pmode%
-    \global\colonfoundonthislinetrue%
-  \fi
-}
-
-\lst@AddToHook{Output}{%
-  \ifcolonfoundonthisline%
-    \ifnum\lst@mode=\lst@Pmode%
-      \def\lst@thestyle{\JSONnumbervaluestyle}%
-    \fi
-  \fi
-  %override by keyword style if a keyword is detected!
-  \lsthk@DetectKeywords% 
-}
-
-% reset the switch at the end of line
-\lst@AddToHook{EOL}%
-  {\global\colonfoundonthislinefalse}
-
-\makeatother
-
-\definecolor{positiveColor}{rgb}{0,1,0}
-\definecolor{negativeColor}{rgb}{1,0,0}
-\definecolor{neutralColor}{rgb}{0.6,0.6,0.6}
-
-% https://tex.stackexchange.com/questions/12703/how-to-create-fixed-width-table-columns-with-text-raggedright-centered-raggedlef
-\usepackage{array}
-\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
-\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
-\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\input{hyphenation}
 
 \begin{document}
 
@@ -227,11 +10,6 @@ basicstyle=\ttfamily\tiny,
 
 \pagestyle{plain} % Default to the plain heading style until the thesis style is called for the body content
 
-%----------------------------------------------------------------------------------------
-%	HYPHENATION
-%----------------------------------------------------------------------------------------
-
-\hyphenation{veli-\v{c}in para-metr\r{u} ana-l\'yze v\'ysled-k\r{u} mno-ha po-kro-\v{c}il\'e pro-ce-sor um\'i-st\v{e}-n\'e Vi-zu-a-li-za-ce me-thod front-end back-end umo\v{z}-\v{n}u-je re-pre-zen-ta-ci hra-na-mi}
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -307,15 +85,7 @@ In Prague on \today & Signature:
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
 
-% Text of abstract should have three parts: Motivation. This paper. Summary.
-\noindent
-Finite element analysis is a process of modeling physical reality that consists of several phases -- model generation, meshing, attribute assignment, solution, and post-processing. With the ongoing desire to solve more complex systems with better and better precision, an analysis has to process enormous amount of data in each of its phases. Traditional unstructured file-based representation of the mesh, input parameters, and the results from the solution is the bottleneck of the entire process. It lacks the scalability and complicates the development of the tools for engineers and researchers that are either preparing the input to FEM, or interpreting the output from FEM.
-
-Limitations of the standard file-based approach are the motivation to re-think the entire process of data management in FEA. The focus of the thesis is mainly on the post-processing of the results and the way the results are stored, transfered, and visualized. However, the thesis describes the design and implementation of the complete FEA data management system that connects all the parts of the finite element analysis, providing query interface and remote access over the Internet. There is proposed the new storage format for representation of FEM results that provides the persistent representation of visual filters to simplify the implementation of a post-processor.
-
-The main feature of the storage format is the support for compression of FEM results. The compression method based on singular value decomposition is proposed. The method is able to compress arbitrary results from FEM using low-rank approximation matrices. The compression ratio is at most 10\% for all tested results. In many cases, the compression ratio is bellow 1\% of the original size, while the relative approximation error is kept under $10^{-5}$.
-
-To demonstrate the proposed methods, the thesis describes the implementation of two post-processors. The desktop post-processor is a feature-rich visualization tool that allows to visualize the data in various formats including the new proposed storage format. It is able to create efficient surface representation of an arbitrary finite element mesh and it implements advanced techniques for manipulation with the mesh entities. The web-based post-processor is a simple cross-platform application that demonstrates the benefits of the proposed storage format. It is able to visualize the simulation results located in a remote storage. As the hard work connected with processing of the results is offloaded to a server, the web application is just a thin client that works even on devices with limited CPU and memory resources.\\
+\input{abstract-en}
 
 \noindent
 \textbf{\keywordstitle} \keywordnames
@@ -324,14 +94,7 @@ To demonstrate the proposed methods, the thesis describes the implementation of 
 \begin{abstractcs}
 \addchaptertocentry{\abstractnamecs} % Add the abstract to the table of contents
 
-\noindent
-Kone\v{c}n\v{e} prvkov\'a anal\'yza je proces slou\v{z}\'ic\'i k simulaci pr\r{u}b\v{e}h\r{u} fyzik\'aln\'ich veli\v{c}in, kter\'y sest\'av\'a z n\v{e}kolika f\'az\'i -- vytvo\v{r}en\'i geometrick\'eho modelu, generov\'an\'i s\'it\v{e} kone\v{c}n\'ych prvk\r{u}, p\v{r}i\v{r}azen\'i parametr\r{u} modelu, kone\v{c}n\v{e} prvkov\'y v\'ypo\v{c}et a zpracov\'an\'i v\'ysledk\r{u}. S pokra\v{c}uj\'ic\'i snahou o st\'ale vy\v{s}\v{s}\'i p\v{r}esnost v\'ypo\v{c}tu, ka\v{z}d\'a z f\'az\'i anal\'yzy mus\'i zpracov\'avat obrovsk\'e mno\v{z}stv\'i dat. Tradi\v{c}n\'i reprezentace s\'it\v{e}, vstupn\'ich parametr\r{u} a v\'ysledk\r{u} zalo\v{z}en\'a na oby\v{c}ejn\'ych nestrukturovan\'ych souborech je \'uzk\'ym hrdlem cel\'eho procesu. Tento fakt komplikuje v\'yvoj n\'astroj\r{u} pro in\v{z}en\'yry a v\v{e}dce, kte\v{r}\'i p\v{r}ipravuj\'i vstupn\'i data do MKP nebo interpretuj\'i v\'ysledky z MKP.
-
-Nev\'yhody a omezen\'i tradi\v{c}n\'iho p\v{r}\'istupu zalo\v{z}en\'eho na souborech je motivac\'i pro v\'yrazn\'e p\v{r}epracov\'an\'i cel\'eho zp\r{u}sobu nakl\'ad\'an\'i s daty v kone\v{c}n\v{e} prvkov\'e anal\'yze. Pr\'ace je zam\v{e}\v{r}ena p\v{r}edev\v{s}\'im na zpracov\'an\'i v\'ysledk\r{u} z MKP a na zp\r{u}sob jejich ukl\'ad\'an\'i, p\v{r}enos a zobrazov\'an\'i. Nicm\'en\v{e}, dizerta\v{c}n\'i pr\'ace popisuje tak\'e n\'avrh a implementaci kompletn\'iho syst\'emu pro spr\'avu dat, kter\'y propojuje v\v{s}echny \v{c}\'asti kone\v{c}n\v{e} prvkov\'e anal\'yzy a poskytuje rozhran\'i pro dotazov\'an\'i nad daty a vzd\'alen\'y p\v{r}\'istup p\v{r}es Internet. Je zde rovn\v{e}\v{z} p\v{r}edstaven nov\'y form\'at pro reprezentaci v\'ysled\-k\r{u} z MKP, kter\'y mimo jin\'e podporuje ulo\v{z}en\'i vizu\'aln\'ich filtr\r{u} aplikovan\'ych na data, co\v{z} usnad\v{n}uje implementaci post-procesoru.
-
-Hlavn\'i v\'yhoda nov\'eho form\'atu je podpora pro kompresi dat. Kompresn\'i metoda zalo\v{z}en\'a na singul\'arn\'im rozkladu je p\v{r}edstavena a pops\'ana. Metoda je schopna zkompresovat libovolnou sadu v\'ysledk\r{u} z MKP pou\v{z}it\'im aproximace matic\'i s ni\v{z}\v{s}\'i hodnost\'i. Kompresn\'i pom\v{e}r je nejv\'y\v{s}e 10\% pro v\v{s}echny testovan\'e v\'ysledky. V~mno-ha p\v{r}\'ipadech je kompresn\'i pom\v{e}r pod 1\% p\r{u}vodn\'i velikosti, zat\'imco relativn\'i chybu aproximace se poda\v{r}ilo udr\v{z}et pod $10^{-5}$.
-
-Pro demostraci uveden\'ych metod dizerta\v{c}n\'i pr\'ace rovn\v{e}\v{z} popisuje implementaci dvou post-procesor\r{u}. Desktopov\'y post-procesor je vizualiza\v{c}n\'i n\'astroj, kter\'y umo\v{z}\v{n}uje zobrazovat data v r\r{u}zn\'ych form\'atech v\v{c}etn\v{e} nov\v{e} navr\v{z}en\'eho form\'atu podporuj\'ic\'iho kompresi v\'ysledk\r{u} z MKP. Post-procesor je schopen vytvo\v{r}it efektivn\'i reprezentaci kone\v{c}n\v{e} prvkov\'e s\'it\v{e} a implementuje pokro\v{c}il\'e techniky pro manipulaci s uzly, hranami a prvky s\'it\v{e}. Webov\'y post-procesor je jednoduch\'a multi-platformn\'i aplikace, kter\'a demonstruje v\'yhody nov\'eho form\'atu. Umo\v{z}\v{n}uje zobrazit v\'ysledky z MKP um\'ist\v{e}n\'e ve vzd\'alen\'em \'ulo\v{z}i\v{s}ti. D\'iky tomu, \v{z}e v\'ypo\v{c}etn\v{e} n\'aro\v{c}n\'e operace souvisej\'ic\'i se zpracov\'an\'im v\'ysledk\r{u} jsou prov\'ad\v{e}ny na vzd\'alen\'em serveru, webov\'a aplikace je pouze tenk\'y klient, kter\'y je schopen pracovat i na za\v{r}\'izen\'ich s velmi omezen\'ym v\'ykonem a pam\v{e}t\'i.\\
+\input{abstract-cs}
 
 \noindent
 \textbf{\keywordstitlecs} \keywordnamescs
@@ -344,14 +107,7 @@ Pro demostraci uveden\'ych metod dizerta\v{c}n\'i pr\'ace rovn\v{e}\v{z} popisuj
 \begin{acknowledgements}
 \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
 
-\noindent
-I would like to express my sincere gratitude to my supervisor \supname{} for all his help and guidance throughout the work on this thesis, and also throughout my studies.
-
-I also thank the teachers of my doctoral courses, especially prof. RNDr. Ivo Marek, DrSc., rest his soul, for his advice on the mathematical problems that arose during my research work. I am grateful for the discussions with prof. Dr. Ing. Bo\v{r}ek Patz\'ak about the design of the database for the finite element model, which was an inspiration for a part of my research. My special thanks go to Ing. Martin Hor\'ak, Ph.D., who brought me to the idea to use singular value decomposition for the compression of FEM results. Many thanks also to the colleagues in the Department of Mechanics for a great time spent after the working hours.
-
-I would also like to give my thanks to my parents for their patience and understanding. Last but not the least, I thank Hana for her endless support and encouragement that helped me to accomplish the goal.\\
-
-This work was supported by the Czech Science Foundation under projects with numbers P105/12/G059 and 15-05935S. The financial support is gratefully acknowledged.
+\input{acknowledgements}
 
 \end{acknowledgements}
 

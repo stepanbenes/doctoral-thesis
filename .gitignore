@@ -1,5 +1,5 @@
-# generated pdf file
-thesis.pdf
+# generated pdf files
+*.pdf
 
 # compilation scripts
-*.bat
+#*.bat
