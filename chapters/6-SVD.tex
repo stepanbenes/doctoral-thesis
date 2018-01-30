@@ -186,7 +186,7 @@ Considering the usual shape of matrix containing FEM results, this inequality is
 \subsection{Algorithm description}
 Once SVD is calculated, the compression algorithm removes a certain number of singular values and corresponding singular vectors. The remaining singular values and vectors represent the compressed data. There are two strategies that influence the way how to preserve the number of singular values -- resulting size and quality. Each strategy is assigned a control parameter that determines compression ratio or approximation error.
 
-\paragraph{Compression ratio}
+\paragraph{Compression ratio.}
 If the focus is only on the size of compressed data, the rank $r$ of the approximation matrix can be calculated by the formula
 
 \begin{equation}
@@ -197,7 +197,7 @@ r=\ceil*{c \times \frac{m n}{m+n+1}},
 \noindent
 where $c$ is the compression ratio, $0 \leq c \leq 1$ ($0$ results in absolute compression while $1$ results in no compression); $\ceil*{.}$ is the ceiling function.
 
-\paragraph{Approximation error}
+\paragraph{Approximation error.}
 In a usual case, the most important measure to take into account is the approximation error. Algorithm is trying to minimize the compression ratio while at the same time ensuring that predefined approximation error threshold is not exceeded. To quantify the error, the Normalized root-mean-square deviation ($\mathit{NRMSD}$) is used. The normalized error metric enables working with various data sets that have different scales. $\mathit{NRMSD}$ is defined in Section \ref{sec:error-estimation}.
 
 To effectively calculate the final rank of the approximation matrix from the desired approximation error, the interesting property of singular values
