@@ -3,59 +3,64 @@
 
 \input{hyphenation}
 
-\begin{document}
+% packages used in Statement only
+% ...
 
+% commands used in Statement only
+
+\begin{document}
+% ...
 
 \frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
 
 \pagestyle{plain} % Default to the plain heading style until the thesis style is called for the body content
 
-
-%----------------------------------------------------------------------------------------
-%	TITLE PAGE
-%----------------------------------------------------------------------------------------
-
+%
+%-----------------------------------------------------------------------------
+%	COVER
+%-----------------------------------------------------------------------------
+%
 \begin{titlepage}
+\setstretch{1.3}
 \begin{center}
 
-% Logo CVUT
-\includegraphics[width=30mm]{figures/logo-cvut} \\
-{\scshape\LARGE \univname\par} % University name
-\HRule \\[0.2cm] % Horizontal line
-%\vspace*{.06\textheight}
-\facname\\[0.2cm] % Faculty name
-\deptname % Department name
-\vspace{3.5cm}
-
-{\huge \bfseries \ttitle\par}\vspace{1.0cm} % Thesis title
-
-\textsc{\Large Doctoral Thesis}\\[1.5cm] % Thesis type
- 
-{\large \authorname}\\[3.0cm] % Author name
-
-
-\begin{minipage}[t]{\textwidth}
-\begin{flushleft}
-\emph{Doctoral study programme:} \\
-Civil Engineering \\[0.5cm] % Supervisor name  
-\emph{Branch of study:} \\
-Building and Structural Engineering \\[0.5cm] % Supervisor name  
-
-\emph{Supervisor:} \\
-\supname % Supervisor name  
-\end{flushleft}
-\end{minipage}\\[3cm]
-
-\vfill
-
-{\large Prague, 2018}\\[2cm] % Date
- 
+\vspace*{2cm}
+{\textbf{\Large \textsc{\univname}}}\\[2cm]
+\includegraphics[width=.5\textwidth]{figures/logo-cvut}\\[2cm]
+{\Large {\textbf{DOCTORAL THESIS STATEMENT}}}
 \vfill
 \end{center}
 \end{titlepage}
 
+%
+%-----------------------------------------------------------------------------
+%	TITLE PAGE
+%-----------------------------------------------------------------------------
+%
+\begin{titlepage}
+\setstretch{1.3}
+\begin{center}
+{\Large\textsc{\univname}}\\[0.3cm]
+{\large \facname}\\
+\deptname\\[0.5cm]
+\includegraphics[width=.2\textwidth]{figures/logo-cvut}\\[1cm]
+{\Large\textsc{\authorname}}\\[1cm]
+{\LARGE \bfseries \ttitle}\\[2cm]
+
+\large
+Ph.D. Programme: \textbf{Civil Engineering} \\
+Branch of Study: \textbf{Building and Structural Engineering} \\[1cm]
+Supervisor: \textbf{\supname} \\[3cm]
+
+\large \textit{Doctoral thesis statement for obtaining the degree of ``Doctor of Philosophy'' abbreviated to ``Ph.D.''}\\[2cm]
+{\large Prague, 2018}\\[4cm]
+\vfill
+\end{center}
+\end{titlepage}
+
+
 %----------------------------------------------------------------------------------------
-%	ABSTRACT PAGE
+%	ABSTRACT PAGE (ENGLISH)
 %----------------------------------------------------------------------------------------
 
 \begin{abstract}
@@ -65,8 +70,26 @@ Building and Structural Engineering \\[0.5cm] % Supervisor name
 
 \noindent
 \textbf{\keywordstitle} \keywordnames
-
 \end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT PAGE (CZECH)
+%----------------------------------------------------------------------------------------
+
+\begin{abstractcs}
+\addchaptertocentry{\abstractnamecs} % Add the abstract to the table of contents
+
+\input{abstract-cs}
+
+\noindent
+\textbf{\keywordstitlecs} \keywordnamescs
+\end{abstractcs}
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+\tableofcontents % Prints the main table of contents
 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - CHAPTERS
@@ -88,6 +111,21 @@ Building and Structural Engineering \\[0.5cm] % Supervisor name
 
 \printbibliography[heading=bibintoc]
 
-%----------------------------------------------------------------------------------------
+%-----------------------------------------------------------------------------
+%	List of publications
+%-----------------------------------------------------------------------------
+%
+%\include{publications}
+
+%
+%-----------------------------------------------------------------------------
+%	COVER
+%-----------------------------------------------------------------------------
+%
+
+\cleardoublepage
+
+\newpage\pagestyle{empty}\null\newpage
+\newpage\pagestyle{empty}\null\newpage
 
 \end{document}
