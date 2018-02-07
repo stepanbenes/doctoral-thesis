@@ -23,6 +23,11 @@
 
 % commands used in Statement only
 
+\newcommand*\cleartoleftpage{
+  \clearpage
+  \ifodd\value{page}\hbox{}\newpage\fi
+}
+
 \begin{document}
 % ...
 
@@ -129,6 +134,8 @@ Branch of Study: \textbf{Building and Structural Engineering} \\[3cm]
 %----------------------------------------------------------------------------------------
 %	ABSTRACT PAGE (CZECH)
 %----------------------------------------------------------------------------------------
+\begingroup
+\let\cleardoublepage\clearpage % redefine cleardoublepage command to remove odd page before czech abstract
 
 \begin{abstractcs}
 \addchaptertocentry{\abstractnamecs} % Add the abstract to the table of contents
@@ -138,6 +145,7 @@ Branch of Study: \textbf{Building and Structural Engineering} \\[3cm]
 \noindent
 \textbf{\keywordstitlecs} \keywordnamescs
 \end{abstractcs}
+\endgroup
 
 %----------------------------------------------------------------------------------------
 %	TABLE OF CONTENTS
