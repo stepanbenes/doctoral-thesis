@@ -16,6 +16,20 @@
 
 \input{config}
 
+%----------------------------------------------------------------------------------------
+%	MARGIN SETTINGS
+%----------------------------------------------------------------------------------------
+
+\geometry{
+    paper=a4paper, % Change to letterpaper for US letter
+    inner=3.4cm, % Inner margin
+    outer=3.4cm, % Outer margin
+    bindingoffset=0cm, % Binding offset
+    top=1.5cm, % Top margin
+    bottom=1.5cm, % Bottom margin
+    %showframe, % Uncomment to show how the type block is set on the page
+}
+
 \input{hyphenation}
 
 % packages used in Statement only
@@ -23,10 +37,7 @@
 
 % commands used in Statement only
 
-\newcommand*\cleartoleftpage{
-  \clearpage
-  \ifodd\value{page}\hbox{}\newpage\fi
-}
+\usepackage{changepage}
 
 \begin{document}
 % ...
@@ -41,15 +52,15 @@
 %-----------------------------------------------------------------------------
 %
 \begin{titlepage}
-\setstretch{1.3}
-\begin{center}
-
-\vspace*{2cm}
-{\textbf{\Large \textsc{\univname}}}\\[2cm]
-\includegraphics[width=.5\textwidth]{figures/logo-cvut}\\[2cm]
-{\Large {\textbf{DOCTORAL THESIS STATEMENT}}}
-\vfill
-\end{center}
+  \setstretch{1.3}
+  \begin{center}
+    
+    \vspace*{2cm}
+    {\textbf{\Large \textsc{\univname}}}\\[2cm]
+    \includegraphics[width=.5\textwidth]{figures/logo-cvut}\\[2cm]
+    {\Large {\textbf{DOCTORAL THESIS STATEMENT}}}
+    \vfill
+  \end{center}
 \end{titlepage}
 
 %
@@ -157,7 +168,10 @@ Branch of Study: \textbf{Building and Structural Engineering} \\[3cm]
 %	THESIS CONTENT - CHAPTERS
 %----------------------------------------------------------------------------------------
 
+\begin{adjustwidth}{-0.8cm}{-0.8cm}
+
 \mainmatter % Begin numeric (1,2,3...) page numbering
+
 
 \pagestyle{thesis} % Return the page headers back to the "thesis" style
 
@@ -189,5 +203,7 @@ Branch of Study: \textbf{Building and Structural Engineering} \\[3cm]
 %
 
 \cleardoublepage % insert blank page after publications
+
+\end{adjustwidth}
 
 \end{document}
