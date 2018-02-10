@@ -37,6 +37,13 @@
 
 % commands used in Statement only
 
+\newcommand{\chapterwithoutnumber}[2]{
+    \setcounter{chapter}{#1}
+    \setcounter{section}{0}
+    \chapter*{#2}
+    \addcontentsline{toc}{chapter}{#2}
+}
+
 \usepackage{changepage}
 
 \begin{document}
