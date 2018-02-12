@@ -9,6 +9,7 @@ Here follows the list of aims that were set for the research work described in t
     \item Finally, the product of this research should be the implementation of two post-processors. The first is the standard desktop post-processor that will demonstrate the way of transition from the convential file-based formats to the proposed structured database format utilizing compression. The second post-processor is the web-based thin client intended to demonstrate the advantages of the proposed format when incorporated into a complex FEA running on a remote server.
 \end{itemize}
 
+% TODO: remove this section?
 \section{Challenges}
 
 The main challenge is the design of universal format that can hold the results from any FEM analysis. Results are composed of scalars, vectors, or tensors. Each field has different number of components. The results can be located in nodes or integration points. There may be a requirement to extrapolate the results from integration points to element nodes. There are various extrapolation strategies. The mesh can be different for each time step (e.g., in case of simulating the construction stages). The mesh can contain 1D, 2D, or 3D elements -- each of different type and approximation. The results from 3D simulations can be visualized on the surface of the mesh, in form of cross-sections or iso-areas, or as a vector field. The storage format should support efficient representation of all these forms of results.
