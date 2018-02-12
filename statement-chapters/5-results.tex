@@ -2,15 +2,7 @@
 
 \section{SVD compression method results}
 
-First example is an analysis of aging of nuclear power plant's containment made from prestressed concrete. The finite element mesh used in this analysis is in Figure \ref{fig:temelin:mesh}. More details about the analysis can be found in \cite{Kruis2012} and \cite{Koudelka2009}. This analysis includes high number of analysis time steps (thousands) with very little differences between them. There is therefore potential for compression to be very effective (compression ratio to be very low) as proven in Figure \ref{fig:temelin:NRMSD} that examines the impact of changes in the compression ratio to the mean error of approximation.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{figures/chapter-SVD/temelin_screenshot}
-\decoRule
-\caption[Results visualization: reactor containment 3D.]{Segment of reactor containment analyzed. Results visualization (displacement field, x component).}
-\label{fig:temelin:mesh}
-\end{figure}
+Performance of the SVD-based compression algorithm and the quality of its output is tested on several real world examples in the thesis. The first example is an analysis of aging of nuclear power plant's containment made from prestressed concrete. The finite element mesh used in this analysis is in Figure \ref{fig:desktop-postprocessor-master}. More details about the analysis can be found in \cite{Kruis2012} and \cite{Koudelka2009}. This analysis includes high number of analysis time steps (thousands) with very little differences between them. The number of data locations (nodes or integration points) is in order of hunderds of thousands. There is therefore a potential for compression to be very effective (compression ratio to be very low) as proven in Figure \ref{fig:temelin:NRMSD} that examines the impact of changes in the compression ratio to the mean error of approximation.
 
 \begin{figure}[H]
 \centering
@@ -31,21 +23,14 @@ Besides the error also the execution speed of compression algorithm was measured
 \label{fig:temelin:ExeTime}
 \end{figure}
 
+
 \section{Post-processor implementation results}
 
 % Post-processors screenshots and description
 
-This section contains screenshots and performance evaluation of both the desktop post-processor and the web post-processor. In Figure \ref{fig:desktop-postprocessor-remote-solutions}, there is a screenshot of the desktop post-processor that demonstrates the ability to connect to the remote web API and retrieve the list of solutions stored in the database.
+This section contains screenshots and performance evaluation of both the desktop post-processor and the web post-processor. Both post-processors have the ability to connect to the remote web API, retrieve the list of solutions stored in the database, and visualize the results of the same simulation.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{figures/chapter-data-management/desktop-postprocessor-remote-solutions}
-    \decoRule
-    \caption[Desktop post-processor screenshot. List of remote solutions.]{Desktop post-processor screenshot. Demonstration of connection to the web API (listing of remote solutions).}
-    \label{fig:desktop-postprocessor-remote-solutions}
-\end{figure}
-
-Figure \ref{fig:desktop-postprocessor-master} shows the visualization of the master layer of the selected solution in the desktop post-processor window. The left panel contains the layer tree view that allows to choose the layers to show in the main window. There are also the options to visualize components of scalar, vector, or tensor data using the color scale on the mesh surface. Vector fields can be also visualized using arrows in the data locations pointing in the direction corresponding to the vector field. The top panel contains the tools for manipulation with the mesh, changing the camera view, selecting mesh entities, and assigning attributes to them.
+Figure \ref{fig:desktop-postprocessor-master} shows the visualization of the master layer in the desktop post-processor window. The left panel contains the layer tree view that allows to choose the layers to show in the main window. There are also the options to visualize components of scalar, vector, or tensor data using the color scale on the mesh surface. Vector fields can be also visualized using arrows in the data locations pointing in the direction corresponding to the vector field. The top panel contains the tools for manipulation with the mesh, changing the camera view, selecting mesh entities, and assigning attributes to them.
 
 \begin{figure}[H]
     \centering
@@ -82,15 +67,7 @@ The post-processor also provides the user interface for definition of the parame
     \label{fig:web-postprocessor-surface}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{figures/chapter-data-management/web-postprocessor-slice}
-    \decoRule
-    \caption{Web post-processor screenshot. Visualization of a slice layer.}
-    \label{fig:web-postprocessor-slice}
-\end{figure}
-
-Figure \ref{fig:web-postprocessor-surface} shows the web post-processor that is connected to the same database as the desktop post-processor. The user interface also allows to select the layer of the current solution and the data component that should be visualized on the mesh surface. Figure \ref{fig:web-postprocessor-slice} contains the visualization of a slice layer.
+Figure \ref{fig:web-postprocessor-surface} shows the web post-processor that is connected to the same database as the desktop post-processor. The user interface also allows to select the layer of the current solution and the data component that should be visualized on the mesh surface.
 
 \begin{figure}[H]
     \centering
