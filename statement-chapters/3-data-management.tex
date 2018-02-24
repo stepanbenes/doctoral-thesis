@@ -87,10 +87,15 @@ The key part of the format is the solution document that mainly holds the inform
     }
     \end{lstlisting}
 
+\vspace{5mm}
+
 Data in each layer are stored in four types of documents. All documents are identified by the layer id, which is a GUID (Globally Unique IDentifier), and by its index within the layer (except Summary document that does not need an index as it exist in one instance per layer).
+
 \begin{itemize}
 
     \item \textbf{Summary document} contains all the descriptive information about a layer. It has the layer id, name, and the the id of the parent layer. It also holds the collection of mesh, result, and attribute descriptors that reference the other documents related to the layer. An example of a summary document in JSON format is presented in Listing \ref{lst:summary.json}.
+
+    \pagebreak
 
     \begin{lstlisting}[style=json,caption=Example of summary.json document.,label=lst:summary.json]
     {
@@ -150,7 +155,7 @@ Data in each layer are stored in four types of documents. All documents are iden
             "CellConnectivity": "SwAAADgAAAA0AAAASQAAAD4AAAArAAAAKAAAADwAAAA+AAAAKwAAACgAAAA8AAAAOQAAACUAAA...",
             "CellTypes": "DAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMD..."
         }
-        \end{lstlisting}
+    \end{lstlisting}
 
     \item \textbf{Attribute document} serves as a container for additional information assigned to mesh entities, e.g., material id of each finite element. An example of an attribute document in JSON format is presented in Listing \ref{lst:attribute.json}.
 
@@ -171,14 +176,11 @@ Data in each layer are stored in four types of documents. All documents are iden
             },
             "Data": "EwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAAB..."
         }
-        \end{lstlisting}
+    \end{lstlisting}
 
     \item \textbf{Result document} is the document that contains the result fields from FEM. An example of a result document in JSON format is presented in Listing \ref{lst:result.json}. Result document is usually the most memory-consuming component of the storage format and it is therefore designed to support compression of data to reduce its size. The compressed data are converted to text using a binary-to-text encoding method and stored as the value of \code{Data} property of Result document.
 
-    % TODO: include this paragraph?
-
-    %There are also many options to partition the data into smaller groups. The largest granularity is achieved when the data corresponding to a single time step is stored in a single document, which allows for the lowest latency when transfering the document from the storage to the post-processor, in particular when the data are stored on a remote machine. On the other hand, the better reduction of overall size can be achieved when the data for all time steps of a field component are stored in a single document, which usually leads to better compression ratio as the compression method can find more redundancies in the data. There is also a compromise between the two approaches -- to divide the time steps into multiple groups of equal or distinct sizes. This is usually connected with the input of the user who specifies the collection of key time steps of the analysis. If the key time steps are carefully chosen, the compression ratio and/or error can be even better compared to the previous case.
-    
+    There are also many options to partition the data into smaller groups. The largest granularity is achieved when the data corresponding to a single time step is stored in a single document, which allows for the lowest latency when transfering the document from the storage to the post-processor, in particular when the data are stored on a remote machine. On the other hand, the better reduction of overall size can be achieved when the data for all time steps of a field component are stored in a single document, which usually leads to better compression ratio as the compression method can find more redundancies in the data.
 
     \begin{lstlisting}[style=json,caption=Example of result.json document.,label=lst:result.json]
         {
@@ -208,4 +210,6 @@ Data in each layer are stored in four types of documents. All documents are iden
 \end{itemize}
 
 % TODO: remove this paragraph?
+\vspace{5mm}
+
 At first glance the format seams to be overcomplicated. The data are scattered throughout a large number of documents. There are various types of documents with different schema, some information is duplicated, etc. However, the format is carefully designed to allow efficient and simple implementation of a post-processor while enabling the use of compression to significantly reduce the storage size of the results if needed. A post-processor should be able to easily decode the data and display it immediately, without the need for additional transformation, sorting, or caching. E.g., there is one-to-one mapping of the data in a result document to a mesh to be able to use the decoded data array directly as an OpenGL buffer in the graphics card. Also, the fact that the data are stored in a small structured documents of a known schema enables to index the data by a database management system and also to create efficient queries over the data. As a side effect of the data fragmentation, the resulting latency is being very low, i.e., the delay between the user request and the data being rendered on a screen is small (which allows real-time creation of animations).
