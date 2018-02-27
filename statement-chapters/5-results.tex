@@ -8,7 +8,7 @@ Performance of the SVD-based compression algorithm and the quality of its output
 \centering
 \includegraphics[width=\textwidth]{figures/chapter-SVD/temelin_NRMSD}
 \decoRule
-\caption[Dependence of NRMSD on compression ratio and rank (reactor containment 3D).]{Dependence of $\mathit{NRMSD}$ on $c$ and $r$ for reactor containment analysis results.} % ...$c$ (and $r$)...
+\caption[Dependence of NRMSD on compression ratio and rank (reactor containment 3D).]{Dependence of $\mathit{NRMSD}$ on compression ratio (and rank) for reactor containment analysis results.}
 \label{fig:temelin:NRMSD}
 \end{figure}
 
@@ -28,7 +28,7 @@ Besides the error also the execution speed of compression algorithm was measured
 
 % Post-processors screenshots and description
 
-This section contains screenshots and performance evaluation of both the desktop post-processor and the web post-processor. Both post-processors have the ability to connect to the remote web API, retrieve the list of solutions stored in the database, and visualize the results of the same simulation.
+This section contains screenshots and performance evaluation of both the desktop post-pro\-ces\-sor and the web post-processor. Both post-processors have the ability to connect to the remote web API, retrieve the list of solutions stored in the database, and visualize the results of the same simulation.
 
 Figure \ref{fig:desktop-postprocessor-master} shows the visualization of the master layer in the desktop post-processor window. The left panel contains the layer tree view that allows to choose the layers to show in the main window. There are also the options to visualize components of scalar, vector, or tensor data using the color scale on the mesh surface. Vector fields can be also visualized using arrows in the data locations pointing in the direction corresponding to the vector field. The top panel contains the tools for manipulation with the mesh, changing the camera view, selecting mesh entities, and assigning attributes to them.
 
@@ -40,7 +40,7 @@ Figure \ref{fig:desktop-postprocessor-master} shows the visualization of the mas
     \label{fig:desktop-postprocessor-master}
 \end{figure}
 
-The post-processor also provides the user interface for definition of the parameters of a visual filter that the user wants to be applied on the selected layer. The parameters are sent as a part of the filter command that is sent to the FEM format converter component that generates the new layer. The layer tree is then updated and the new layer is displayed. The examples of slice and iso-surface layers are shown in Figure \ref{fig:desktop-postprocessor-slice} and Figure \ref{fig:desktop-postprocessor-isosurface}, respectively.
+The post-processor also provides the user interface for definition of the parameters of a visual filter that the user wants to be applied on the selected layer. The parameters are sent as a part of the filter command to the FEM format converter component that generates the new layer. The layer tree is then updated and the new layer is displayed. The examples of slice and iso-surface layers are shown in Figure \ref{fig:desktop-postprocessor-slice} and Figure \ref{fig:desktop-postprocessor-isosurface}, respectively.
 
 \begin{figure}[H]
     \centering
