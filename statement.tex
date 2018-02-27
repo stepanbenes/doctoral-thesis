@@ -12,6 +12,7 @@
     headsepline, % Uncomment to get a line under the header
     chapterinoneline, % Uncomment to place the chapter title next to the number on one line
     %consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout
+    decreaseabovechapterskip, % Decrease vertical space above chapter title
     ]{MastersDoctoralThesis} % The class file specifying the document structure
 
 \input{config}
@@ -20,6 +21,7 @@
 %	MARGIN SETTINGS
 %----------------------------------------------------------------------------------------
 
+% E-VERSION:
 \geometry{
     paper=a4paper, % Change to letterpaper for US letter
     inner=3.4cm, % Inner margin
@@ -29,6 +31,17 @@
     bottom=1.5cm, % Bottom margin
     %showframe, % Uncomment to show how the type block is set on the page
 }
+
+% PRINT VERSION:
+%\geometry{
+%    paper=a4paper, % Change to letterpaper for US letter
+%    inner=3.3cm, % Inner margin
+%    outer=3.0cm, % Outer margin
+%    bindingoffset=0.5cm, % Binding offset
+%    top=1.5cm, % Top margin
+%    bottom=1.5cm, % Bottom margin
+%    %showframe, % Uncomment to show how the type block is set on the page
+%}
 
 \input{hyphenation}
 
@@ -196,6 +209,7 @@ Supervisor: \textbf{\supname} \\[3cm]
 
 %\nocite{*} % check for unused references (package refcheck); comment out to filter out unused references
 
+\AtNextBibliography{\small} % use small font for bibliography
 \printbibliography[heading=bibintoc]
 
 %-----------------------------------------------------------------------------

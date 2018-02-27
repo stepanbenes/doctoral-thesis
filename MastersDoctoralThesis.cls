@@ -41,6 +41,7 @@
 \booltrue{hyperrefsupport}
 \newbool{headsepline}
 \newbool{consistentlayout}
+\newbool{decreaseabovechapterskip}
 
 \DeclareOption{nohyperref}{\boolfalse{hyperrefsupport}}
 \DeclareOption{nolistspacing}{\booltrue{nolistspace}}
@@ -50,6 +51,7 @@
 \DeclareOption{parskip}{\booltrue{parskip}}
 \DeclareOption{headsepline}{\booltrue{headsepline}}
 \DeclareOption{consistentlayout}{\booltrue{consistentlayout}}
+\DeclareOption{decreaseabovechapterskip}{\booltrue{decreaseabovechapterskip}}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{\baseclass}}
 
 \ProcessOptions\relax
@@ -57,7 +59,7 @@
 \LoadClass{\baseclass}
 
 %  Simple interface for the user  to customize the chapter titles 
-\ProvideDocumentCommand{\abovechapterskip}{}{\vspace*{20pt}}
+\ProvideDocumentCommand{\abovechapterskip}{}{\vspace*{\ifbool{decreaseabovechapterskip}{-10pt}{20pt}}}
 \ProvideDocumentCommand{\chapterbelowskip}{}{\vspace*{40pt}}
 \ProvideDocumentCommand{\chapterinbetweenskip}{}{\vspace*{20pt}}
 \ProvideDocumentCommand{\autodot}{}{}

@@ -141,6 +141,8 @@ Data in each layer are stored in four types of documents. All documents are iden
     }
     \end{lstlisting}
     
+    \vspace{5mm}
+
     \item \textbf{Mesh document} contains the geometric representation of a finite element mesh. An example of a mesh document in JSON format is presented in Listing \ref{lst:mesh.json}.
     
     \begin{lstlisting}[style=json,caption=Example of mesh.json document.,label=lst:mesh.json]
@@ -156,6 +158,8 @@ Data in each layer are stored in four types of documents. All documents are iden
             "CellTypes": "DAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMD..."
         }
     \end{lstlisting}
+
+    \vspace{5mm}
 
     \item \textbf{Attribute document} serves as a container for additional information assigned to mesh entities, e.g., material id of each finite element. An example of an attribute document in JSON format is presented in Listing \ref{lst:attribute.json}.
 
@@ -177,6 +181,8 @@ Data in each layer are stored in four types of documents. All documents are iden
             "Data": "EwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAAB..."
         }
     \end{lstlisting}
+
+    \vspace{5mm}
 
     \item \textbf{Result document} is the document that contains the result fields from FEM. An example of a result document in JSON format is presented in Listing \ref{lst:result.json}. Result document is usually the most memory-consuming component of the storage format and it is therefore designed to support compression of data to reduce its size. The compressed data are converted to text using a binary-to-text encoding method and stored as the value of \code{Data} property.
 
@@ -205,7 +211,7 @@ Data in each layer are stored in four types of documents. All documents are iden
             },
             "Data": "47HYqWHLML9OLoc9P8tAv5nfIqKPa1S/BoMRvASgbL+E47yyIMJ5v47IymmBdYK/ZcAwsn55IL+uuEUHN3swv1..."
         }
-        \end{lstlisting}
+    \end{lstlisting}
 
 \end{itemize}
 
